@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Interativo de Bioquímica</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1, h2 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        .section {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+            padding: 20px;
+            max-width: 800px;
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        .question p {
+            font-weight: bold;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+        }
+        .option {
+            background-color: #e7e7e7;
+            border: none;
+            border-radius: 4px;
+            color: #333;
+            cursor: pointer;
+            margin: 5px 0;
+            padding: 10px;
+            text-align: left;
+            transition: background-color 0.3s;
+        }
+        .option:hover {
+            background-color: #d0d0d0;
+        }
+        .option.selected {
+            background-color: #3498db;
+            color: #fff;
+        }
+        .submit-btn {
+            background-color: #27ae60;
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+            cursor: pointer;
+            display: block;
+            font-size: 16px;
+            margin: 20px auto 0;
+            padding: 10px 20px;
+            transition: background-color 0.3s;
+        }
+        .submit-btn:hover {
+            background-color: #219653;
+        }
+        .feedback {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .correct {
+            color: #27ae60;
+        }
+        .incorrect {
+            color: #e74c3c;
+        }
+        .result {
+            background-color: #ecf0f1;
+            border-radius: 4px;
+            margin-top: 20px;
+            padding: 10px;
+        }
+        .result ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .result li {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Quiz Interativo de Bioquímica</h1>
+    <p style="text-align: center;">Este site contém questões interativas sobre vários tópicos de bioquímica. Agora com 20 questões no total (5 por seção). Selecione as respostas e clique em "Verificar" para ver os resultados.</p>
+
+    <!-- Seção 1: Reações Endergônicas e Exergônicas -->
+    <div class="section" id="section1">
+        <h2>Reações Endergônicas e Exergônicas</h2>
+        <div class="question" data-correct="A">
+            <p>1. Qual é a principal característica de uma reação exergônica?</p>
+            <div class="options">
+                <button class="option" data-value="A">Libera energia (ΔG < 0)</button>
+                <button class="option" data-value="B">Absorve energia (ΔG > 0)</button>
+                <button class="option" data-value="C">Não envolve energia</button>
+                <button class="option" data-value="D">Sempre requer enzimas</button>
+            </div>
+        </div>
+        <div class="question" data-correct="B">
+            <p>2. Em uma reação endergônica, o que acontece com a energia livre de Gibbs?</p>
+            <div class="options">
+                <button class="option" data-value="A">Diminui</button>
+                <button class="option" data-value="B">Aumenta</button>
+                <button class="option" data-value="C">Permanece constante</button>
+                <button class="option" data-value="D">Não é relevante</button>
+            </div>
+        </div>
+        <div class="question" data-correct="C">
+            <p>3. Qual é um exemplo clássico de reação exergônica?</p>
+            <div class="options">
+                <button class="option" data-value="A">Fotossíntese</button>
+                <button class="option" data-value="B">Síntese de proteínas</button>
+                <button class="option" data-value="C">Hidrólise de ATP</button>
+                <button class="option" data-value="D">Gliconeogênese</button>
+            </div>
+        </div>
+        <div class="question" data-correct="A">
+            <p>4. O que geralmente acopla reações endergônicas a exergônicas nas células?</p>
+            <div class="options">
+                <button class="option" data-value="A">Hidrólise de ATP</button>
+                <button class="option" data-value="B">Absorção de luz solar</button>
+                <button class="option" data-value="C">Degradação de proteínas</button>
+                <button class="option" data-value="D">Síntese de DNA</button>
+            </div>
+        </div>
+        <div class="question" data-correct="D">
+            <p>5. Quando uma reação está em equilíbrio, qual é o valor de ΔG?</p>
+            <div class="options">
+                <button class="option" data-value="A">Sempre positivo</button>
+                <button class="option" data-value="B">Sempre negativo</button>
+                <button class="option" data-value="C">Pode ser qualquer valor</button>
+                <button class="option" data-value="D">Zero</button>
+            </div>
+        </div>
+        <button class="submit-btn" onclick="checkAnswers('section1')">Verificar Respostas</button>
+        <div class="feedback" id="feedback1"></div>
+        <div class="result" id="result1" style="display: none;"></div>
+    </div>
+
+    <!-- Seção 2: Gliconeogênese, Glicogênese e Glicólise -->
+    <div class="section" id="section2">
+        <h2>Gliconeogênese, Glicogênese e Glicólise</h2>
+        <div class="question" data-correct="A">
+            <p>1. Qual é o principal objetivo da glicólise?</p>
+            <div class="options">
+                <button class="option" data-value="A">Quebrar glicose em piruvato, produzindo ATP</button>
+                <button class="option" data-value="B">Sintetizar glicose a partir de não-carboidratos</button>
+                <button class="option" data-value="C">Armazenar glicose como glicogênio</button>
+                <button class="option" data-value="D">Liberar glicose do glicogênio</button>
+            </div>
+        </div>
+        <div class="question" data-correct="B">
+            <p>2. A gliconeogênese ocorre principalmente em qual órgão?</p>
+            <div class="options">
+                <button class="option" data-value="A">Músculos</button>
+                <button class="option" data-value="B">Fígado</button>
+                <button class="option" data-value="C">Cérebro</button>
+                <button class="option" data-value="D">Intestino</button>
+            </div>
+        </div>
+        <div class="question" data-correct="C">
+            <p>3. Qual enzima é chave na glicogênese?</p>
+            <div class="options">
+                <button class="option" data-value="A">Hexoquinase</button>
+                <button class="option" data-value="B">Piruvato quinase</button>
+                <button class="option" data-value="C">Glicogênio sintase</button>
+                <button class="option" data-value="D">Frutose-1,6-bisfosfatase</button>
+            </div>
+        </div>
+        <div class="question" data-correct="A">
+            <p>4. Qual é a enzima regulatória principal na glicólise?</p>
+            <div class="options">
+                <button class="option" data-value="A">Fosfofrutoquinase-1 (PFK-1)</button>
+                <button class="option" data-value="B">Glucose-6-fosfatase</button>
+                <button class="option" data-value="C">Glicogênio fosforilase</button>
+                <button class="option" data-value="D">Piruvato carboxilase</button>
+            </div>
+        </div>
+        <div class="question" data-correct="D">
+            <p>5. A gliconeogênese contorna quais etapas da glicólise?</p>
+            <div class="options">
+                <button class="option" data-value="A">Todas as etapas</button>
+                <button class="option" data-value="B">Apenas as etapas reversíveis</button>
+                <button class="option" data-value="C">Nenhuma etapa</button>
+                <button class="option" data-value="D">As etapas irreversíveis</button>
+            </div>
+        </div>
+        <button class="submit-btn" onclick="checkAnswers('section2')">Verificar Respostas</button>
+        <div class="feedback" id="feedback2"></div>
+        <div class="result" id="result2" style="display: none;"></div>
+    </div>
+
+    <!-- Seção 3: Introdução à Bioenergética e Respiração Celular -->
+    <div class="section" id="section3">
+        <h2>Introdução à Bioenergética e Respiração Celular</h2>
+        <div class="question" data-correct="A">
+            <p>1. O que é bioenergética?</p>
+            <div class="options">
+                <button class="option" data-value="A">Estudo da transferência e transformação de energia em sistemas biológicos</button>
+                <button class="option" data-value="B">Estudo da estrutura das células</button>
+                <button class="option" data-value="C">Processo de divisão celular</button>
+                <button class="option" data-value="D">Síntese de proteínas</button>
+            </div>
+        </div>
+        <div class="question" data-correct="B">
+            <p>2. Quantos ATPs são produzidos na respiração celular aeróbica completa a partir de uma molécula de glicose?</p>
+            <div class="options">
+                <button class="option" data-value="A">2</button>
+                <button class="option" data-value="B">30-32</button>
+                <button class="option" data-value="C">4</button>
+                <button class="option" data-value="D">36-38</button>
+            </div>
+        </div>
+        <div class="question" data-correct="C">
+            <p>3. Qual é a etapa final da respiração celular?</p>
+            <div class="options">
+                <button class="option" data-value="A">Glicólise</button>
+                <button class="option" data-value="B">Ciclo de Krebs</button>
+                <button class="option" data-value="C">Fosforilação oxidativa</button>
+                <button class="option" data-value="D">Fermentação</button>
+            </div>
+        </div>
+        <div class="question" data-correct="D">
+            <p>4. Onde ocorre o ciclo de Krebs na respiração celular?</p>
+            <div class="options">
+                <button class="option" data-value="A">Citoplasma</button>
+                <button class="option" data-value="B">Núcleo</button>
+                <button class="option" data-value="C">Membrana plasmática</button>
+                <button class="option" data-value="D">Matriz mitocondrial</button>
+            </div>
+        </div>
+        <div class="question" data-correct="A">
+            <p>5. Qual é o propósito principal da cadeia de transporte de elétrons?</p>
+            <div class="options">
+                <button class="option" data-value="A">Criar um gradiente de prótons para síntese de ATP</button>
+                <button class="option" data-value="B">Produzir glicose</button>
+                <button class="option" data-value="C">Degradar lipídios</button>
+                <button class="option" data-value="D">Sintetizar proteínas</button>
+            </div>
+        </div>
+        <button class="submit-btn" onclick="checkAnswers('section3')">Verificar Respostas</button>
+        <div class="feedback" id="feedback3"></div>
+        <div class="result" id="result3" style="display: none;"></div>
+    </div>
+
+    <!-- Seção 4: Lipídios -->
+    <div class="section" id="section4">
+        <h2>Lipídios</h2>
+        <div class="question" data-correct="A">
+            <p>1. Qual é a função principal dos lipídios?</p>
+            <div class="options">
+                <button class="option" data-value="A">Armazenamento de energia e isolamento térmico</button>
+                <button class="option" data-value="B">Catalisar reações químicas</button>
+                <button class="option" data-value="C">Transportar oxigênio</button>
+                <button class="option" data-value="D">Síntese de DNA</button>
+            </div>
+        </div>
+        <div class="question" data-correct="B">
+            <p>2. O que são ácidos graxos saturados?</p>
+            <div class="options">
+                <button class="option" data-value="A">Possuem ligações duplas</button>
+                <button class="option" data-value="B">Não possuem ligações duplas</button>
+                <button class="option" data-value="C">São sempre líquidos à temperatura ambiente</button>
+                <button class="option" data-value="D">São encontrados apenas em plantas</button>
+            </div>
+        </div>
+        <div class="question" data-correct="C">
+            <p>3. Qual lipídio é componente principal das membranas celulares?</p>
+            <div class="options">
+                <button class="option" data-value="A">Triglicerídeos</button>
+                <button class="option" data-value="B">Esteroides</button>
+                <button class="option" data-value="C">Fosfolipídios</button>
+                <button class="option" data-value="D">Ceras</button>
+            </div>
+        </div>
+        <div class="question" data-correct="D">
+            <p>4. O colesterol é um tipo de qual classe de lipídios?</p>
+            <div class="options">
+                <button class="option" data-value="A">Triglicerídeo</button>
+                <button class="option" data-value="B">Ácido graxo</button>
+                <button class="option" data-value="C">Fosfolipídio</button>
+                <button class="option" data-value="D">Esteróide</button>
+            </div>
+        </div>
+        <div class="question" data-correct="A">
+            <p>5. O que é a beta-oxidação?</p>
+            <div class="options">
+                <button class="option" data-value="A">Degradação de ácidos graxos para produzir acetil-CoA</button>
+                <button class="option" data-value="B">Síntese de lipídios a partir de carboidratos</button>
+                <button class="option" data-value="C">Armazenamento de gorduras no tecido adiposo</button>
+                <button class="option" data-value="D">Formação de membranas celulares</button>
+            </div>
+        </div>
+        <button class="submit-btn" onclick="checkAnswers('section4')">Verificar Respostas</button>
+        <div class="feedback" id="feedback4"></div>
+        <div class="result" id="result4" style="display: none;"></div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.option').forEach(button => {
+            button.addEventListener('click', function() {
+                const options = this.parentElement.querySelectorAll('.option');
+                options.forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+            });
+        });
+
+        function checkAnswers(sectionId) {
+            const section = document.getElementById(sectionId);
+            const questions = section.querySelectorAll('.question');
+            let correctCount = 0;
+            let errors = [];
+
+            questions.forEach((q, index) => {
+                const selected = q.querySelector('.option.selected');
+                const correct = q.dataset.correct;
+                if (selected && selected.dataset.value === correct) {
+                    correctCount++;
+                } else {
+                    const questionText = q.querySelector('p').textContent;
+                    const selectedValue = selected ? selected.textContent : 'Nenhuma selecionada';
+                    const correctOption = q.querySelector(`.option[data-value="${correct}"]`).textContent;
+                    errors.push(`Questão ${index + 1}: ${questionText} - Sua resposta: ${selectedValue} (Errada). Correta: ${correctOption}`);
+                }
+            });
+
+            const feedback = document.getElementById(`feedback${sectionId.slice(-1)}`);
+            feedback.innerHTML = `<span class="${correctCount === questions.length ? 'correct' : 'incorrect'}">Você acertou ${correctCount} de ${questions.length} questões.</span>`;
+
+            const result = document.getElementById(`result${sectionId.slice(-1)}`);
+            result.style.display = 'block';
+            result.innerHTML = '<h3>Erros Detalhados:</h3><ul>' + errors.map(err => `<li>${err}</li>`).join('') + '</ul>';
+            if (errors.length === 0) {
+                result.innerHTML = '<p>Todas corretas! Parabéns!</p>';
+            }
+        }
+    </script>
+</body>
+</html>
