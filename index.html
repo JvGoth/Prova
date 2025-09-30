@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz Interativo de Bioquímica</title>
+    <title>Quiz Interativo de Sistemas Operacionais</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -94,227 +94,268 @@
     </style>
 </head>
 <body>
-    <h1>Quiz Interativo de Bioquímica</h1>
-    <p style="text-align: center;">Este site contém questões interativas sobre vários tópicos de bioquímica. Agora com 20 questões no total (5 por seção). Selecione as respostas e clique em "Verificar" para ver os resultados.</p>
+    <h1>Quiz Interativo de Sistemas Operacionais</h1>
+    <p style="text-align: center;">Este site contém questões interativas sobre vários tópicos de sistemas operacionais. Selecione as respostas e clique em "Verificar" para ver os resultados.</p>
 
-    <!-- Seção 1: Reações Endergônicas e Exergônicas -->
+    <!-- Seção 1: Conceitos Básicos -->
     <div class="section" id="section1">
-        <h2>Reações Endergônicas e Exergônicas</h2>
-        <div class="question" data-correct="A">
-            <p>1. Qual é a principal característica de uma reação exergônica?</p>
-            <div class="options">
-                <button class="option" data-value="A">Libera energia (ΔG < 0)</button>
-                <button class="option" data-value="B">Absorve energia (ΔG > 0)</button>
-                <button class="option" data-value="C">Não envolve energia</button>
-                <button class="option" data-value="D">Sempre requer enzimas</button>
-            </div>
-        </div>
-        <div class="question" data-correct="B">
-            <p>2. Em uma reação endergônica, o que acontece com a energia livre de Gibbs?</p>
-            <div class="options">
-                <button class="option" data-value="A">Diminui</button>
-                <button class="option" data-value="B">Aumenta</button>
-                <button class="option" data-value="C">Permanece constante</button>
-                <button class="option" data-value="D">Não é relevante</button>
-            </div>
-        </div>
-        <div class="question" data-correct="C">
-            <p>3. Qual é um exemplo clássico de reação exergônica?</p>
-            <div class="options">
-                <button class="option" data-value="A">Fotossíntese</button>
-                <button class="option" data-value="B">Síntese de proteínas</button>
-                <button class="option" data-value="C">Hidrólise de ATP</button>
-                <button class="option" data-value="D">Gliconeogênese</button>
-            </div>
-        </div>
-        <div class="question" data-correct="A">
-            <p>4. O que geralmente acopla reações endergônicas a exergônicas nas células?</p>
-            <div class="options">
-                <button class="option" data-value="A">Hidrólise de ATP</button>
-                <button class="option" data-value="B">Absorção de luz solar</button>
-                <button class="option" data-value="C">Degradação de proteínas</button>
-                <button class="option" data-value="D">Síntese de DNA</button>
-            </div>
-        </div>
-        <div class="question" data-correct="D">
-            <p>5. Quando uma reação está em equilíbrio, qual é o valor de ΔG?</p>
-            <div class="options">
-                <button class="option" data-value="A">Sempre positivo</button>
-                <button class="option" data-value="B">Sempre negativo</button>
-                <button class="option" data-value="C">Pode ser qualquer valor</button>
-                <button class="option" data-value="D">Zero</button>
-            </div>
-        </div>
+        <h2>Conceitos Básicos</h2>
+        <div id="questions1"></div>
         <button class="submit-btn" onclick="checkAnswers('section1')">Verificar Respostas</button>
         <div class="feedback" id="feedback1"></div>
         <div class="result" id="result1" style="display: none;"></div>
     </div>
 
-    <!-- Seção 2: Gliconeogênese, Glicogênese e Glicólise -->
+    <!-- Seção 2: Estrutura de um SO -->
     <div class="section" id="section2">
-        <h2>Gliconeogênese, Glicogênese e Glicólise</h2>
-        <div class="question" data-correct="A">
-            <p>1. Qual é o principal objetivo da glicólise?</p>
-            <div class="options">
-                <button class="option" data-value="A">Quebrar glicose em piruvato, produzindo ATP</button>
-                <button class="option" data-value="B">Sintetizar glicose a partir de não-carboidratos</button>
-                <button class="option" data-value="C">Armazenar glicose como glicogênio</button>
-                <button class="option" data-value="D">Liberar glicose do glicogênio</button>
-            </div>
-        </div>
-        <div class="question" data-correct="B">
-            <p>2. A gliconeogênese ocorre principalmente em qual órgão?</p>
-            <div class="options">
-                <button class="option" data-value="A">Músculos</button>
-                <button class="option" data-value="B">Fígado</button>
-                <button class="option" data-value="C">Cérebro</button>
-                <button class="option" data-value="D">Intestino</button>
-            </div>
-        </div>
-        <div class="question" data-correct="C">
-            <p>3. Qual enzima é chave na glicogênese?</p>
-            <div class="options">
-                <button class="option" data-value="A">Hexoquinase</button>
-                <button class="option" data-value="B">Piruvato quinase</button>
-                <button class="option" data-value="C">Glicogênio sintase</button>
-                <button class="option" data-value="D">Frutose-1,6-bisfosfatase</button>
-            </div>
-        </div>
-        <div class="question" data-correct="A">
-            <p>4. Qual é a enzima regulatória principal na glicólise?</p>
-            <div class="options">
-                <button class="option" data-value="A">Fosfofrutoquinase-1 (PFK-1)</button>
-                <button class="option" data-value="B">Glucose-6-fosfatase</button>
-                <button class="option" data-value="C">Glicogênio fosforilase</button>
-                <button class="option" data-value="D">Piruvato carboxilase</button>
-            </div>
-        </div>
-        <div class="question" data-correct="D">
-            <p>5. A gliconeogênese contorna quais etapas da glicólise?</p>
-            <div class="options">
-                <button class="option" data-value="A">Todas as etapas</button>
-                <button class="option" data-value="B">Apenas as etapas reversíveis</button>
-                <button class="option" data-value="C">Nenhuma etapa</button>
-                <button class="option" data-value="D">As etapas irreversíveis</button>
-            </div>
-        </div>
+        <h2>Estrutura de um SO</h2>
+        <div id="questions2"></div>
         <button class="submit-btn" onclick="checkAnswers('section2')">Verificar Respostas</button>
         <div class="feedback" id="feedback2"></div>
         <div class="result" id="result2" style="display: none;"></div>
     </div>
 
-    <!-- Seção 3: Introdução à Bioenergética e Respiração Celular -->
+    <!-- Seção 3: Arquiteturas de SOs -->
     <div class="section" id="section3">
-        <h2>Introdução à Bioenergética e Respiração Celular</h2>
-        <div class="question" data-correct="A">
-            <p>1. O que é bioenergética?</p>
-            <div class="options">
-                <button class="option" data-value="A">Estudo da transferência e transformação de energia em sistemas biológicos</button>
-                <button class="option" data-value="B">Estudo da estrutura das células</button>
-                <button class="option" data-value="C">Processo de divisão celular</button>
-                <button class="option" data-value="D">Síntese de proteínas</button>
-            </div>
-        </div>
-        <div class="question" data-correct="B">
-            <p>2. Quantos ATPs são produzidos na respiração celular aeróbica completa a partir de uma molécula de glicose?</p>
-            <div class="options">
-                <button class="option" data-value="A">2</button>
-                <button class="option" data-value="B">30-32</button>
-                <button class="option" data-value="C">4</button>
-                <button class="option" data-value="D">36-38</button>
-            </div>
-        </div>
-        <div class="question" data-correct="C">
-            <p>3. Qual é a etapa final da respiração celular?</p>
-            <div class="options">
-                <button class="option" data-value="A">Glicólise</button>
-                <button class="option" data-value="B">Ciclo de Krebs</button>
-                <button class="option" data-value="C">Fosforilação oxidativa</button>
-                <button class="option" data-value="D">Fermentação</button>
-            </div>
-        </div>
-        <div class="question" data-correct="D">
-            <p>4. Onde ocorre o ciclo de Krebs na respiração celular?</p>
-            <div class="options">
-                <button class="option" data-value="A">Citoplasma</button>
-                <button class="option" data-value="B">Núcleo</button>
-                <button class="option" data-value="C">Membrana plasmática</button>
-                <button class="option" data-value="D">Matriz mitocondrial</button>
-            </div>
-        </div>
-        <div class="question" data-correct="A">
-            <p>5. Qual é o propósito principal da cadeia de transporte de elétrons?</p>
-            <div class="options">
-                <button class="option" data-value="A">Criar um gradiente de prótons para síntese de ATP</button>
-                <button class="option" data-value="B">Produzir glicose</button>
-                <button class="option" data-value="C">Degradar lipídios</button>
-                <button class="option" data-value="D">Sintetizar proteínas</button>
-            </div>
-        </div>
+        <h2>Arquiteturas de SOs</h2>
+        <div id="questions3"></div>
         <button class="submit-btn" onclick="checkAnswers('section3')">Verificar Respostas</button>
         <div class="feedback" id="feedback3"></div>
         <div class="result" id="result3" style="display: none;"></div>
     </div>
 
-    <!-- Seção 4: Lipídios -->
+    <!-- Seção 4: O Conceito de Tarefa -->
     <div class="section" id="section4">
-        <h2>Lipídios</h2>
-        <div class="question" data-correct="A">
-            <p>1. Qual é a função principal dos lipídios?</p>
-            <div class="options">
-                <button class="option" data-value="A">Armazenamento de energia e isolamento térmico</button>
-                <button class="option" data-value="B">Catalisar reações químicas</button>
-                <button class="option" data-value="C">Transportar oxigênio</button>
-                <button class="option" data-value="D">Síntese de DNA</button>
-            </div>
-        </div>
-        <div class="question" data-correct="B">
-            <p>2. O que são ácidos graxos saturados?</p>
-            <div class="options">
-                <button class="option" data-value="A">Possuem ligações duplas</button>
-                <button class="option" data-value="B">Não possuem ligações duplas</button>
-                <button class="option" data-value="C">São sempre líquidos à temperatura ambiente</button>
-                <button class="option" data-value="D">São encontrados apenas em plantas</button>
-            </div>
-        </div>
-        <div class="question" data-correct="C">
-            <p>3. Qual lipídio é componente principal das membranas celulares?</p>
-            <div class="options">
-                <button class="option" data-value="A">Triglicerídeos</button>
-                <button class="option" data-value="B">Esteroides</button>
-                <button class="option" data-value="C">Fosfolipídios</button>
-                <button class="option" data-value="D">Ceras</button>
-            </div>
-        </div>
-        <div class="question" data-correct="D">
-            <p>4. O colesterol é um tipo de qual classe de lipídios?</p>
-            <div class="options">
-                <button class="option" data-value="A">Triglicerídeo</button>
-                <button class="option" data-value="B">Ácido graxo</button>
-                <button class="option" data-value="C">Fosfolipídio</button>
-                <button class="option" data-value="D">Esteróide</button>
-            </div>
-        </div>
-        <div class="question" data-correct="A">
-            <p>5. O que é a beta-oxidação?</p>
-            <div class="options">
-                <button class="option" data-value="A">Degradação de ácidos graxos para produzir acetil-CoA</button>
-                <button class="option" data-value="B">Síntese de lipídios a partir de carboidratos</button>
-                <button class="option" data-value="C">Armazenamento de gorduras no tecido adiposo</button>
-                <button class="option" data-value="D">Formação de membranas celulares</button>
-            </div>
-        </div>
+        <h2>O Conceito de Tarefa</h2>
+        <div id="questions4"></div>
         <button class="submit-btn" onclick="checkAnswers('section4')">Verificar Respostas</button>
         <div class="feedback" id="feedback4"></div>
         <div class="result" id="result4" style="display: none;"></div>
     </div>
 
+    <!-- Seção 5: Implementação de Tarefas -->
+    <div class="section" id="section5">
+        <h2>Implementação de Tarefas</h2>
+        <div id="questions5"></div>
+        <button class="submit-btn" onclick="checkAnswers('section5')">Verificar Respostas</button>
+        <div class="feedback" id="feedback5"></div>
+        <div class="result" id="result5" style="display: none;"></div>
+    </div>
+
+    <!-- Seção 6: Escalonamento de Tarefas -->
+    <div class="section" id="section6">
+        <h2>Escalonamento de Tarefas</h2>
+        <div id="questions6"></div>
+        <button class="submit-btn" onclick="checkAnswers('section6')">Verificar Respostas</button>
+        <div class="feedback" id="feedback6"></div>
+        <div class="result" id="result6" style="display: none;"></div>
+    </div>
+
+    <!-- Seção 7: Tópicos em Gestão de Tarefas -->
+    <div class="section" id="section7">
+        <h2>Tópicos em Gestão de Tarefas</h2>
+        <div id="questions7"></div>
+        <button class="submit-btn" onclick="checkAnswers('section7')">Verificar Respostas</button>
+        <div class="feedback" id="feedback7"></div>
+        <div class="result" id="result7" style="display: none;"></div>
+    </div>
+
+    <!-- Seção 8: Comunicação entre Tarefas -->
+    <div class="section" id="section8">
+        <h2>Comunicação entre Tarefas</h2>
+        <div id="questions8"></div>
+        <button class="submit-btn" onclick="checkAnswers('section8')">Verificar Respostas</button>
+        <div class="feedback" id="feedback8"></div>
+        <div class="result" id="result8" style="display: none;"></div>
+    </div>
+
     <script>
-        document.querySelectorAll('.option').forEach(button => {
-            button.addEventListener('click', function() {
-                const options = this.parentElement.querySelectorAll('.option');
-                options.forEach(opt => opt.classList.remove('selected'));
-                this.classList.add('selected');
+        // Função para embaralhar array (Fisher-Yates shuffle)
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // Pools de perguntas (pelo menos 40 no total, distribuídas por seções, baseadas em exercícios reais dos capítulos)
+        const questionPools = {
+            section1: [  // Conceitos Básicos (Cap. 1) - 5 perguntas
+                { q: "Quais os dois principais objetivos de um sistema operacional?", options: ["A: Abstração e gerência de recursos", "B: Execução de programas e jogos", "C: Segurança e velocidade", "D: Conectividade e armazenamento"], correct: "A" },
+                { q: "Por que a abstração de recursos é importante para os desenvolvedores de aplicações?", options: ["A: Permite acessar hardware diretamente", "B: Simplifica o acesso a recursos distintos", "C: Aumenta a velocidade de execução", "D: Reduz o uso de memória"], correct: "B" },
+                { q: "A gerência de atividades permite compartilhar o processador, executando mais de uma aplicação ao mesmo tempo. Identifique as principais vantagens trazidas por essa funcionalidade.", options: ["A: Atender vários usuários simultâneos, uso de computadores multiprocessador, modularidade", "B: Apenas velocidade maior", "C: Menor consumo de energia", "D: Mais segurança"], correct: "A" },
+                { q: "O que caracteriza um sistema operacional de tempo real?", options: ["A: Previsibilidade em tempos de resposta", "B: Alta velocidade", "C: Interface gráfica", "D: Suporte a rede"], correct: "A" },
+                { q: "Relacione as afirmações aos respectivos tipos de sistemas operacionais: distribuído (D), multi-usuário (M), desktop (K), servidor (S), embarcado (E) ou de tempo-real (T): Deve ter um comportamento temporal previsível.", options: ["A: D", "B: M", "C: K", "D: T"], correct: "D" },
+                { q: "Qual das afirmativas é incorreta sobre sistemas operacionais?", options: ["A: Em um sistema operacional de tempo real, a rapidez de resposta é menos importante que a previsibilidade do tempo de resposta.", "B: Um sistema operacional multi-usuários apresenta comportamento hidrofílico.", "C: Nos sistemas operacionais de rede a localização dos recursos é transparente para os usuários.", "D: Um sistema operacional de tempo real deve priorizar as tarefas que interagem com o usuário."], correct: "B" },
+                { q: "Qual das afirmativas é incorreta sobre sistemas operacionais?", options: ["A: Um sistema operacional de tempo real deve priorizar as tarefas que interagem com o usuário.", "B: Um sistema operacional embarcado é projetado para operar em hardware com poucos recursos.", "C: Sistemas operacionais de rede permitem acesso a recursos remotos.", "D: Sistemas batch processam tarefas sem interação do usuário."], correct: "A" },
+                { q: "O que é abstração em sistemas operacionais?", options: ["A: Interface homogênea para recursos hardware", "B: Gerência de energia", "C: Segurança de dados", "D: Conexão de rede"], correct: "A" },
+                { q: "Qual é o papel da gerência de recursos em um SO?", options: ["A: Resolver conflitos no uso de hardware", "B: Executar jogos", "C: Editar textos", "D: Navegar na internet"], correct: "A" },
+                { q: "Qual a diferença entre política e mecanismo em SO?", options: ["A: Política é decisão abstrata, mecanismo é implementação de baixo nível", "B: Política é hardware, mecanismo é software", "C: Política é usuário, mecanismo é kernel", "D: Política é rede, mecanismo é disco"], correct: "A" },
+                { q: "Qual categoria de SO é usada em smartphones?", options: ["A: Móvel", "B: Desktop", "C: Servidor", "D: Batch"], correct: "A" },
+                { q: "O que define um SO de tempo real crítico (hard real-time)?", options: ["A: Perda de prazo pode ter graves consequências", "B: Alta velocidade sempre", "C: Interface gráfica", "D: Suporte a múltiplos usuários"], correct: "A" },
+                { q: "Qual exemplo de SO de tempo real?", options: ["A: QNX", "B: Windows 10", "C: Android", "D: MS-DOS"], correct: "A" },
+                { q: "O que é um SO embarcado?", options: ["A: Construído para hardware com poucos recursos", "B: Para desktops", "C: Para servidores", "D: Para redes"], correct: "A" },
+                { q: "Qual é um exemplo de SO batch?", options: ["A: OS/360", "B: Linux", "C: iOS", "D: MacOS"], correct: "A" }
+            ],
+            section2: [  // Estrutura de um SO (Cap. 2) - 5 perguntas
+                { q: "Quais os principais elementos de um sistema operacional?", options: ["A: Núcleo, código de inicialização, drivers, programas utilitários", "B: Apenas núcleo", "C: Apenas hardware", "D: Apenas aplicativos"], correct: "A" },
+                { q: "O que é o núcleo de um SO?", options: ["A: Gerência de recursos do hardware", "B: Interface gráfica", "C: Aplicativos do usuário", "D: Periféricos"], correct: "A" },
+                { q: "O que faz o código de inicialização (boot code)?", options: ["A: Inicializa hardware e carrega o núcleo", "B: Executa aplicativos", "C: Gerencia memória", "D: Controla rede"], correct: "A" },
+                { q: "Para que servem os drivers?", options: ["A: Acessar dispositivos físicos", "B: Editar textos", "C: Navegar na internet", "D: Jogar"], correct: "A" },
+                { q: "O que são programas utilitários?", options: ["A: Ferramentas para uso do sistema", "B: O núcleo", "C: Hardware", "D: Drivers"], correct: "A" },
+                { q: "Qual é o papel das chamadas de sistema (syscalls)?", options: ["A: Interface entre aplicativos e núcleo", "B: Inicialização do hardware", "C: Gerência de energia", "D: Interface gráfica"], correct: "A" },
+                { q: "O que é modo núcleo?", options: ["A: Acesso privilegiado ao hardware", "B: Modo usuário", "C: Modo suspenso", "D: Modo terminada"], correct: "A" },
+                { q: "O que é modo usuário?", options: ["A: Acesso restrito, para aplicativos", "B: Acesso total ao hardware", "C: Inicialização", "D: Drivers"], correct: "A" },
+                { q: "Por que é importante separar modo núcleo e modo usuário?", options: ["A: Segurança e estabilidade", "B: Velocidade", "C: Energia", "D: Rede"], correct: "A" },
+                { q: "O que é uma interrupção?", options: ["A: Sinal assíncrono do hardware", "B: Chamada de sistema", "C: Erro de software", "D: Inicialização"], correct: "A" },
+                { q: "Qual a função das interrupções?", options: ["A: Notificar eventos assíncronos", "B: Executar tarefas", "C: Gerenciar memória", "D: Abrir arquivos"], correct: "A" },
+                { q: "O que são exceções?", options: ["A: Erros de execução no processador", "B: Interrupções de hardware", "C: Chamadas de sistema", "D: Drivers"], correct: "A" },
+                { q: "O que são chamadas de sistema?", options: ["A: Interrupções de software para acessar o núcleo", "B: Erros", "C: Interrupções de hardware", "D: Inicialização"], correct: "A" },
+                { q: "Qual é o papel da MMU?", options: ["A: Gerenciar memória virtual", "B: Processador", "C: Disco", "D: Rede"], correct: "A" },
+                { q: "O que é proteção de memória?", options: ["A: Isolamento entre processos", "B: Compartilhamento total", "C: Sem proteção", "D: Acesso direto"], correct: "A" }
+            ],
+            section3: [  // Arquiteturas de SOs (Cap. 3) - 5 perguntas
+                { q: "Qual é a principal vantagem da arquitetura monolítica?", options: ["A: Desempenho alto", "B: Robustez", "C: Fácil manutenção", "D: Modularidade"], correct: "A" },
+                { q: "Qual é uma desvantagem da arquitetura monolítica?", options: ["A: Baixa robustez devido a erros propagando", "B: Alto desempenho", "C: Modularidade", "D: Flexibilidade"], correct: "A" },
+                { q: "O que é uma arquitetura micronúcleo?", options: ["A: Núcleo mínimo, serviços em usuário", "B: Tudo no núcleo", "C: Camadas", "D: Híbrida"], correct: "A" },
+                { q: "Qual vantagem da arquitetura micronúcleo?", options: ["A: Robustez e modularidade", "B: Alto desempenho", "C: Complexidade baixa", "D: Nenhum"], correct: "A" },
+                { q: "O que é arquitetura em camadas?", options: ["A: Organização em níveis de abstração", "B: Tudo em núcleo", "C: Serviços em usuário", "D: Híbrida"], correct: "A" },
+                { q: "Qual desvantagem da arquitetura em camadas?", options: ["A: Desempenho devido a camadas", "B: Robustez", "C: Modularidade", "D: Flexibilidade"], correct: "A" },
+                { q: "O que é núcleo híbrido?", options: ["A: Combinação de monolítico e micronúcleo", "B: Apenas monolítico", "C: Apenas micronúcleo", "D: Camadas"], correct: "A" },
+                { q: "Qual exemplo de SO com núcleo híbrido?", options: ["A: Windows NT", "B: MS-DOS", "C: UNIX antigo", "D: Minix"], correct: "A" },
+                { q: "O que é máquina virtual?", options: ["A: Camada que emula um sistema", "B: Núcleo mínimo", "C: Camadas", "D: Híbrido"], correct: "A" },
+                { q: "O que é hipervisor nativo?", options: ["A: Executa diretamente no hardware", "B: Sobre SO hospedeiro", "C: Aplicação", "D: Contêiner"], correct: "A" },
+                { q: "O que é contêiner?", options: ["A: Virtualização de userspace", "B: Máquina virtual completa", "C: Núcleo híbrido", "D: Exonúcleo"], correct: "A" },
+                { q: "O que é exonúcleo?", options: ["A: Acesso direto a hardware sem abstrações", "B: Núcleo monolítico", "C: Camadas", "D: Micronúcleo"], correct: "A" },
+                { q: "O que é uninúcleo?", options: ["A: Núcleo e aplicação compilados juntos", "B: Núcleo mínimo", "C: Camadas", "D: Híbrido"], correct: "A" },
+                { q: "Qual exemplo de exonúcleo?", options: ["A: Aegis/ExOS", "B: Windows", "C: Linux", "D: Android"], correct: "A" },
+                { q: "Qual exemplo de uninúcleo?", options: ["A: OSv", "B: MS-DOS", "C: UNIX", "D: Minix"], correct: "A" }
+            ],
+            section4: [  // O Conceito de Tarefa (Cap. 4) - 5 perguntas
+                { q: "Qual é uma razão para usar tarefas em vez de programas sequenciais?", options: ["A: Atender vários usuários simultâneos", "B: Menor velocidade", "C: Mais complexidade", "D: Menor modularidade"], correct: "A" },
+                { q: "O que é uma tarefa?", options: ["A: Execução de fluxo de instruções", "B: Programa estático", "C: Hardware", "D: Periférico"], correct: "A" },
+                { q: "Qual diferença entre programa e tarefa?", options: ["A: Programa é estático, tarefa é dinâmica", "B: Programa é dinâmico, tarefa é estática", "C: Nenhum", "D: São iguais"], correct: "A" },
+                { q: "Qual exemplo de tarefas em navegador Web?", options: ["A: Buscar elementos, analisar HTML, animar interface, responder usuário", "B: Apenas buscar elementos", "C: Apenas analisar HTML", "D: Apenas responder usuário"], correct: "A" },
+                { q: "O que é o monitor em sistemas antigos?", options: ["A: Gerencia execução de tarefas", "B: Executa tarefas", "C: Hardware", "D: Aplicativo"], correct: "A" },
+                { q: "O que é time-sharing?", options: ["A: Compartilhamento de tempo do processador", "B: Compartilhamento de memória", "C: Compartilhamento de disco", "D: Compartilhamento de rede"], correct: "A" },
+                { q: "Qual estado de tarefa quando aguardando recurso?", options: ["A: Suspensa", "B: Pronta", "C: Executando", "D: Nova"], correct: "A" },
+                { q: "Qual transição de nova para pronta?", options: ["A: Carregamento concluído", "B: Execução inicia", "C: Suspensão", "D: Término"], correct: "A" },
+                { q: "O que é quantum?", options: ["A: Fatia de tempo para tarefa", "B: Memória alocada", "C: Disco", "D: Prioridade"], correct: "A" },
+                { q: "Qual vantagem do time-sharing?", options: ["A: Melhor interatividade", "B: Menos tarefas", "C: Mais ociosidade", "D: Menor segurança"], correct: "A" },
+                { q: "Qual desvantagem dos sistemas monotarefa?", options: ["A: Ociosidade durante E/S", "B: Alta interatividade", "C: Multitarefa", "D: Segurança"], correct: "A" },
+                { q: "O que é preempção?", options: ["A: Retirar recurso à força", "B: Adicionar recurso", "C: Suspender voluntariamente", "D: Término"], correct: "A" },
+                { q: "Qual estado quando tarefa criada mas não carregada?", options: ["A: Nova", "B: Pronta", "C: Suspensa", "D: Executando"], correct: "A" },
+                { q: "Qual transição de executando para suspensa?", options: ["A: Solicitação de recurso indisponível", "B: Fim de quantum", "C: Carregamento", "D: Término"], correct: "A" },
+                { q: "Qual transição de executando para pronta?", options: ["A: Fim de quantum", "B: Recurso disponível", "C: Erro", "D: Criação"], correct: "A" }
+            ],
+            section5: [  // Implementação de Tarefas (Cap. 5) - 5 perguntas
+                { q: "O que é contexto de uma tarefa?", options: ["A: Estado interno do processador e recursos", "B: Apenas registradores", "C: Apenas memória", "D: Apenas arquivos"], correct: "A" },
+                { q: "O que é TCB ou PCB?", options: ["A: Estrutura para representar tarefa", "B: Programa", "C: Hardware", "D: Driver"], correct: "A" },
+                { q: "O que inclui um TCB típico?", options: ["A: Identificador, estado, contexto, memória, recursos", "B: Apenas identificador", "C: Apenas estado", "D: Apenas contexto"], correct: "A" },
+                { q: "O que é troca de contexto?", options: ["A: Suspender uma tarefa e ativar outra", "B: Criar tarefa", "C: Terminar tarefa", "D: Suspender por E/S"], correct: "A" },
+                { q: "Qual a fórmula de eficiência E?", options: ["A: E = tq / (tq + ttc)", "B: E = ttc / tq", "C: E = tq * ttc", "D: E = ttc - tq"], correct: "A" },
+                { q: "O que é um processo?", options: ["A: Unidade de contexto para tarefas", "B: Tarefa única", "C: Hardware", "D: Driver"], correct: "A" },
+                { q: "Qual chamada de sistema para criar processo no Linux?", options: ["A: fork()", "B: createprocess()", "C: execve()", "D: exit()"], correct: "A" },
+                { q: "O que faz execve()?", options: ["A: Carrega novo código no processo", "B: Cria processo", "C: Termina processo", "D: Espera filho"], correct: "A" },
+                { q: "O que é thread?", options: ["A: Fluxo de execução independente", "B: Processo completo", "C: Núcleo", "D: Driver"], correct: "A" },
+                { q: "O que é TLS em threads?", options: ["A: Thread Local Storage", "B: Total Local Storage", "C: Task Local Storage", "D: Thread Global Storage"], correct: "A" },
+                { q: "Qual modelo de threads N:1?", options: ["A: Muitas threads de usuário para uma de núcleo", "B: Uma para uma", "C: Muitas para muitas", "D: Nenhum"], correct: "A" },
+                { q: "Qual vantagem do modelo 1:1?", options: ["A: Melhor concorrência", "B: Baixo custo", "C: Simples", "D: Sem paralelismo"], correct: "A" },
+                { q: "Qual modelo híbrido N:M?", options: ["A: Muitas threads de usuário para M de núcleo", "B: Uma para uma", "C: N para 1", "D: Nenhum"], correct: "A" },
+                { q: "Qual biblioteca para threads em C?", options: ["A: Pthreads", "B: Java Threads", "C: .NET Threads", "D: Python Threads"], correct: "A" },
+                { q: "Qual comparação entre processos e threads?", options: ["A: Threads são mais leves e compartilham memória", "B: Processos são mais leves", "C: Nenhum", "D: Iguais"], correct: "A" },
+                { q: "Qual exercício: Explique o que é e para que serve o conceito de troca de contexto.", options: ["A: Salvar e restaurar estado da tarefa", "B: Criar tarefa", "C: Terminar tarefa", "D: Suspender tarefa"], correct: "A" },
+                { q: "Qual exercício: O que são processos e threads? Qual a relação entre eles?", options: ["A: Processos são contêineres, threads são fluxos dentro", "B: Iguais", "C: Processos dentro de threads", "D: Nenhum"], correct: "A" },
+                { q: "Qual exercício: Desenhe um diagrama temporal da execução de um processo com threads.", options: ["A: Mostra trocas de contexto entre threads", "B: Apenas processos", "C: Hardware", "D: Drivers"], correct: "A" },
+                { q: "Qual exercício: Quais as principais vantagens e desvantagens de threads em relação a processos?", options: ["A: Threads mais rápidas, mas menos isoladas", "B: Processos mais rápidas", "C: Nenhum", "D: Iguais"], correct: "A" },
+                { q: "Qual exercício: Forneça dois exemplos de problemas cuja implementação multi-thread não tem desempenho melhor que a respectiva implementação sequencial.", options: ["A: Tarefas CPU-bound sem paralelismo", "B: Tarefas I/O-bound", "C: Interativas", "D: Tempo real"], correct: "A" }
+            ],
+            section6: [  // Escalonamento de Tarefas (Cap. 6) - 5 perguntas
+                { q: "Quais tipos de tarefas orientadas a processamento?", options: ["A: CPU-bound", "B: I/O-bound", "C: Interativas", "D: Tempo real"], correct: "A" },
+                { q: "Quais tipos de tarefas orientadas a entrada/saída?", options: ["A: I/O-bound", "B: CPU-bound", "C: Batch", "D: Realtime"], correct: "A" },
+                { q: "Qual métrica para tempo de vida de tarefa?", options: ["A: Turnaround time", "B: Waiting time", "C: Response time", "D: Justice"], correct: "A" },
+                { q: "O que é tempo de espera?", options: ["A: Tempo na fila de prontas", "B: Tempo total", "C: Tempo de resposta", "D: Eficiência"], correct: "A" },
+                { q: "O que é tempo de resposta?", options: ["A: Tempo entre evento e resultado", "B: Tempo total", "C: Tempo de espera", "D: Eficiência"], correct: "A" },
+                { q: "Qual algoritmo FCFS?", options: ["A: First Come First Served", "B: Shortest Job First", "C: Round Robin", "D: Priority"], correct: "A" },
+                { q: "Qual algoritmo SJF?", options: ["A: Shortest Job First", "B: FCFS", "C: RR", "D: PRIO"], correct: "A" },
+                { q: "Qual algoritmo RR?", options: ["A: Round Robin", "B: SJF", "C: SRTF", "D: FCFS"], correct: "A" },
+                { q: "O que é inanição?", options: ["A: Tarefas de baixa prioridade nunca executam", "B: Alta eficiência", "C: Baixo tempo de espera", "D: Justiça"], correct: "A" },
+                { q: "Como evitar inanição?", options: ["A: Envelhecimento", "B: Preempção", "C: Cooperação", "D: Nenhum"], correct: "A" },
+                { q: "Qual exercício: O que significa time sharing e qual a sua importância em um sistema operacional?", options: ["A: Compartilhamento de tempo, interatividade", "B: Compartilhamento de memória", "C: Compartilhamento de disco", "D: Compartilhamento de rede"], correct: "A" },
+                { q: "Qual exercício: Como e com base em que critérios é escolhida a duração de um quantum de processamento?", options: ["A: Equilíbrio entre interatividade e eficiência", "B: Aleatório", "C: Fixo sempre", "D: Nenhum"], correct: "A" },
+                { q: "Qual exercício: Relacione as afirmações aos respectivos algoritmos de escalonamento: RR, SJF, SRTF, PRIOc, PRIOp, PRIOd", options: ["A: Baseado em duração restante", "B: Round Robin", "C: Priority coop", "D: SJF"], correct: "A" },
+                { q: "Qual exercício: Explique o que é escalonamento round-robin, dando um exemplo.", options: ["A: Revezamento com quantum", "B: Primeiro que chega", "C: Menor tarefa", "D: Prioridade"], correct: "A" },
+                { q: "Qual exercício: Como e com base em que critérios é escolhida a duração de um quantum de processamento?", options: ["A: Balanço entre overhead e responsividade", "B: Sempre 1ms", "C: Sempre 1s", "D: Nenhum"], correct: "A" },
+                { q: "Qual exercício: A tabela a seguir representa um conjunto de tarefas prontas para utilizar um processador. Represente graficamente a sequência de execução das tarefas e calcule os tempos médios de vida (turnaround time) e de espera (waiting time), para as políticas de escalonamento a seguir: (a) FCFS cooperativa (b) SJF cooperativa (c) SJF preemptiva (SRTF) (d) PRIO cooperativa (e) PRIO preemptiva (f) RR com tq = 2, sem envelhecimento", options: ["A: Calcular com dados da tabela", "B: Ignorar", "C: Usar SJF", "D: Usar FCFS"], correct: "A" }
+            ],
+            section7: [  // Tópicos em Gestão de Tarefas (Cap. 7) - 5 perguntas
+                { q: "O que é inversão de prioridades?", options: ["A: Tarefa alta prioridade bloqueada por baixa", "B: Herança de prioridades", "C: Envelhecimento", "D: Preempção"], correct: "A" },
+                { q: "Como resolver inversão de prioridades?", options: ["A: Protocolo de herança de prioridade", "B: Aumentar quantum", "C: Reduzir tarefas", "D: Nenhum"], correct: "A" },
+                { q: "Qual exemplo de inversão de prioridades?", options: ["A: Mars Pathfinder", "B: Windows NT", "C: Linux", "D: Android"], correct: "A" },
+                { q: "O que é herança de prioridade?", options: ["A: Aumentar prioridade temporariamente", "B: Reduzir prioridade", "C: Fixar prioridade", "D: Ignorar"], correct: "A" },
+                { q: "Qual exercício: Explique os conceitos de inversão e herança de prioridade.", options: ["A: Inversão é alta bloqueada por baixa, herança resolve", "B: Inversão é herança", "C: Nenhum", "D: Prioridades fixas"], correct: "A" },
+                { q: "Qual exercício: O sistema operacional da sonda Mars Pathfinder usa escalonamento por prioridades preemptivo, sem envelhecimento e sem compartilhamento de tempo. Desenhe o diagrama de tempo da execução sem e com o protocolo de herança de prioridades e discuta sobre as diferenças observadas entre as duas execuções.", options: ["A: Com herança, evita inversão", "B: Sem herança", "C: Nenhum", "D: Preempção"], correct: "A" }
+            ],
+            section8: [  // Comunicação entre Tarefas (Cap. 8) - 5 perguntas
+                { q: "Quais razões para usar tarefas cooperantes?", options: ["A: Atender múltiplos usuários, multiprocessador, modularidade", "B: Menor interatividade", "C: Mais erros", "D: Menor robustez"], correct: "A" },
+                { q: "O que é comunicação intraprocesso?", options: ["A: Dentro do mesmo processo", "B: Entre processos", "C: Entre máquinas", "D: Nenhum"], correct: "A" },
+                { q: "O que é comunicação direta?", options: ["A: Emissor identifica receptor", "B: Indireta", "C: Buffer", "D: Fluxo"], correct: "A" },
+                { q: "O que é comunicação síncrona?", options: ["A: Bloqueante", "B: Não-bloqueante", "C: Semissíncrona", "D: Assíncrona"], correct: "A" },
+                { q: "O que é comunicação por mensagens?", options: ["A: Pacotes independentes", "B: Fluxo contínuo", "C: Nenhum", "D: Buffer infinito"], correct: "A" },
+                { q: "O que é comunicação M:N?", options: ["A: Múltiplos emissores e receptores", "B: 1:1", "C: Direta", "D: Síncrona"], correct: "A" },
+                { q: "Qual exemplo de comunicação por mensagens?", options: ["A: Message queues UNIX", "B: Pipes", "C: TCP", "D: Arquivos"], correct: "A" },
+                { q: "Qual exercício: Quais são as vantagens e desvantagens das abordagens a seguir, sob as óticas do sistema operacional e do programador de aplicações: comunicação bloqueante ou não-bloqueante", options: ["A: Bloqueante simples, não-bloqueante flexível", "B: Nenhum", "C: Iguais", "D: Bloqueante flexível"], correct: "A" },
+                { q: "Qual exercício: Explique como processos que comunicam por troca de mensagens se comportam em relação à capacidade do canal de comunicação, considerando as semânticas de chamada síncrona e assíncrona.", options: ["A: Síncrona bloqueia, assíncrona não", "B: Nenhum", "C: Iguais", "D: Síncrona não bloqueia"], correct: "A" },
+                { q: "Qual exercício: Sobre as afirmações a seguir, relativas mecanismos de comunicação, indique quais são incorretas: A comunicação indireta (por canais) é mais adequada para sistemas distribuídos.", options: ["A: Correta", "B: Incorreta", "C: Parcial", "D: Nenhum"], correct: "A" },
+                { q: "Qual exercício: Sobre as afirmações a seguir, relativas à sincronização na comunicação entre processos, indique quais são incorretas: Na comunicação semi-bloqueante, o emissor espera indefinidamente pela possibilidade de enviar os dados.", options: ["A: Incorreta", "B: Correta", "C: Parcial", "D: Nenhum"], correct: "A" }
+            ]
+        };
+
+        // Função para gerar perguntas aleatórias
+        function generateQuestions(sectionId, pool) {
+            const shuffled = shuffle([...pool]).slice(0, 5);
+            const container = document.getElementById(`questions${sectionId.slice(-1)}`);
+            shuffled.forEach((item, index) => {
+                const qDiv = document.createElement('div');
+                qDiv.classList.add('question');
+                qDiv.dataset.correct = item.correct;
+                const p = document.createElement('p');
+                p.textContent = item.q;
+                qDiv.appendChild(p);
+                const optionsDiv = document.createElement('div');
+                optionsDiv.classList.add('options');
+                item.options.forEach(opt => {
+                    const [value, text] = opt.split(': ');
+                    const btn = document.createElement('button');
+                    btn.classList.add('option');
+                    btn.dataset.value = value;
+                    btn.textContent = opt;
+                    optionsDiv.appendChild(btn);
+                });
+                qDiv.appendChild(optionsDiv);
+                container.appendChild(qDiv);
+            });
+        }
+
+        // Gerar perguntas ao carregar
+        window.addEventListener('load', () => {
+            generateQuestions('section1', questionPools.section1);
+            generateQuestions('section2', questionPools.section2);
+            generateQuestions('section3', questionPools.section3);
+            generateQuestions('section4', questionPools.section4);
+            generateQuestions('section5', questionPools.section5);
+            generateQuestions('section6', questionPools.section6);
+            generateQuestions('section7', questionPools.section7);
+            generateQuestions('section8', questionPools.section8);
+
+            // Adicionar event listeners para seleção
+            document.querySelectorAll('.option').forEach(button => {
+                button.addEventListener('click', function() {
+                    const options = this.parentElement.querySelectorAll('.option');
+                    options.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                });
             });
         });
 
@@ -333,7 +374,7 @@
                     const questionText = q.querySelector('p').textContent;
                     const selectedValue = selected ? selected.textContent : 'Nenhuma selecionada';
                     const correctOption = q.querySelector(`.option[data-value="${correct}"]`).textContent;
-                    errors.push(`Questão ${index + 1}: ${questionText} - Sua resposta: ${selectedValue} (Errada). Correta: ${correctOption}`);
+                    errors.push(`${questionText} - Sua resposta: ${selectedValue} (Errada). Correta: ${correctOption}`);
                 }
             });
 
