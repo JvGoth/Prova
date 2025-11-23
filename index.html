@@ -1,393 +1,239 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz Interativo de Sistemas Operacionais</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            color: #333;
-            margin: 0;
-            padding: 20px;
-            line-height: 1.6;
+<script>
+    // Função para embaralhar array (Fisher-Yates shuffle)
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
         }
-        h1, h2 {
-            text-align: center;
-            color: #2c3e50;
-        }
-        .section {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            margin: 20px auto;
-            padding: 20px;
-            max-width: 800px;
-        }
-        .question {
-            margin-bottom: 20px;
-        }
-        .question p {
-            font-weight: bold;
-        }
-        .options {
-            display: flex;
-            flex-direction: column;
-        }
-        .option {
-            background-color: #e7e7e7;
-            border: none;
-            border-radius: 4px;
-            color: #333;
-            cursor: pointer;
-            margin: 5px 0;
-            padding: 10px;
-            text-align: left;
-            transition: background-color 0.3s;
-        }
-        .option:hover {
-            background-color: #d0d0d0;
-        }
-        .option.selected {
-            background-color: #3498db;
-            color: #fff;
-        }
-        .submit-btn {
-            background-color: #27ae60;
-            border: none;
-            border-radius: 4px;
-            color: #fff;
-            cursor: pointer;
-            display: block;
-            font-size: 16px;
-            margin: 20px auto 0;
-            padding: 10px 20px;
-            transition: background-color 0.3s;
-        }
-        .submit-btn:hover {
-            background-color: #219653;
-        }
-        .feedback {
-            margin-top: 20px;
-            text-align: center;
-        }
-        .correct {
-            color: #27ae60;
-        }
-        .incorrect {
-            color: #e74c3c;
-        }
-        .result {
-            background-color: #ecf0f1;
-            border-radius: 4px;
-            margin-top: 20px;
-            padding: 10px;
-        }
-        .result ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        .result li {
-            margin: 5px 0;
-        }
-    </style>
-</head>
-<body>
-    <h1>Quiz Interativo de Sistemas Operacionais</h1>
-    <p style="text-align: center;">Este site contém questões interativas sobre vários tópicos de sistemas operacionais. Selecione as respostas e clique em "Verificar" para ver os resultados.</p>
+        return array;
+    }
 
-    <!-- Seção 1: Conceitos Básicos -->
-    <div class="section" id="section1">
-        <h2>Conceitos Básicos</h2>
-        <div id="questions1"></div>
-        <button class="submit-btn" onclick="checkAnswers('section1')">Verificar Respostas</button>
-        <div class="feedback" id="feedback1"></div>
-        <div class="result" id="result1" style="display: none;"></div>
-    </div>
+    // Pools de Perguntas de Fisiologia (Baseadas nos PDFs e Slides)
+    const questionPools = {
+        section1: [
+            // Agora as respostas corretas são armazenadas como o TEXTO da opção, não a letra.
+            { type: 'mc', q: "Qual é a definição de Fisiologia segundo os slides?", options: ["A: Estudo da natureza do funcionamento de um organismo vivo e suas partes", "B: Apenas estudo de processos químicos", "C: Estudo de anatomia macroscópica", "D: Estudo de física aplicada"], correctText: "Estudo da natureza do funcionamento de um organismo vivo e suas partes" },
+            { type: 'mc', q: "Quem introduziu o conceito de regulação do meio interno?", options: ["A: Jean Fernel", "B: Claude Bernard", "C: Walter B. Cannon", "D: Roberto Lent"], correctText: "Claude Bernard" },
+            { type: 'mc', q: "O termo 'Homeostase' foi cunhado por:", options: ["A: Claude Bernard", "B: Walter B. Cannon", "C: Jean Fernel", "D: Guyton & Hall"], correctText: "Walter B. Cannon" },
+            { type: 'mc', q: "O meio interno do organismo é composto principalmente por:", options: ["A: Líquido intracelular (LIC)", "B: Líquido extracelular (LEC)", "C: Apenas plasma", "D: Oceano primitivo"], correctText: "Líquido extracelular (LEC)" },
+            { type: 'mc', q: "Qual é a porcentagem aproximada de LEC no plasma?", options: ["A: 75%", "B: 25%", "C: 67%", "D: 33%"], correctText: "25%" },
+            { type: 'mc', q: "As alças de retroalimentação negativa são usadas para:", options: ["A: Amplificar respostas", "B: Estabilizar o sistema", "C: Causar explosões", "D: Ignorar mudanças"], correctText: "Estabilizar o sistema" },
+            { type: 'mc', q: "Exemplo de feedback positivo nos slides:", options: ["A: Regulação de temperatura", "B: Coagulação sanguínea", "C: Pressão arterial", "D: Glicemia"], correctText: "Coagulação sanguínea" },
+            { type: 'mc', q: "Quais são os principais componentes do meio interno?", options: ["A: Plasma e interstício", "B: Apenas LIC", "C: Oceano primitivo", "D: Sistemas nervosos"], correctText: "Plasma e interstício" },
+            { type: 'mc', q: "A permeabilidade seletiva refere-se a:", options: ["A: Diferenças em íons entre LIC e LEC", "B: Igualdade total de composições", "C: Ausência de membranas", "D: Apenas água"], correctText: "Diferenças em íons entre LIC e LEC" },
+            { type: 'mc', q: "Quantos sistemas principais no corpo humano são listados?", options: ["A: 5", "B: 10", "C: 15", "D: 20"], correctText: "10" }
+        ],
+        section2: [
+            { type: 'mc', q: "As membranas biológicas são formadas principalmente por:", options: ["A: Proteínas apenas", "B: Fosfolipídios na bicamada lipídica", "C: Carboidratos", "D: Ácidos nucleicos"], correctText: "Fosfolipídios na bicamada lipídica" },
+            { type: 'mc', q: "Qual a função principal das membranas biológicas?", options: ["A: Barreira seletiva", "B: Armazenamento de energia", "C: Síntese de proteínas", "D: Reprodução celular"], correctText: "Barreira seletiva" },
+            { type: 'mc', q: "Os fosfolipídios formam a bicamada porque são:", options: ["A: Hidrofílicos totais", "B: Anfipáticos (hidrofílicos e hidrofóbicos)", "C: Hidrofóbicos totais", "D: Neutros"], correctText: "Anfipáticos (hidrofílicos e hidrofóbicos)" },
+            { type: 'mc', q: "Qual íon é mais concentrado no LIC do que no LEC?", options: ["A: Na+", "B: K+", "C: Cl-", "D: Ca2+"], correctText: "K+" },
+            { type: 'mc', q: "A composição eletrolítica dos líquidos corporais é mantida por:", options: ["A: Permeabilidade seletiva", "B: Difusão aleatória", "C: Ausência de bombas", "D: Apenas osmose"], correctText: "Permeabilidade seletiva" },
+            { type: 'mc', q: "Qual a função das proteínas de membrana?", options: ["A: Apenas estrutural", "B: Transporte, sinalização, adesão", "C: Armazenamento de íons", "D: Síntese de lipídios"], correctText: "Transporte, sinalização, adesão" },
+            { type: 'mc', q: "O modelo de mosaico fluido descreve as membranas como:", options: ["A: Rígidas e estáticas", "B: Fluidas com proteínas embutidas", "C: Apenas lipídicas", "D: Sem colesterol"], correctText: "Fluidas com proteínas embutidas" },
+            { type: 'mc', q: "O colesterol nas membranas ajuda a:", options: ["A: Aumentar fluidez excessiva", "B: Manter a fluidez adequada", "C: Bloquear todo transporte", "D: Dissolver a bicamada"], correctText: "Manter a fluidez adequada" },
+            { type: 'mc', q: "Diferenças na composição lipídica afetam:", options: ["A: Nada", "B: Fluidez e função da membrana", "C: Apenas cor", "D: Tamanho celular"], correctText: "Fluidez e função da membrana" },
+            { type: 'mc', q: "As glicoproteínas na membrana são importantes para:", options: ["A: Reconhecimento celular", "B: Apenas transporte de íons", "C: Armazenamento de energia", "D: Divisão celular"], correctText: "Reconhecimento celular" }
+        ],
+        section3: [
+            { type: 'mc', q: "Tipos de comunicação entre células incluem:", options: ["A: Apenas moléculas livres", "B: Moléculas livres e aderidas", "C: Apenas sinapses elétricas", "D: Nada"], correctText: "Moléculas livres e aderidas" },
+            { type: 'mc', q: "Moléculas de adesão ligam o extracelular ao:", options: ["A: Núcleo", "B: Citoesqueleto", "C: Mitocôndria", "D: Ribossomos"], correctText: "Citoesqueleto" },
+            { type: 'mc', q: "Junções GAP permitem comunicação em:", options: ["A: Sincício cardíaco", "B: Apenas nervos", "C: Apenas músculos lisos", "D: Ossos"], correctText: "Sincício cardíaco" },
+            { type: 'mc', q: "Moléculas de adesão são usadas no desenvolvimento para:", options: ["A: Migração e diferenciação celular", "B: Apenas digestão", "C: Respiração", "D: Circulação"], correctText: "Migração e diferenciação celular" },
+            { type: 'mc', q: "Sinalização parácrina é:", options: ["A: Local", "B: Distante via sangue", "C: Via nervos", "D: Neuroendócrina"], correctText: "Local" },
+            { type: 'mc', q: "Sinalização endócrina envolve:", options: ["A: Hormônios no sangue", "B: Moléculas locais", "C: Contato direto", "D: Junções GAP"], correctText: "Hormônios no sangue" },
+            { type: 'mc', q: "Receptores determinam a:", options: ["A: Resposta celular", "B: Produção de sinal", "C: Digestão", "D: Movimento"], correctText: "Resposta celular" },
+            { type: 'mc', q: "Exemplo de receptor ionotrópico:", options: ["A: Receptor de glutamato (AMPA e NMDA)", "B: Receptor olfatório", "C: Receptor de insulina", "D: Receptor de cortisol"], correctText: "Receptor de glutamato (AMPA e NMDA)" },
+            { type: 'mc', q: "Receptor conectado a proteína G exemplo:", options: ["A: Receptor olfatório", "B: AMPA", "C: Insulina", "D: Cortisol"], correctText: "Receptor olfatório" },
+            { type: 'mc', q: "Receptor intracelular exemplo:", options: ["A: Receptor de cortisol", "B: NMDA", "C: Olfatório", "D: Glutamato"], correctText: "Receptor de cortisol" }
+        ],
+        section4: [
+            { type: 'mc', q: "Propriedades eletroquímicas das células excitáveis envolvem íons como:", options: ["A: K+ e Na+", "B: Apenas Ca2+", "C: Apenas Cl-", "D: Nenhum íon"], correctText: "K+ e Na+" },
+            { type: 'mc', q: "O potencial de repouso é mantido por:", options: ["A: Bomba Na+/K+ ATPase", "B: Diferenças de concentração de íons", "C: Apenas difusão", "D: Nada"], correctText: "Diferenças de concentração de íons" },
+            { type: 'mc', q: "Potencial de ação envolve influxo de:", options: ["A: K+", "B: Na+", "C: Cl-", "D: H+"], correctText: "Na+" },
+            { type: 'mc', q: "Células excitáveis incluem:", options: ["A: Neurônios e músculos", "B: Apenas ossos", "C: Apenas pele", "D: Apenas fígado"], correctText: "Neurônios e músculos" },
+            { type: 'mc', q: "A despolarização ocorre quando:", options: ["A: Entra Na+", "B: Sai K+", "C: Entra Cl-", "D: Sai Ca2+"], correctText: "Entra Na+" },
+            { type: 'mc', q: "Hiperpolarização é causada por:", options: ["A: Saída de K+ ou entrada de Cl-", "B: Entrada de Na+", "C: Nada", "D: Apenas Ca2+"], correctText: "Saída de K+ ou entrada de Cl-" },
+            { type: 'mc', q: "O gradiente eletroquímico é:", options: ["A: Força que move íons", "B: Apenas elétrico", "C: Apenas químico", "D: Nenhum"], correctText: "Força que move íons" },
+            { type: 'mc', q: "Canais iônicos são seletivos para:", options: ["A: Tipos específicos de íons", "B: Todos íons", "C: Apenas proteínas", "D: Lipídios"], correctText: "Tipos específicos de íons" },
+            { type: 'mc', q: "A equação de Nernst calcula:", options: ["A: Potencial de equilíbrio para íons", "B: Fluxo de água", "C: Pressão", "D: Temperatura"], correctText: "Potencial de equilíbrio para íons" },
+            { type: 'mc', q: "Potencial de repouso típico de neurônio:", options: ["A: +70mV", "B: -70mV", "C: 0mV", "D: -30mV"], correctText: "-70mV" }
+        ],
+        section5: [
+            { type: 'mc', q: "Fibras musculares são especializadas em:", options: ["A: Contração", "B: Sensação", "C: Secreção", "D: Absorção"], correctText: "Contração" },
+            { type: 'mc', q: "Para que serve o movimento segundo os slides?", options: ["A: Respiração, digestão, circulação, etc", "B: Apenas luta-ou-fuga", "C: Apenas comunicação", "D: Nada"], correctText: "Respiração, digestão, circulação, etc" },
+            { type: 'mc', q: "Sistema nervoso é dividido em:", options: ["A: SNC e SNP", "B: Apenas SNC", "C: Apenas SNP", "D: SNC e endócrino"], correctText: "SNC e SNP" },
+            { type: 'mc', q: "Neurônios aferentes são:", options: ["A: Sensoriais", "B: Motores", "C: Interneurônios", "D: Glia"], correctText: "Sensoriais" },
+            { type: 'mc', q: "Transdução sensorial é:", options: ["A: Conversão de estímulo em sinal elétrico", "B: Apenas visão", "C: Apenas audição", "D: Nada"], correctText: "Conversão de estímulo em sinal elétrico" },
+            { type: 'mc', q: "Fibras musculares sob comando neural envolvem:", options: ["A: Motoneurônios", "B: Apenas hormônios", "C: Apenas autônomo", "D: Nenhum"], correctText: "Motoneurônios" },
+            { type: 'mc', q: "Comportamentos complexos incluem:", options: ["A: Comunicação, socialização", "B: Apenas respiração", "C: Apenas digestão", "D: Nada"], correctText: "Comunicação, socialização" },
+            { type: 'mc', q: "SNC inclui:", options: ["A: Crânio e coluna vertebral", "B: Apenas nervos periféricos", "C: Apenas baço", "D: Timo"], correctText: "Crânio e coluna vertebral" },
+            { type: 'mc', q: "Organismo interage com ambiente via:", options: ["A: Neurônios aferentes", "B: Apenas eferentes", "C: Nenhum", "D: Apenas glia"], correctText: "Neurônios aferentes" },
+            { type: 'mc', q: "Funções básicas do movimento:", options: ["A: Respiração, postura", "B: Apenas exploração", "C: Apenas expressão", "D: Nenhum"], correctText: "Respiração, postura" }
+        ],
+        section6: [ // 15 Questões Abertas (Sem mudança, pois a correção é por keywords)
+            { type: 'open', q: "Defina Fisiologia com base nos slides.", keywords: ["natureza funcionamento", "organismo vivo", "processos físicos químicos"] },
+            { type: 'open', q: "Explique o conceito de homeostase e quem o cunhou.", keywords: ["walter cannon", "manutenção equilíbrio", "meio interno"] },
+            { type: 'open', q: "Descreva o meio interno do organismo e suas divisões.", keywords: ["líquido extracelular", "plasma interstício", "25% 75%"] },
+            { type: 'open', q: "Diferencie feedback negativo de positivo com exemplos.", keywords: ["negativo estabiliza", "positivo amplifica", "coagulação parto"] },
+            { type: 'open', q: "Cite os principais sistemas do corpo humano listados nos slides.", keywords: ["tegumentar circulatório", "músculo-esquelético respiratório", "digestório urinário reprodutor linfático endócrino nervoso"] },
+            { type: 'open', q: "Explique a estrutura das membranas biológicas.", keywords: ["bicamada lipídica", "fosfolipídios", "proteínas embutidas"] },
+            { type: 'open', q: "Descreva as diferenças na composição iônica entre LIC e LEC.", keywords: ["k+ alto lic", "na+ alto lec", "permeabilidade seletiva"] },
+            { type: 'open', q: "Tipos de comunicação intercelular e exemplos.", keywords: ["livre aderida", "parácrina endócrina", "neurócrina"] },
+            { type: 'open', q: "Explique junções GAP e seu exemplo.", keywords: ["comunicantes", "sincício cardíaco", "troca íons"] },
+            { type: 'open', q: "Descreva um receptor ionotrópico com exemplo.", keywords: ["glutamato ampa nmda", "canal iônico", "rápido"] },
+            { type: 'open', q: "Propriedades eletroquímicas das células excitáveis.", keywords: ["k+ na+", "potencial repouso", "ação"] },
+            { type: 'open', q: "Explique a fisiologia muscular básica.", keywords: ["fibras contração", "actina miosina", "energia atp"] },
+            { type: 'open', q: "Descreva o sistema nervoso e suas divisões.", keywords: ["snc snp", "crânio coluna", "nervos periféricos"] },
+            { type: 'open', q: "Introdução aos sistemas sensoriais: transdução.", keywords: ["estímulo sinal elétrico", "neurônio aferente", "snc"] },
+            { type: 'open', q: "Para que serve o movimento? Funções e comportamentos.", keywords: ["respiração digestão", "luta-fuga exploração", "comunicação socialização"] }
+        ]
+    };
 
-    <!-- Seção 2: Estrutura de um SO -->
-    <div class="section" id="section2">
-        <h2>Estrutura de um SO</h2>
-        <div id="questions2"></div>
-        <button class="submit-btn" onclick="checkAnswers('section2')">Verificar Respostas</button>
-        <div class="feedback" id="feedback2"></div>
-        <div class="result" id="result2" style="display: none;"></div>
-    </div>
+    // Função para gerar perguntas aleatórias (suporte a MC e open)
+    function generateQuestions(sectionId, pool) {
+        const numToGenerate = sectionId === 'section6' ? pool.length : 5;
+        const shuffledQuestions = shuffle([...pool]).slice(0, numToGenerate);
+        const container = document.getElementById(`questions${sectionId.slice(-1)}`);
+        
+        const alphabet = ['A', 'B', 'C', 'D'];
 
-    <!-- Seção 3: Arquiteturas de SOs -->
-    <div class="section" id="section3">
-        <h2>Arquiteturas de SOs</h2>
-        <div id="questions3"></div>
-        <button class="submit-btn" onclick="checkAnswers('section3')">Verificar Respostas</button>
-        <div class="feedback" id="feedback3"></div>
-        <div class="result" id="result3" style="display: none;"></div>
-    </div>
+        shuffledQuestions.forEach((item, index) => {
+            const qDiv = document.createElement('div');
+            qDiv.classList.add('question');
+            qDiv.dataset.type = item.type;
+            const p = document.createElement('p');
+            p.textContent = `${index + 1}. ${item.q}`;
+            qDiv.appendChild(p);
 
-    <!-- Seção 4: O Conceito de Tarefa -->
-    <div class="section" id="section4">
-        <h2>O Conceito de Tarefa</h2>
-        <div id="questions4"></div>
-        <button class="submit-btn" onclick="checkAnswers('section4')">Verificar Respostas</button>
-        <div class="feedback" id="feedback4"></div>
-        <div class="result" id="result4" style="display: none;"></div>
-    </div>
-
-    <!-- Seção 5: Implementação de Tarefas -->
-    <div class="section" id="section5">
-        <h2>Implementação de Tarefas</h2>
-        <div id="questions5"></div>
-        <button class="submit-btn" onclick="checkAnswers('section5')">Verificar Respostas</button>
-        <div class="feedback" id="feedback5"></div>
-        <div class="result" id="result5" style="display: none;"></div>
-    </div>
-
-    <!-- Seção 6: Escalonamento de Tarefas -->
-    <div class="section" id="section6">
-        <h2>Escalonamento de Tarefas</h2>
-        <div id="questions6"></div>
-        <button class="submit-btn" onclick="checkAnswers('section6')">Verificar Respostas</button>
-        <div class="feedback" id="feedback6"></div>
-        <div class="result" id="result6" style="display: none;"></div>
-    </div>
-
-    <!-- Seção 7: Tópicos em Gestão de Tarefas -->
-    <div class="section" id="section7">
-        <h2>Tópicos em Gestão de Tarefas</h2>
-        <div id="questions7"></div>
-        <button class="submit-btn" onclick="checkAnswers('section7')">Verificar Respostas</button>
-        <div class="feedback" id="feedback7"></div>
-        <div class="result" id="result7" style="display: none;"></div>
-    </div>
-
-    <!-- Seção 8: Comunicação entre Tarefas -->
-    <div class="section" id="section8">
-        <h2>Comunicação entre Tarefas</h2>
-        <div id="questions8"></div>
-        <button class="submit-btn" onclick="checkAnswers('section8')">Verificar Respostas</button>
-        <div class="feedback" id="feedback8"></div>
-        <div class="result" id="result8" style="display: none;"></div>
-    </div>
-
-    <script>
-        // Função para embaralhar array (Fisher-Yates shuffle)
-        function shuffle(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-            return array;
-        }
-
-        // Pools de perguntas (pelo menos 40 no total, distribuídas por seções, baseadas em exercícios reais dos capítulos)
-        const questionPools = {
-            section1: [  // Conceitos Básicos (Cap. 1) - 5 perguntas
-                { q: "Quais os dois principais objetivos de um sistema operacional?", options: ["A: Abstração e gerência de recursos", "B: Execução de programas e jogos", "C: Segurança e velocidade", "D: Conectividade e armazenamento"], correct: "A" },
-                { q: "Por que a abstração de recursos é importante para os desenvolvedores de aplicações?", options: ["A: Permite acessar hardware diretamente", "B: Simplifica o acesso a recursos distintos", "C: Aumenta a velocidade de execução", "D: Reduz o uso de memória"], correct: "B" },
-                { q: "A gerência de atividades permite compartilhar o processador, executando mais de uma aplicação ao mesmo tempo. Identifique as principais vantagens trazidas por essa funcionalidade.", options: ["A: Atender vários usuários simultâneos, uso de computadores multiprocessador, modularidade", "B: Apenas velocidade maior", "C: Menor consumo de energia", "D: Mais segurança"], correct: "A" },
-                { q: "O que caracteriza um sistema operacional de tempo real?", options: ["A: Previsibilidade em tempos de resposta", "B: Alta velocidade", "C: Interface gráfica", "D: Suporte a rede"], correct: "A" },
-                { q: "Relacione as afirmações aos respectivos tipos de sistemas operacionais: distribuído (D), multi-usuário (M), desktop (K), servidor (S), embarcado (E) ou de tempo-real (T): Deve ter um comportamento temporal previsível.", options: ["A: D", "B: M", "C: K", "D: T"], correct: "D" },
-                { q: "Qual das afirmativas é incorreta sobre sistemas operacionais?", options: ["A: Em um sistema operacional de tempo real, a rapidez de resposta é menos importante que a previsibilidade do tempo de resposta.", "B: Um sistema operacional multi-usuários apresenta comportamento hidrofílico.", "C: Nos sistemas operacionais de rede a localização dos recursos é transparente para os usuários.", "D: Um sistema operacional de tempo real deve priorizar as tarefas que interagem com o usuário."], correct: "B" },
-                { q: "Qual das afirmativas é incorreta sobre sistemas operacionais?", options: ["A: Um sistema operacional de tempo real deve priorizar as tarefas que interagem com o usuário.", "B: Um sistema operacional embarcado é projetado para operar em hardware com poucos recursos.", "C: Sistemas operacionais de rede permitem acesso a recursos remotos.", "D: Sistemas batch processam tarefas sem interação do usuário."], correct: "A" },
-                { q: "O que é abstração em sistemas operacionais?", options: ["A: Interface homogênea para recursos hardware", "B: Gerência de energia", "C: Segurança de dados", "D: Conexão de rede"], correct: "A" },
-                { q: "Qual é o papel da gerência de recursos em um SO?", options: ["A: Resolver conflitos no uso de hardware", "B: Executar jogos", "C: Editar textos", "D: Navegar na internet"], correct: "A" },
-                { q: "Qual a diferença entre política e mecanismo em SO?", options: ["A: Política é decisão abstrata, mecanismo é implementação de baixo nível", "B: Política é hardware, mecanismo é software", "C: Política é usuário, mecanismo é kernel", "D: Política é rede, mecanismo é disco"], correct: "A" },
-                { q: "Qual categoria de SO é usada em smartphones?", options: ["A: Móvel", "B: Desktop", "C: Servidor", "D: Batch"], correct: "A" },
-                { q: "O que define um SO de tempo real crítico (hard real-time)?", options: ["A: Perda de prazo pode ter graves consequências", "B: Alta velocidade sempre", "C: Interface gráfica", "D: Suporte a múltiplos usuários"], correct: "A" },
-                { q: "Qual exemplo de SO de tempo real?", options: ["A: QNX", "B: Windows 10", "C: Android", "D: MS-DOS"], correct: "A" },
-                { q: "O que é um SO embarcado?", options: ["A: Construído para hardware com poucos recursos", "B: Para desktops", "C: Para servidores", "D: Para redes"], correct: "A" },
-                { q: "Qual é um exemplo de SO batch?", options: ["A: OS/360", "B: Linux", "C: iOS", "D: MacOS"], correct: "A" }
-            ],
-            section2: [  // Estrutura de um SO (Cap. 2) - 5 perguntas
-                { q: "Quais os principais elementos de um sistema operacional?", options: ["A: Núcleo, código de inicialização, drivers, programas utilitários", "B: Apenas núcleo", "C: Apenas hardware", "D: Apenas aplicativos"], correct: "A" },
-                { q: "O que é o núcleo de um SO?", options: ["A: Gerência de recursos do hardware", "B: Interface gráfica", "C: Aplicativos do usuário", "D: Periféricos"], correct: "A" },
-                { q: "O que faz o código de inicialização (boot code)?", options: ["A: Inicializa hardware e carrega o núcleo", "B: Executa aplicativos", "C: Gerencia memória", "D: Controla rede"], correct: "A" },
-                { q: "Para que servem os drivers?", options: ["A: Acessar dispositivos físicos", "B: Editar textos", "C: Navegar na internet", "D: Jogar"], correct: "A" },
-                { q: "O que são programas utilitários?", options: ["A: Ferramentas para uso do sistema", "B: O núcleo", "C: Hardware", "D: Drivers"], correct: "A" },
-                { q: "Qual é o papel das chamadas de sistema (syscalls)?", options: ["A: Interface entre aplicativos e núcleo", "B: Inicialização do hardware", "C: Gerência de energia", "D: Interface gráfica"], correct: "A" },
-                { q: "O que é modo núcleo?", options: ["A: Acesso privilegiado ao hardware", "B: Modo usuário", "C: Modo suspenso", "D: Modo terminada"], correct: "A" },
-                { q: "O que é modo usuário?", options: ["A: Acesso restrito, para aplicativos", "B: Acesso total ao hardware", "C: Inicialização", "D: Drivers"], correct: "A" },
-                { q: "Por que é importante separar modo núcleo e modo usuário?", options: ["A: Segurança e estabilidade", "B: Velocidade", "C: Energia", "D: Rede"], correct: "A" },
-                { q: "O que é uma interrupção?", options: ["A: Sinal assíncrono do hardware", "B: Chamada de sistema", "C: Erro de software", "D: Inicialização"], correct: "A" },
-                { q: "Qual a função das interrupções?", options: ["A: Notificar eventos assíncronos", "B: Executar tarefas", "C: Gerenciar memória", "D: Abrir arquivos"], correct: "A" },
-                { q: "O que são exceções?", options: ["A: Erros de execução no processador", "B: Interrupções de hardware", "C: Chamadas de sistema", "D: Drivers"], correct: "A" },
-                { q: "O que são chamadas de sistema?", options: ["A: Interrupções de software para acessar o núcleo", "B: Erros", "C: Interrupções de hardware", "D: Inicialização"], correct: "A" },
-                { q: "Qual é o papel da MMU?", options: ["A: Gerenciar memória virtual", "B: Processador", "C: Disco", "D: Rede"], correct: "A" },
-                { q: "O que é proteção de memória?", options: ["A: Isolamento entre processos", "B: Compartilhamento total", "C: Sem proteção", "D: Acesso direto"], correct: "A" }
-            ],
-            section3: [  // Arquiteturas de SOs (Cap. 3) - 5 perguntas
-                { q: "Qual é a principal vantagem da arquitetura monolítica?", options: ["A: Desempenho alto", "B: Robustez", "C: Fácil manutenção", "D: Modularidade"], correct: "A" },
-                { q: "Qual é uma desvantagem da arquitetura monolítica?", options: ["A: Baixa robustez devido a erros propagando", "B: Alto desempenho", "C: Modularidade", "D: Flexibilidade"], correct: "A" },
-                { q: "O que é uma arquitetura micronúcleo?", options: ["A: Núcleo mínimo, serviços em usuário", "B: Tudo no núcleo", "C: Camadas", "D: Híbrida"], correct: "A" },
-                { q: "Qual vantagem da arquitetura micronúcleo?", options: ["A: Robustez e modularidade", "B: Alto desempenho", "C: Complexidade baixa", "D: Nenhum"], correct: "A" },
-                { q: "O que é arquitetura em camadas?", options: ["A: Organização em níveis de abstração", "B: Tudo em núcleo", "C: Serviços em usuário", "D: Híbrida"], correct: "A" },
-                { q: "Qual desvantagem da arquitetura em camadas?", options: ["A: Desempenho devido a camadas", "B: Robustez", "C: Modularidade", "D: Flexibilidade"], correct: "A" },
-                { q: "O que é núcleo híbrido?", options: ["A: Combinação de monolítico e micronúcleo", "B: Apenas monolítico", "C: Apenas micronúcleo", "D: Camadas"], correct: "A" },
-                { q: "Qual exemplo de SO com núcleo híbrido?", options: ["A: Windows NT", "B: MS-DOS", "C: UNIX antigo", "D: Minix"], correct: "A" },
-                { q: "O que é máquina virtual?", options: ["A: Camada que emula um sistema", "B: Núcleo mínimo", "C: Camadas", "D: Híbrido"], correct: "A" },
-                { q: "O que é hipervisor nativo?", options: ["A: Executa diretamente no hardware", "B: Sobre SO hospedeiro", "C: Aplicação", "D: Contêiner"], correct: "A" },
-                { q: "O que é contêiner?", options: ["A: Virtualização de userspace", "B: Máquina virtual completa", "C: Núcleo híbrido", "D: Exonúcleo"], correct: "A" },
-                { q: "O que é exonúcleo?", options: ["A: Acesso direto a hardware sem abstrações", "B: Núcleo monolítico", "C: Camadas", "D: Micronúcleo"], correct: "A" },
-                { q: "O que é uninúcleo?", options: ["A: Núcleo e aplicação compilados juntos", "B: Núcleo mínimo", "C: Camadas", "D: Híbrido"], correct: "A" },
-                { q: "Qual exemplo de exonúcleo?", options: ["A: Aegis/ExOS", "B: Windows", "C: Linux", "D: Android"], correct: "A" },
-                { q: "Qual exemplo de uninúcleo?", options: ["A: OSv", "B: MS-DOS", "C: UNIX", "D: Minix"], correct: "A" }
-            ],
-            section4: [  // O Conceito de Tarefa (Cap. 4) - 5 perguntas
-                { q: "Qual é uma razão para usar tarefas em vez de programas sequenciais?", options: ["A: Atender vários usuários simultâneos", "B: Menor velocidade", "C: Mais complexidade", "D: Menor modularidade"], correct: "A" },
-                { q: "O que é uma tarefa?", options: ["A: Execução de fluxo de instruções", "B: Programa estático", "C: Hardware", "D: Periférico"], correct: "A" },
-                { q: "Qual diferença entre programa e tarefa?", options: ["A: Programa é estático, tarefa é dinâmica", "B: Programa é dinâmico, tarefa é estática", "C: Nenhum", "D: São iguais"], correct: "A" },
-                { q: "Qual exemplo de tarefas em navegador Web?", options: ["A: Buscar elementos, analisar HTML, animar interface, responder usuário", "B: Apenas buscar elementos", "C: Apenas analisar HTML", "D: Apenas responder usuário"], correct: "A" },
-                { q: "O que é o monitor em sistemas antigos?", options: ["A: Gerencia execução de tarefas", "B: Executa tarefas", "C: Hardware", "D: Aplicativo"], correct: "A" },
-                { q: "O que é time-sharing?", options: ["A: Compartilhamento de tempo do processador", "B: Compartilhamento de memória", "C: Compartilhamento de disco", "D: Compartilhamento de rede"], correct: "A" },
-                { q: "Qual estado de tarefa quando aguardando recurso?", options: ["A: Suspensa", "B: Pronta", "C: Executando", "D: Nova"], correct: "A" },
-                { q: "Qual transição de nova para pronta?", options: ["A: Carregamento concluído", "B: Execução inicia", "C: Suspensão", "D: Término"], correct: "A" },
-                { q: "O que é quantum?", options: ["A: Fatia de tempo para tarefa", "B: Memória alocada", "C: Disco", "D: Prioridade"], correct: "A" },
-                { q: "Qual vantagem do time-sharing?", options: ["A: Melhor interatividade", "B: Menos tarefas", "C: Mais ociosidade", "D: Menor segurança"], correct: "A" },
-                { q: "Qual desvantagem dos sistemas monotarefa?", options: ["A: Ociosidade durante E/S", "B: Alta interatividade", "C: Multitarefa", "D: Segurança"], correct: "A" },
-                { q: "O que é preempção?", options: ["A: Retirar recurso à força", "B: Adicionar recurso", "C: Suspender voluntariamente", "D: Término"], correct: "A" },
-                { q: "Qual estado quando tarefa criada mas não carregada?", options: ["A: Nova", "B: Pronta", "C: Suspensa", "D: Executando"], correct: "A" },
-                { q: "Qual transição de executando para suspensa?", options: ["A: Solicitação de recurso indisponível", "B: Fim de quantum", "C: Carregamento", "D: Término"], correct: "A" },
-                { q: "Qual transição de executando para pronta?", options: ["A: Fim de quantum", "B: Recurso disponível", "C: Erro", "D: Criação"], correct: "A" }
-            ],
-            section5: [  // Implementação de Tarefas (Cap. 5) - 5 perguntas
-                { q: "O que é contexto de uma tarefa?", options: ["A: Estado interno do processador e recursos", "B: Apenas registradores", "C: Apenas memória", "D: Apenas arquivos"], correct: "A" },
-                { q: "O que é TCB ou PCB?", options: ["A: Estrutura para representar tarefa", "B: Programa", "C: Hardware", "D: Driver"], correct: "A" },
-                { q: "O que inclui um TCB típico?", options: ["A: Identificador, estado, contexto, memória, recursos", "B: Apenas identificador", "C: Apenas estado", "D: Apenas contexto"], correct: "A" },
-                { q: "O que é troca de contexto?", options: ["A: Suspender uma tarefa e ativar outra", "B: Criar tarefa", "C: Terminar tarefa", "D: Suspender por E/S"], correct: "A" },
-                { q: "Qual a fórmula de eficiência E?", options: ["A: E = tq / (tq + ttc)", "B: E = ttc / tq", "C: E = tq * ttc", "D: E = ttc - tq"], correct: "A" },
-                { q: "O que é um processo?", options: ["A: Unidade de contexto para tarefas", "B: Tarefa única", "C: Hardware", "D: Driver"], correct: "A" },
-                { q: "Qual chamada de sistema para criar processo no Linux?", options: ["A: fork()", "B: createprocess()", "C: execve()", "D: exit()"], correct: "A" },
-                { q: "O que faz execve()?", options: ["A: Carrega novo código no processo", "B: Cria processo", "C: Termina processo", "D: Espera filho"], correct: "A" },
-                { q: "O que é thread?", options: ["A: Fluxo de execução independente", "B: Processo completo", "C: Núcleo", "D: Driver"], correct: "A" },
-                { q: "O que é TLS em threads?", options: ["A: Thread Local Storage", "B: Total Local Storage", "C: Task Local Storage", "D: Thread Global Storage"], correct: "A" },
-                { q: "Qual modelo de threads N:1?", options: ["A: Muitas threads de usuário para uma de núcleo", "B: Uma para uma", "C: Muitas para muitas", "D: Nenhum"], correct: "A" },
-                { q: "Qual vantagem do modelo 1:1?", options: ["A: Melhor concorrência", "B: Baixo custo", "C: Simples", "D: Sem paralelismo"], correct: "A" },
-                { q: "Qual modelo híbrido N:M?", options: ["A: Muitas threads de usuário para M de núcleo", "B: Uma para uma", "C: N para 1", "D: Nenhum"], correct: "A" },
-                { q: "Qual biblioteca para threads em C?", options: ["A: Pthreads", "B: Java Threads", "C: .NET Threads", "D: Python Threads"], correct: "A" },
-                { q: "Qual comparação entre processos e threads?", options: ["A: Threads são mais leves e compartilham memória", "B: Processos são mais leves", "C: Nenhum", "D: Iguais"], correct: "A" },
-                { q: "Qual exercício: Explique o que é e para que serve o conceito de troca de contexto.", options: ["A: Salvar e restaurar estado da tarefa", "B: Criar tarefa", "C: Terminar tarefa", "D: Suspender tarefa"], correct: "A" },
-                { q: "Qual exercício: O que são processos e threads? Qual a relação entre eles?", options: ["A: Processos são contêineres, threads são fluxos dentro", "B: Iguais", "C: Processos dentro de threads", "D: Nenhum"], correct: "A" },
-                { q: "Qual exercício: Desenhe um diagrama temporal da execução de um processo com threads.", options: ["A: Mostra trocas de contexto entre threads", "B: Apenas processos", "C: Hardware", "D: Drivers"], correct: "A" },
-                { q: "Qual exercício: Quais as principais vantagens e desvantagens de threads em relação a processos?", options: ["A: Threads mais rápidas, mas menos isoladas", "B: Processos mais rápidas", "C: Nenhum", "D: Iguais"], correct: "A" },
-                { q: "Qual exercício: Forneça dois exemplos de problemas cuja implementação multi-thread não tem desempenho melhor que a respectiva implementação sequencial.", options: ["A: Tarefas CPU-bound sem paralelismo", "B: Tarefas I/O-bound", "C: Interativas", "D: Tempo real"], correct: "A" }
-            ],
-            section6: [  // Escalonamento de Tarefas (Cap. 6) - 5 perguntas
-                { q: "Quais tipos de tarefas orientadas a processamento?", options: ["A: CPU-bound", "B: I/O-bound", "C: Interativas", "D: Tempo real"], correct: "A" },
-                { q: "Quais tipos de tarefas orientadas a entrada/saída?", options: ["A: I/O-bound", "B: CPU-bound", "C: Batch", "D: Realtime"], correct: "A" },
-                { q: "Qual métrica para tempo de vida de tarefa?", options: ["A: Turnaround time", "B: Waiting time", "C: Response time", "D: Justice"], correct: "A" },
-                { q: "O que é tempo de espera?", options: ["A: Tempo na fila de prontas", "B: Tempo total", "C: Tempo de resposta", "D: Eficiência"], correct: "A" },
-                { q: "O que é tempo de resposta?", options: ["A: Tempo entre evento e resultado", "B: Tempo total", "C: Tempo de espera", "D: Eficiência"], correct: "A" },
-                { q: "Qual algoritmo FCFS?", options: ["A: First Come First Served", "B: Shortest Job First", "C: Round Robin", "D: Priority"], correct: "A" },
-                { q: "Qual algoritmo SJF?", options: ["A: Shortest Job First", "B: FCFS", "C: RR", "D: PRIO"], correct: "A" },
-                { q: "Qual algoritmo RR?", options: ["A: Round Robin", "B: SJF", "C: SRTF", "D: FCFS"], correct: "A" },
-                { q: "O que é inanição?", options: ["A: Tarefas de baixa prioridade nunca executam", "B: Alta eficiência", "C: Baixo tempo de espera", "D: Justiça"], correct: "A" },
-                { q: "Como evitar inanição?", options: ["A: Envelhecimento", "B: Preempção", "C: Cooperação", "D: Nenhum"], correct: "A" },
-                { q: "Qual exercício: O que significa time sharing e qual a sua importância em um sistema operacional?", options: ["A: Compartilhamento de tempo, interatividade", "B: Compartilhamento de memória", "C: Compartilhamento de disco", "D: Compartilhamento de rede"], correct: "A" },
-                { q: "Qual exercício: Como e com base em que critérios é escolhida a duração de um quantum de processamento?", options: ["A: Equilíbrio entre interatividade e eficiência", "B: Aleatório", "C: Fixo sempre", "D: Nenhum"], correct: "A" },
-                { q: "Qual exercício: Relacione as afirmações aos respectivos algoritmos de escalonamento: RR, SJF, SRTF, PRIOc, PRIOp, PRIOd", options: ["A: Baseado em duração restante", "B: Round Robin", "C: Priority coop", "D: SJF"], correct: "A" },
-                { q: "Qual exercício: Explique o que é escalonamento round-robin, dando um exemplo.", options: ["A: Revezamento com quantum", "B: Primeiro que chega", "C: Menor tarefa", "D: Prioridade"], correct: "A" },
-                { q: "Qual exercício: Como e com base em que critérios é escolhida a duração de um quantum de processamento?", options: ["A: Balanço entre overhead e responsividade", "B: Sempre 1ms", "C: Sempre 1s", "D: Nenhum"], correct: "A" },
-                { q: "Qual exercício: A tabela a seguir representa um conjunto de tarefas prontas para utilizar um processador. Represente graficamente a sequência de execução das tarefas e calcule os tempos médios de vida (turnaround time) e de espera (waiting time), para as políticas de escalonamento a seguir: (a) FCFS cooperativa (b) SJF cooperativa (c) SJF preemptiva (SRTF) (d) PRIO cooperativa (e) PRIO preemptiva (f) RR com tq = 2, sem envelhecimento", options: ["A: Calcular com dados da tabela", "B: Ignorar", "C: Usar SJF", "D: Usar FCFS"], correct: "A" }
-            ],
-            section7: [  // Tópicos em Gestão de Tarefas (Cap. 7) - 5 perguntas
-                { q: "O que é inversão de prioridades?", options: ["A: Tarefa alta prioridade bloqueada por baixa", "B: Herança de prioridades", "C: Envelhecimento", "D: Preempção"], correct: "A" },
-                { q: "Como resolver inversão de prioridades?", options: ["A: Protocolo de herança de prioridade", "B: Aumentar quantum", "C: Reduzir tarefas", "D: Nenhum"], correct: "A" },
-                { q: "Qual exemplo de inversão de prioridades?", options: ["A: Mars Pathfinder", "B: Windows NT", "C: Linux", "D: Android"], correct: "A" },
-                { q: "O que é herança de prioridade?", options: ["A: Aumentar prioridade temporariamente", "B: Reduzir prioridade", "C: Fixar prioridade", "D: Ignorar"], correct: "A" },
-                { q: "Qual exercício: Explique os conceitos de inversão e herança de prioridade.", options: ["A: Inversão é alta bloqueada por baixa, herança resolve", "B: Inversão é herança", "C: Nenhum", "D: Prioridades fixas"], correct: "A" },
-                { q: "Qual exercício: O sistema operacional da sonda Mars Pathfinder usa escalonamento por prioridades preemptivo, sem envelhecimento e sem compartilhamento de tempo. Desenhe o diagrama de tempo da execução sem e com o protocolo de herança de prioridades e discuta sobre as diferenças observadas entre as duas execuções.", options: ["A: Com herança, evita inversão", "B: Sem herança", "C: Nenhum", "D: Preempção"], correct: "A" }
-            ],
-            section8: [  // Comunicação entre Tarefas (Cap. 8) - 5 perguntas
-                { q: "Quais razões para usar tarefas cooperantes?", options: ["A: Atender múltiplos usuários, multiprocessador, modularidade", "B: Menor interatividade", "C: Mais erros", "D: Menor robustez"], correct: "A" },
-                { q: "O que é comunicação intraprocesso?", options: ["A: Dentro do mesmo processo", "B: Entre processos", "C: Entre máquinas", "D: Nenhum"], correct: "A" },
-                { q: "O que é comunicação direta?", options: ["A: Emissor identifica receptor", "B: Indireta", "C: Buffer", "D: Fluxo"], correct: "A" },
-                { q: "O que é comunicação síncrona?", options: ["A: Bloqueante", "B: Não-bloqueante", "C: Semissíncrona", "D: Assíncrona"], correct: "A" },
-                { q: "O que é comunicação por mensagens?", options: ["A: Pacotes independentes", "B: Fluxo contínuo", "C: Nenhum", "D: Buffer infinito"], correct: "A" },
-                { q: "O que é comunicação M:N?", options: ["A: Múltiplos emissores e receptores", "B: 1:1", "C: Direta", "D: Síncrona"], correct: "A" },
-                { q: "Qual exemplo de comunicação por mensagens?", options: ["A: Message queues UNIX", "B: Pipes", "C: TCP", "D: Arquivos"], correct: "A" },
-                { q: "Qual exercício: Quais são as vantagens e desvantagens das abordagens a seguir, sob as óticas do sistema operacional e do programador de aplicações: comunicação bloqueante ou não-bloqueante", options: ["A: Bloqueante simples, não-bloqueante flexível", "B: Nenhum", "C: Iguais", "D: Bloqueante flexível"], correct: "A" },
-                { q: "Qual exercício: Explique como processos que comunicam por troca de mensagens se comportam em relação à capacidade do canal de comunicação, considerando as semânticas de chamada síncrona e assíncrona.", options: ["A: Síncrona bloqueia, assíncrona não", "B: Nenhum", "C: Iguais", "D: Síncrona não bloqueia"], correct: "A" },
-                { q: "Qual exercício: Sobre as afirmações a seguir, relativas mecanismos de comunicação, indique quais são incorretas: A comunicação indireta (por canais) é mais adequada para sistemas distribuídos.", options: ["A: Correta", "B: Incorreta", "C: Parcial", "D: Nenhum"], correct: "A" },
-                { q: "Qual exercício: Sobre as afirmações a seguir, relativas à sincronização na comunicação entre processos, indique quais são incorretas: Na comunicação semi-bloqueante, o emissor espera indefinidamente pela possibilidade de enviar os dados.", options: ["A: Incorreta", "B: Correta", "C: Parcial", "D: Nenhum"], correct: "A" }
-            ]
-        };
-
-        // Função para gerar perguntas aleatórias
-        function generateQuestions(sectionId, pool) {
-            const shuffled = shuffle([...pool]).slice(0, 5);
-            const container = document.getElementById(`questions${sectionId.slice(-1)}`);
-            shuffled.forEach((item, index) => {
-                const qDiv = document.createElement('div');
-                qDiv.classList.add('question');
-                qDiv.dataset.correct = item.correct;
-                const p = document.createElement('p');
-                p.textContent = item.q;
-                qDiv.appendChild(p);
+            if (item.type === 'mc') {
+                // 1. Embaralha as opções
+                let optionsToShuffle = [...item.options];
+                shuffle(optionsToShuffle);
+                
+                // 2. Encontra a nova letra correta após o embaralhamento
+                let newCorrectLetter = '';
                 const optionsDiv = document.createElement('div');
                 optionsDiv.classList.add('options');
-                item.options.forEach(opt => {
-                    const [value, text] = opt.split(': ');
+
+                optionsToShuffle.forEach((opt, optIndex) => {
+                    const originalValue = opt.substring(0, opt.indexOf(':')); // A, B, C ou D original
+                    const newLetter = alphabet[optIndex]; // A, B, C ou D da nova posição
+                    
+                    // Verifica se esta opção é a correta usando o texto (correctText)
+                    const isCorrect = opt.includes(item.correctText);
+
+                    if (isCorrect) {
+                        newCorrectLetter = newLetter;
+                    }
+                    
+                    // Remove a letra original e a substitui pela nova letra
+                    const optionContent = opt.substring(opt.indexOf(':') + 2); // Conteúdo após A:, B: etc.
+                    const newOptionText = `${newLetter}: ${optionContent}`;
+                    
                     const btn = document.createElement('button');
                     btn.classList.add('option');
-                    btn.dataset.value = value;
-                    btn.textContent = opt;
+                    btn.dataset.value = newLetter; // Armazena a nova letra
+                    btn.textContent = newOptionText;
                     optionsDiv.appendChild(btn);
                 });
+                
+                // 3. Atualiza o dataset para a verificação
+                qDiv.dataset.correct = newCorrectLetter; 
                 qDiv.appendChild(optionsDiv);
-                container.appendChild(qDiv);
-            });
-        }
-
-        // Gerar perguntas ao carregar
-        window.addEventListener('load', () => {
-            generateQuestions('section1', questionPools.section1);
-            generateQuestions('section2', questionPools.section2);
-            generateQuestions('section3', questionPools.section3);
-            generateQuestions('section4', questionPools.section4);
-            generateQuestions('section5', questionPools.section5);
-            generateQuestions('section6', questionPools.section6);
-            generateQuestions('section7', questionPools.section7);
-            generateQuestions('section8', questionPools.section8);
-
-            // Adicionar event listeners para seleção
-            document.querySelectorAll('.option').forEach(button => {
-                button.addEventListener('click', function() {
-                    const options = this.parentElement.querySelectorAll('.option');
-                    options.forEach(opt => opt.classList.remove('selected'));
-                    this.classList.add('selected');
-                });
-            });
+            } else { // open
+                qDiv.dataset.keywords = item.keywords.join(',');
+                const textarea = document.createElement('textarea');
+                textarea.classList.add('open-answer');
+                textarea.placeholder = 'Digite sua resposta detalhada aqui...';
+                qDiv.appendChild(textarea);
+            }
+            container.appendChild(qDiv);
         });
+    }
 
-        function checkAnswers(sectionId) {
-            const section = document.getElementById(sectionId);
-            const questions = section.querySelectorAll('.question');
-            let correctCount = 0;
-            let errors = [];
+    // Timer global (30 minutos = 1800 segundos)
+    let timeLeft = 3600;
+    const timerDisplay = document.getElementById('timer');
+    const timerInterval = setInterval(() => {
+        timeLeft--;
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        timerDisplay.textContent = `Tempo restante: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            timerDisplay.textContent = 'Tempo esgotado!';
+            document.querySelectorAll('.submit-btn').forEach(btn => btn.disabled = true);
+        }
+    }, 1000);
 
-            questions.forEach((q, index) => {
+    // Gerar perguntas ao carregar
+    window.addEventListener('load', () => {
+        generateQuestions('section1', questionPools.section1);
+        generateQuestions('section2', questionPools.section2);
+        generateQuestions('section3', questionPools.section3);
+        generateQuestions('section4', questionPools.section4);
+        generateQuestions('section5', questionPools.section5);
+        generateQuestions('section6', questionPools.section6);
+        
+        // Adicionar event listeners para seleção (MC)
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('option')) {
+                const options = e.target.parentElement.querySelectorAll('.option');
+                options.forEach(opt => opt.classList.remove('selected'));
+                e.target.classList.add('selected');
+            }
+        });
+    });
+
+    // Função para verificar respostas
+    function checkAnswers(sectionId) {
+        if (timeLeft <= 0) return; // Não permite verificar após tempo esgotado
+        const section = document.getElementById(sectionId);
+        const questions = section.querySelectorAll('.question');
+        let correctCount = 0;
+        let totalQuestions = 0;
+        let errors = [];
+
+        questions.forEach((q, index) => {
+            totalQuestions++;
+            if (q.dataset.type === 'mc') {
                 const selected = q.querySelector('.option.selected');
-                const correct = q.dataset.correct;
+                const correct = q.dataset.correct; // A nova letra correta (A, B, C ou D)
+                
                 if (selected && selected.dataset.value === correct) {
                     correctCount++;
                 } else {
                     const questionText = q.querySelector('p').textContent;
                     const selectedValue = selected ? selected.textContent : 'Nenhuma selecionada';
-                    const correctOption = q.querySelector(`.option[data-value="${correct}"]`).textContent;
-                    errors.push(`${questionText} - Sua resposta: ${selectedValue} (Errada). Correta: ${correctOption}`);
+                    // Encontra a opção correta pela nova letra correta
+                    const correctOptionElement = Array.from(q.querySelectorAll('.option')).find(opt => opt.dataset.value === correct);
+                    const correctText = correctOptionElement ? correctOptionElement.textContent : 'N/A';
+                    errors.push(`${questionText} - Sua resposta: ${selectedValue} (Errada). Correta: ${correctText}`);
                 }
-            });
-
-            const feedback = document.getElementById(`feedback${sectionId.slice(-1)}`);
-            feedback.innerHTML = `<span class="${correctCount === questions.length ? 'correct' : 'incorrect'}">Você acertou ${correctCount} de ${questions.length} questões.</span>`;
-
-            const result = document.getElementById(`result${sectionId.slice(-1)}`);
-            result.style.display = 'block';
-            result.innerHTML = '<h3>Erros Detalhados:</h3><ul>' + errors.map(err => `<li>${err}</li>`).join('') + '</ul>';
-            if (errors.length === 0) {
-                result.innerHTML = '<p>Todas corretas! Parabéns!</p>';
+            } else { // open
+                const answer = q.querySelector('.open-answer').value.toLowerCase().trim();
+                const keywords = q.dataset.keywords.split(',').map(k => k.toLowerCase().trim());
+                // Critério de correção parcial: pelo menos 2 keywords
+                const matches = keywords.filter(kw => answer.includes(kw)).length;
+                if (matches >= 2) {
+                    correctCount++;
+                } else {
+                    const questionText = q.querySelector('p').textContent;
+                    errors.push(`${questionText} - Resposta parcial/errada. Sugestão: Inclua termos como ${keywords.slice(0,3).join(', ')}...`);
+                }
             }
+        });
+
+        const feedback = document.getElementById(`feedback${sectionId.slice(-1)}`);
+        feedback.innerHTML = `<span class="${correctCount === totalQuestions ? 'correct' : 'incorrect'}">Você acertou ${correctCount} de ${totalQuestions} questões.</span>`;
+        const result = document.getElementById(`result${sectionId.slice(-1)}`);
+        result.style.display = 'block';
+
+        if (errors.length === 0) {
+            result.innerHTML = '<p class="correct">Todas corretas! Parabéns!</p>';
+        } else {
+            result.innerHTML = '<h3>Erros Detalhados:</h3><ul>' + errors.map(err => `<li>${err}</li>`).join('') + '</ul>';
         }
-    </script>
-</body>
-</html>
+    }
+</script>
