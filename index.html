@@ -1,239 +1,412 @@
-<script>
-    // Função para embaralhar array (Fisher-Yates shuffle)
-    function shuffle(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Interativo de Fisiologia</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
         }
-        return array;
-    }
+        h1, h2 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        #timer {
+            text-align: center;
+            font-size: 24px;
+            color: #e74c3c;
+            margin-bottom: 20px;
+        }
+        .section {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+            padding: 20px;
+            max-width: 800px;
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        .question p {
+            font-weight: bold;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+        }
+        .option {
+            background-color: #e7e7e7;
+            border: none;
+            border-radius: 4px;
+            color: #333;
+            cursor: pointer;
+            margin: 5px 0;
+            padding: 10px;
+            text-align: left;
+            transition: background-color 0.3s;
+        }
+        .option:hover {
+            background-color: #d0d0d0;
+        }
+        .option.selected {
+            background-color: #3498db;
+            color: #fff;
+        }
+        .open-answer {
+            width: 100%;
+            min-height: 80px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin: 5px 0;
+            font-family: Arial, sans-serif;
+        }
+        .submit-btn {
+            background-color: #27ae60;
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+            cursor: pointer;
+            display: block;
+            font-size: 16px;
+            margin: 20px auto 0;
+            padding: 10px 20px;
+            transition: background-color 0.3s;
+        }
+        .submit-btn:hover {
+            background-color: #219653;
+        }
+        .submit-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .feedback {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .correct {
+            color: #27ae60;
+        }
+        .incorrect {
+            color: #e74c3c;
+        }
+        .result {
+            background-color: #ecf0f1;
+            border-radius: 4px;
+            margin-top: 20px;
+            padding: 10px;
+        }
+        .result ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .result li {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Quiz Interativo de Fisiologia</h1>
+    <p style="text-align: center;">Este site contém questões interativas sobre Fisiologia, baseadas nos slides fornecidos. Selecione respostas para cada seção e clique em "Verificar". Você tem 30 minutos para completar todo o quiz. A seção final contém 15 questões abertas.</p>
+    <div id="timer">Tempo restante: 30:00</div>
+    <div class="section" id="section1">
+        <h2>Introdução à Fisiologia e Homeostase</h2>
+        <div id="questions1"></div>
+        <button class="submit-btn" onclick="checkAnswers('section1')">Verificar Respostas</button>
+        <div class="feedback" id="feedback1"></div>
+        <div class="result" id="result1" style="display: none;"></div>
+    </div>
+    <div class="section" id="section2">
+        <h2>Membranas Biológicas</h2>
+        <div id="questions2"></div>
+        <button class="submit-btn" onclick="checkAnswers('section2')">Verificar Respostas</button>
+        <div class="feedback" id="feedback2"></div>
+        <div class="result" id="result2" style="display: none;"></div>
+    </div>
+    <div class="section" id="section3">
+        <h2>Comunicação Intercelular</h2>
+        <div id="questions3"></div>
+        <button class="submit-btn" onclick="checkAnswers('section3')">Verificar Respostas</button>
+        <div class="feedback" id="feedback3"></div>
+        <div class="result" id="result3" style="display: none;"></div>
+    </div>
+    <div class="section" id="section4">
+        <h2>Eletrofisiologia e Propriedades Eletroquímicas</h2>
+        <div id="questions4"></div>
+        <button class="submit-btn" onclick="checkAnswers('section4')">Verificar Respostas</button>
+        <div class="feedback" id="feedback4"></div>
+        <div class="result" id="result4" style="display: none;"></div>
+    </div>
+    <div class="section" id="section5">
+        <h2>Fisiologia Muscular e Sistemas Relacionados</h2>
+        <div id="questions5"></div>
+        <button class="submit-btn" onclick="checkAnswers('section5')">Verificar Respostas</button>
+        <div class="feedback" id="feedback5"></div>
+        <div class="result" id="result5" style="display: none;"></div>
+    </div>
+    <div class="section" id="section6">
+        <h2>Questões Abertas (Nível Avançado)</h2>
+        <p>Responda livremente nas caixas de texto. Verificação parcial baseada em palavras-chave.</p>
+        <div id="questions6"></div>
+        <button class="submit-btn" onclick="checkAnswers('section6')">Verificar Respostas</button>
+        <div class="feedback" id="feedback6"></div>
+        <div class="result" id="result6" style="display: none;"></div>
+    </div>
+    <script>
+        // Função para embaralhar array (Fisher-Yates shuffle)
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
 
-    // Pools de Perguntas de Fisiologia (Baseadas nos PDFs e Slides)
-    const questionPools = {
-        section1: [
-            // Agora as respostas corretas são armazenadas como o TEXTO da opção, não a letra.
-            { type: 'mc', q: "Qual é a definição de Fisiologia segundo os slides?", options: ["A: Estudo da natureza do funcionamento de um organismo vivo e suas partes", "B: Apenas estudo de processos químicos", "C: Estudo de anatomia macroscópica", "D: Estudo de física aplicada"], correctText: "Estudo da natureza do funcionamento de um organismo vivo e suas partes" },
-            { type: 'mc', q: "Quem introduziu o conceito de regulação do meio interno?", options: ["A: Jean Fernel", "B: Claude Bernard", "C: Walter B. Cannon", "D: Roberto Lent"], correctText: "Claude Bernard" },
-            { type: 'mc', q: "O termo 'Homeostase' foi cunhado por:", options: ["A: Claude Bernard", "B: Walter B. Cannon", "C: Jean Fernel", "D: Guyton & Hall"], correctText: "Walter B. Cannon" },
-            { type: 'mc', q: "O meio interno do organismo é composto principalmente por:", options: ["A: Líquido intracelular (LIC)", "B: Líquido extracelular (LEC)", "C: Apenas plasma", "D: Oceano primitivo"], correctText: "Líquido extracelular (LEC)" },
-            { type: 'mc', q: "Qual é a porcentagem aproximada de LEC no plasma?", options: ["A: 75%", "B: 25%", "C: 67%", "D: 33%"], correctText: "25%" },
-            { type: 'mc', q: "As alças de retroalimentação negativa são usadas para:", options: ["A: Amplificar respostas", "B: Estabilizar o sistema", "C: Causar explosões", "D: Ignorar mudanças"], correctText: "Estabilizar o sistema" },
-            { type: 'mc', q: "Exemplo de feedback positivo nos slides:", options: ["A: Regulação de temperatura", "B: Coagulação sanguínea", "C: Pressão arterial", "D: Glicemia"], correctText: "Coagulação sanguínea" },
-            { type: 'mc', q: "Quais são os principais componentes do meio interno?", options: ["A: Plasma e interstício", "B: Apenas LIC", "C: Oceano primitivo", "D: Sistemas nervosos"], correctText: "Plasma e interstício" },
-            { type: 'mc', q: "A permeabilidade seletiva refere-se a:", options: ["A: Diferenças em íons entre LIC e LEC", "B: Igualdade total de composições", "C: Ausência de membranas", "D: Apenas água"], correctText: "Diferenças em íons entre LIC e LEC" },
-            { type: 'mc', q: "Quantos sistemas principais no corpo humano são listados?", options: ["A: 5", "B: 10", "C: 15", "D: 20"], correctText: "10" }
-        ],
-        section2: [
-            { type: 'mc', q: "As membranas biológicas são formadas principalmente por:", options: ["A: Proteínas apenas", "B: Fosfolipídios na bicamada lipídica", "C: Carboidratos", "D: Ácidos nucleicos"], correctText: "Fosfolipídios na bicamada lipídica" },
-            { type: 'mc', q: "Qual a função principal das membranas biológicas?", options: ["A: Barreira seletiva", "B: Armazenamento de energia", "C: Síntese de proteínas", "D: Reprodução celular"], correctText: "Barreira seletiva" },
-            { type: 'mc', q: "Os fosfolipídios formam a bicamada porque são:", options: ["A: Hidrofílicos totais", "B: Anfipáticos (hidrofílicos e hidrofóbicos)", "C: Hidrofóbicos totais", "D: Neutros"], correctText: "Anfipáticos (hidrofílicos e hidrofóbicos)" },
-            { type: 'mc', q: "Qual íon é mais concentrado no LIC do que no LEC?", options: ["A: Na+", "B: K+", "C: Cl-", "D: Ca2+"], correctText: "K+" },
-            { type: 'mc', q: "A composição eletrolítica dos líquidos corporais é mantida por:", options: ["A: Permeabilidade seletiva", "B: Difusão aleatória", "C: Ausência de bombas", "D: Apenas osmose"], correctText: "Permeabilidade seletiva" },
-            { type: 'mc', q: "Qual a função das proteínas de membrana?", options: ["A: Apenas estrutural", "B: Transporte, sinalização, adesão", "C: Armazenamento de íons", "D: Síntese de lipídios"], correctText: "Transporte, sinalização, adesão" },
-            { type: 'mc', q: "O modelo de mosaico fluido descreve as membranas como:", options: ["A: Rígidas e estáticas", "B: Fluidas com proteínas embutidas", "C: Apenas lipídicas", "D: Sem colesterol"], correctText: "Fluidas com proteínas embutidas" },
-            { type: 'mc', q: "O colesterol nas membranas ajuda a:", options: ["A: Aumentar fluidez excessiva", "B: Manter a fluidez adequada", "C: Bloquear todo transporte", "D: Dissolver a bicamada"], correctText: "Manter a fluidez adequada" },
-            { type: 'mc', q: "Diferenças na composição lipídica afetam:", options: ["A: Nada", "B: Fluidez e função da membrana", "C: Apenas cor", "D: Tamanho celular"], correctText: "Fluidez e função da membrana" },
-            { type: 'mc', q: "As glicoproteínas na membrana são importantes para:", options: ["A: Reconhecimento celular", "B: Apenas transporte de íons", "C: Armazenamento de energia", "D: Divisão celular"], correctText: "Reconhecimento celular" }
-        ],
-        section3: [
-            { type: 'mc', q: "Tipos de comunicação entre células incluem:", options: ["A: Apenas moléculas livres", "B: Moléculas livres e aderidas", "C: Apenas sinapses elétricas", "D: Nada"], correctText: "Moléculas livres e aderidas" },
-            { type: 'mc', q: "Moléculas de adesão ligam o extracelular ao:", options: ["A: Núcleo", "B: Citoesqueleto", "C: Mitocôndria", "D: Ribossomos"], correctText: "Citoesqueleto" },
-            { type: 'mc', q: "Junções GAP permitem comunicação em:", options: ["A: Sincício cardíaco", "B: Apenas nervos", "C: Apenas músculos lisos", "D: Ossos"], correctText: "Sincício cardíaco" },
-            { type: 'mc', q: "Moléculas de adesão são usadas no desenvolvimento para:", options: ["A: Migração e diferenciação celular", "B: Apenas digestão", "C: Respiração", "D: Circulação"], correctText: "Migração e diferenciação celular" },
-            { type: 'mc', q: "Sinalização parácrina é:", options: ["A: Local", "B: Distante via sangue", "C: Via nervos", "D: Neuroendócrina"], correctText: "Local" },
-            { type: 'mc', q: "Sinalização endócrina envolve:", options: ["A: Hormônios no sangue", "B: Moléculas locais", "C: Contato direto", "D: Junções GAP"], correctText: "Hormônios no sangue" },
-            { type: 'mc', q: "Receptores determinam a:", options: ["A: Resposta celular", "B: Produção de sinal", "C: Digestão", "D: Movimento"], correctText: "Resposta celular" },
-            { type: 'mc', q: "Exemplo de receptor ionotrópico:", options: ["A: Receptor de glutamato (AMPA e NMDA)", "B: Receptor olfatório", "C: Receptor de insulina", "D: Receptor de cortisol"], correctText: "Receptor de glutamato (AMPA e NMDA)" },
-            { type: 'mc', q: "Receptor conectado a proteína G exemplo:", options: ["A: Receptor olfatório", "B: AMPA", "C: Insulina", "D: Cortisol"], correctText: "Receptor olfatório" },
-            { type: 'mc', q: "Receptor intracelular exemplo:", options: ["A: Receptor de cortisol", "B: NMDA", "C: Olfatório", "D: Glutamato"], correctText: "Receptor de cortisol" }
-        ],
-        section4: [
-            { type: 'mc', q: "Propriedades eletroquímicas das células excitáveis envolvem íons como:", options: ["A: K+ e Na+", "B: Apenas Ca2+", "C: Apenas Cl-", "D: Nenhum íon"], correctText: "K+ e Na+" },
-            { type: 'mc', q: "O potencial de repouso é mantido por:", options: ["A: Bomba Na+/K+ ATPase", "B: Diferenças de concentração de íons", "C: Apenas difusão", "D: Nada"], correctText: "Diferenças de concentração de íons" },
-            { type: 'mc', q: "Potencial de ação envolve influxo de:", options: ["A: K+", "B: Na+", "C: Cl-", "D: H+"], correctText: "Na+" },
-            { type: 'mc', q: "Células excitáveis incluem:", options: ["A: Neurônios e músculos", "B: Apenas ossos", "C: Apenas pele", "D: Apenas fígado"], correctText: "Neurônios e músculos" },
-            { type: 'mc', q: "A despolarização ocorre quando:", options: ["A: Entra Na+", "B: Sai K+", "C: Entra Cl-", "D: Sai Ca2+"], correctText: "Entra Na+" },
-            { type: 'mc', q: "Hiperpolarização é causada por:", options: ["A: Saída de K+ ou entrada de Cl-", "B: Entrada de Na+", "C: Nada", "D: Apenas Ca2+"], correctText: "Saída de K+ ou entrada de Cl-" },
-            { type: 'mc', q: "O gradiente eletroquímico é:", options: ["A: Força que move íons", "B: Apenas elétrico", "C: Apenas químico", "D: Nenhum"], correctText: "Força que move íons" },
-            { type: 'mc', q: "Canais iônicos são seletivos para:", options: ["A: Tipos específicos de íons", "B: Todos íons", "C: Apenas proteínas", "D: Lipídios"], correctText: "Tipos específicos de íons" },
-            { type: 'mc', q: "A equação de Nernst calcula:", options: ["A: Potencial de equilíbrio para íons", "B: Fluxo de água", "C: Pressão", "D: Temperatura"], correctText: "Potencial de equilíbrio para íons" },
-            { type: 'mc', q: "Potencial de repouso típico de neurônio:", options: ["A: +70mV", "B: -70mV", "C: 0mV", "D: -30mV"], correctText: "-70mV" }
-        ],
-        section5: [
-            { type: 'mc', q: "Fibras musculares são especializadas em:", options: ["A: Contração", "B: Sensação", "C: Secreção", "D: Absorção"], correctText: "Contração" },
-            { type: 'mc', q: "Para que serve o movimento segundo os slides?", options: ["A: Respiração, digestão, circulação, etc", "B: Apenas luta-ou-fuga", "C: Apenas comunicação", "D: Nada"], correctText: "Respiração, digestão, circulação, etc" },
-            { type: 'mc', q: "Sistema nervoso é dividido em:", options: ["A: SNC e SNP", "B: Apenas SNC", "C: Apenas SNP", "D: SNC e endócrino"], correctText: "SNC e SNP" },
-            { type: 'mc', q: "Neurônios aferentes são:", options: ["A: Sensoriais", "B: Motores", "C: Interneurônios", "D: Glia"], correctText: "Sensoriais" },
-            { type: 'mc', q: "Transdução sensorial é:", options: ["A: Conversão de estímulo em sinal elétrico", "B: Apenas visão", "C: Apenas audição", "D: Nada"], correctText: "Conversão de estímulo em sinal elétrico" },
-            { type: 'mc', q: "Fibras musculares sob comando neural envolvem:", options: ["A: Motoneurônios", "B: Apenas hormônios", "C: Apenas autônomo", "D: Nenhum"], correctText: "Motoneurônios" },
-            { type: 'mc', q: "Comportamentos complexos incluem:", options: ["A: Comunicação, socialização", "B: Apenas respiração", "C: Apenas digestão", "D: Nada"], correctText: "Comunicação, socialização" },
-            { type: 'mc', q: "SNC inclui:", options: ["A: Crânio e coluna vertebral", "B: Apenas nervos periféricos", "C: Apenas baço", "D: Timo"], correctText: "Crânio e coluna vertebral" },
-            { type: 'mc', q: "Organismo interage com ambiente via:", options: ["A: Neurônios aferentes", "B: Apenas eferentes", "C: Nenhum", "D: Apenas glia"], correctText: "Neurônios aferentes" },
-            { type: 'mc', q: "Funções básicas do movimento:", options: ["A: Respiração, postura", "B: Apenas exploração", "C: Apenas expressão", "D: Nenhum"], correctText: "Respiração, postura" }
-        ],
-        section6: [ // 15 Questões Abertas (Sem mudança, pois a correção é por keywords)
-            { type: 'open', q: "Defina Fisiologia com base nos slides.", keywords: ["natureza funcionamento", "organismo vivo", "processos físicos químicos"] },
-            { type: 'open', q: "Explique o conceito de homeostase e quem o cunhou.", keywords: ["walter cannon", "manutenção equilíbrio", "meio interno"] },
-            { type: 'open', q: "Descreva o meio interno do organismo e suas divisões.", keywords: ["líquido extracelular", "plasma interstício", "25% 75%"] },
-            { type: 'open', q: "Diferencie feedback negativo de positivo com exemplos.", keywords: ["negativo estabiliza", "positivo amplifica", "coagulação parto"] },
-            { type: 'open', q: "Cite os principais sistemas do corpo humano listados nos slides.", keywords: ["tegumentar circulatório", "músculo-esquelético respiratório", "digestório urinário reprodutor linfático endócrino nervoso"] },
-            { type: 'open', q: "Explique a estrutura das membranas biológicas.", keywords: ["bicamada lipídica", "fosfolipídios", "proteínas embutidas"] },
-            { type: 'open', q: "Descreva as diferenças na composição iônica entre LIC e LEC.", keywords: ["k+ alto lic", "na+ alto lec", "permeabilidade seletiva"] },
-            { type: 'open', q: "Tipos de comunicação intercelular e exemplos.", keywords: ["livre aderida", "parácrina endócrina", "neurócrina"] },
-            { type: 'open', q: "Explique junções GAP e seu exemplo.", keywords: ["comunicantes", "sincício cardíaco", "troca íons"] },
-            { type: 'open', q: "Descreva um receptor ionotrópico com exemplo.", keywords: ["glutamato ampa nmda", "canal iônico", "rápido"] },
-            { type: 'open', q: "Propriedades eletroquímicas das células excitáveis.", keywords: ["k+ na+", "potencial repouso", "ação"] },
-            { type: 'open', q: "Explique a fisiologia muscular básica.", keywords: ["fibras contração", "actina miosina", "energia atp"] },
-            { type: 'open', q: "Descreva o sistema nervoso e suas divisões.", keywords: ["snc snp", "crânio coluna", "nervos periféricos"] },
-            { type: 'open', q: "Introdução aos sistemas sensoriais: transdução.", keywords: ["estímulo sinal elétrico", "neurônio aferente", "snc"] },
-            { type: 'open', q: "Para que serve o movimento? Funções e comportamentos.", keywords: ["respiração digestão", "luta-fuga exploração", "comunicação socialização"] }
-        ]
-    };
+        // Pools de Perguntas de Fisiologia (Agora a resposta correta é armazenada como o texto da opção: 'correctText')
+        const questionPools = {
+            section1: [
+                { type: 'mc', q: "Qual é a definição de Fisiologia segundo os slides?", options: ["A: Estudo da natureza do funcionamento de um organismo vivo e suas partes", "B: Apenas estudo de processos químicos", "C: Estudo de anatomia macroscópica", "D: Estudo de física aplicada"], correctText: "Estudo da natureza do funcionamento de um organismo vivo e suas partes" },
+                { type: 'mc', q: "Quem introduziu o conceito de regulação do meio interno?", options: ["A: Jean Fernel", "B: Claude Bernard", "C: Walter B. Cannon", "D: Roberto Lent"], correctText: "Claude Bernard" },
+                { type: 'mc', q: "O termo 'Homeostase' foi cunhado por:", options: ["A: Claude Bernard", "B: Walter B. Cannon", "C: Jean Fernel", "D: Guyton & Hall"], correctText: "Walter B. Cannon" },
+                { type: 'mc', q: "O meio interno do organismo é composto principalmente por:", options: ["A: Líquido intracelular (LIC)", "B: Líquido extracelular (LEC)", "C: Apenas plasma", "D: Oceano primitivo"], correctText: "Líquido extracelular (LEC)" },
+                { type: 'mc', q: "Qual é a porcentagem aproximada de LEC no plasma?", options: ["A: 75%", "B: 25%", "C: 67%", "D: 33%"], correctText: "25%" },
+                { type: 'mc', q: "As alças de retroalimentação negativa são usadas para:", options: ["A: Amplificar respostas", "B: Estabilizar o sistema", "C: Causar explosões", "D: Ignorar mudanças"], correctText: "Estabilizar o sistema" },
+                { type: 'mc', q: "Exemplo de feedback positivo nos slides:", options: ["A: Regulação de temperatura", "B: Coagulação sanguínea", "C: Pressão arterial", "D: Glicemia"], correctText: "Coagulação sanguínea" },
+                { type: 'mc', q: "Quais são os principais componentes do meio interno?", options: ["A: Plasma e interstício", "B: Apenas LIC", "C: Oceano primitivo", "D: Sistemas nervosos"], correctText: "Plasma e interstício" },
+                { type: 'mc', q: "A permeabilidade seletiva refere-se a:", options: ["A: Diferenças em íons entre LIC e LEC", "B: Igualdade total de composições", "C: Ausência de membranas", "D: Apenas água"], correctText: "Diferenças em íons entre LIC e LEC" },
+                { type: 'mc', q: "Quantos sistemas principais no corpo humano são listados?", options: ["A: 5", "B: 10", "C: 15", "D: 20"], correctText: "10" }
+            ],
+            section2: [
+                { type: 'mc', q: "As membranas biológicas são formadas principalmente por:", options: ["A: Proteínas apenas", "B: Fosfolipídios na bicamada lipídica", "C: Carboidratos", "D: Ácidos nucleicos"], correctText: "Fosfolipídios na bicamada lipídica" },
+                { type: 'mc', q: "Qual a função principal das membranas biológicas?", options: ["A: Barreira seletiva", "B: Armazenamento de energia", "C: Síntese de proteínas", "D: Reprodução celular"], correctText: "Barreira seletiva" },
+                { type: 'mc', q: "Os fosfolipídios formam a bicamada porque são:", options: ["A: Hidrofílicos totais", "B: Anfipáticos (hidrofílicos e hidrofóbicos)", "C: Hidrofóbicos totais", "D: Neutros"], correctText: "Anfipáticos (hidrofílicos e hidrofóbicos)" },
+                { type: 'mc', q: "Qual íon é mais concentrado no LIC do que no LEC?", options: ["A: Na+", "B: K+", "C: Cl-", "D: Ca2+"], correctText: "K+" },
+                { type: 'mc', q: "A composição eletrolítica dos líquidos corporais é mantida por:", options: ["A: Permeabilidade seletiva", "B: Difusão aleatória", "C: Ausência de bombas", "D: Apenas osmose"], correctText: "Permeabilidade seletiva" },
+                { type: 'mc', q: "Qual a função das proteínas de membrana?", options: ["A: Apenas estrutural", "B: Transporte, sinalização, adesão", "C: Armazenamento de íons", "D: Síntese de lipídios"], correctText: "Transporte, sinalização, adesão" },
+                { type: 'mc', q: "O modelo de mosaico fluido descreve as membranas como:", options: ["A: Rígidas e estáticas", "B: Fluidas com proteínas embutidas", "C: Apenas lipídicas", "D: Sem colesterol"], correctText: "Fluidas com proteínas embutidas" },
+                { type: 'mc', q: "O colesterol nas membranas ajuda a:", options: ["A: Aumentar fluidez excessiva", "B: Manter a fluidez adequada", "C: Bloquear todo transporte", "D: Dissolver a bicamada"], correctText: "Manter a fluidez adequada" },
+                { type: 'mc', q: "Diferenças na composição lipídica afetam:", options: ["A: Nada", "B: Fluidez e função da membrana", "C: Apenas cor", "D: Tamanho celular"], correctText: "Fluidez e função da membrana" },
+                { type: 'mc', q: "As glicoproteínas na membrana são importantes para:", options: ["A: Reconhecimento celular", "B: Apenas transporte de íons", "C: Armazenamento de energia", "D: Divisão celular"], correctText: "Reconhecimento celular" }
+            ],
+            section3: [
+                { type: 'mc', q: "Tipos de comunicação entre células incluem:", options: ["A: Apenas moléculas livres", "B: Moléculas livres e aderidas", "C: Apenas sinapses elétricas", "D: Nada"], correctText: "Moléculas livres e aderidas" },
+                { type: 'mc', q: "Moléculas de adesão ligam o extracelular ao:", options: ["A: Núcleo", "B: Citoesqueleto", "C: Mitocôndria", "D: Ribossomos"], correctText: "Citoesqueleto" },
+                { type: 'mc', q: "Junções GAP permitem comunicação em:", options: ["A: Sincício cardíaco", "B: Apenas nervos", "C: Apenas músculos lisos", "D: Ossos"], correctText: "Sincício cardíaco" },
+                { type: 'mc', q: "Moléculas de adesão são usadas no desenvolvimento para:", options: ["A: Migração e diferenciação celular", "B: Apenas digestão", "C: Respiração", "D: Circulação"], correctText: "Migração e diferenciação celular" },
+                { type: 'mc', q: "Sinalização parácrina é:", options: ["A: Local", "B: Distante via sangue", "C: Via nervos", "D: Neuroendócrina"], correctText: "Local" },
+                { type: 'mc', q: "Sinalização endócrina envolve:", options: ["A: Hormônios no sangue", "B: Moléculas locais", "C: Contato direto", "D: Junções GAP"], correctText: "Hormônios no sangue" },
+                { type: 'mc', q: "Receptores determinam a:", options: ["A: Resposta celular", "B: Produção de sinal", "C: Digestão", "D: Movimento"], correctText: "Resposta celular" },
+                { type: 'mc', q: "Exemplo de receptor ionotrópico:", options: ["A: Receptor de glutamato (AMPA e NMDA)", "B: Receptor olfatório", "C: Receptor de insulina", "D: Receptor de cortisol"], correctText: "Receptor de glutamato (AMPA e NMDA)" },
+                { type: 'mc', q: "Receptor conectado a proteína G exemplo:", options: ["A: Receptor olfatório", "B: AMPA", "C: Insulina", "D: Cortisol"], correctText: "Receptor olfatório" },
+                { type: 'mc', q: "Receptor intracelular exemplo:", options: ["A: Receptor de cortisol", "B: NMDA", "C: Olfatório", "D: Glutamato"], correctText: "Receptor de cortisol" }
+            ],
+            section4: [
+                { type: 'mc', q: "Propriedades eletroquímicas das células excitáveis envolvem íons como:", options: ["A: K+ e Na+", "B: Apenas Ca2+", "C: Apenas Cl-", "D: Nenhum íon"], correctText: "K+ e Na+" },
+                { type: 'mc', q: "O potencial de repouso é mantido por:", options: ["A: Bomba Na+/K+ ATPase", "B: Diferenças de concentração de íons", "C: Apenas difusão", "D: Nada"], correctText: "Diferenças de concentração de íons" },
+                { type: 'mc', q: "Potencial de ação envolve influxo de:", options: ["A: K+", "B: Na+", "C: Cl-", "D: H+"], correctText: "Na+" },
+                { type: 'mc', q: "Células excitáveis incluem:", options: ["A: Neurônios e músculos", "B: Apenas ossos", "C: Apenas pele", "D: Apenas fígado"], correctText: "Neurônios e músculos" },
+                { type: 'mc', q: "A despolarização ocorre quando:", options: ["A: Entra Na+", "B: Sai K+", "C: Entra Cl-", "D: Sai Ca2+"], correctText: "Entra Na+" },
+                { type: 'mc', q: "Hiperpolarização é causada por:", options: ["A: Saída de K+ ou entrada de Cl-", "B: Entrada de Na+", "C: Nada", "D: Apenas Ca2+"], correctText: "Saída de K+ ou entrada de Cl-" },
+                { type: 'mc', q: "O gradiente eletroquímico é:", options: ["A: Força que move íons", "B: Apenas elétrico", "C: Apenas químico", "D: Nenhum"], correctText: "Força que move íons" },
+                { type: 'mc', q: "Canais iônicos são seletivos para:", options: ["A: Tipos específicos de íons", "B: Todos íons", "C: Apenas proteínas", "D: Lipídios"], correctText: "Tipos específicos de íons" },
+                { type: 'mc', q: "A equação de Nernst calcula:", options: ["A: Potencial de equilíbrio para íons", "B: Fluxo de água", "C: Pressão", "D: Temperatura"], correctText: "Potencial de equilíbrio para íons" },
+                { type: 'mc', q: "Potencial de repouso típico de neurônio:", options: ["A: +70mV", "B: -70mV", "C: 0mV", "D: -30mV"], correctText: "-70mV" }
+            ],
+            section5: [
+                { type: 'mc', q: "Fibras musculares são especializadas em:", options: ["A: Contração", "B: Sensação", "C: Secreção", "D: Absorção"], correctText: "Contração" },
+                { type: 'mc', q: "Para que serve o movimento segundo os slides?", options: ["A: Respiração, digestão, circulação, etc", "B: Apenas luta-ou-fuga", "C: Apenas comunicação", "D: Nada"], correctText: "Respiração, digestão, circulação, etc" },
+                { type: 'mc', q: "Sistema nervoso é dividido em:", options: ["A: SNC e SNP", "B: Apenas SNC", "C: Apenas SNP", "D: SNC e endócrino"], correctText: "SNC e SNP" },
+                { type: 'mc', q: "Neurônios aferentes são:", options: ["A: Sensoriais", "B: Motores", "C: Interneurônios", "D: Glia"], correctText: "Sensoriais" },
+                { type: 'mc', q: "Transdução sensorial é:", options: ["A: Conversão de estímulo em sinal elétrico", "B: Apenas visão", "C: Apenas audição", "D: Nada"], correctText: "Conversão de estímulo em sinal elétrico" },
+                { type: 'mc', q: "Fibras musculares sob comando neural envolvem:", options: ["A: Motoneurônios", "B: Apenas hormônios", "C: Apenas autônomo", "D: Nenhum"], correctText: "Motoneurônios" },
+                { type: 'mc', q: "Comportamentos complexos incluem:", options: ["A: Comunicação, socialização", "B: Apenas respiração", "C: Apenas digestão", "D: Nada"], correctText: "Comunicação, socialização" },
+                { type: 'mc', q: "SNC inclui:", options: ["A: Crânio e coluna vertebral", "B: Apenas nervos periféricos", "C: Apenas baço", "D: Timo"], correctText: "Crânio e coluna vertebral" },
+                { type: 'mc', q: "Organismo interage com ambiente via:", options: ["A: Neurônios aferentes", "B: Apenas eferentes", "C: Nenhum", "D: Apenas glia"], correctText: "Neurônios aferentes" },
+                { type: 'mc', q: "Funções básicas do movimento:", options: ["A: Respiração, postura", "B: Apenas exploração", "C: Apenas expressão", "D: Nenhum"], correctText: "Respiração, postura" }
+            ],
+            section6: [ // 15 Questões Abertas
+                { type: 'open', q: "Defina Fisiologia com base nos slides.", keywords: ["natureza funcionamento", "organismo vivo", "processos físicos químicos"] },
+                { type: 'open', q: "Explique o conceito de homeostase e quem o cunhou.", keywords: ["walter cannon", "manutenção equilíbrio", "meio interno"] },
+                { type: 'open', q: "Descreva o meio interno do organismo e suas divisões.", keywords: ["líquido extracelular", "plasma interstício", "25% 75%"] },
+                { type: 'open', q: "Diferencie feedback negativo de positivo com exemplos.", keywords: ["negativo estabiliza", "positivo amplifica", "coagulação parto"] },
+                { type: 'open', q: "Cite os principais sistemas do corpo humano listados nos slides.", keywords: ["tegumentar circulatório", "músculo-esquelético respiratório", "digestório urinário reprodutor linfático endócrino nervoso"] },
+                { type: 'open', q: "Explique a estrutura das membranas biológicas.", keywords: ["bicamada lipídica", "fosfolipídios", "proteínas embutidas"] },
+                { type: 'open', q: "Descreva as diferenças na composição iônica entre LIC e LEC.", keywords: ["k+ alto lic", "na+ alto lec", "permeabilidade seletiva"] },
+                { type: 'open', q: "Tipos de comunicação intercelular e exemplos.", keywords: ["livre aderida", "parácrina endócrina", "neurócrina"] },
+                { type: 'open', q: "Explique junções GAP e seu exemplo.", keywords: ["comunicantes", "sincício cardíaco", "troca íons"] },
+                { type: 'open', q: "Descreva um receptor ionotrópico com exemplo.", keywords: ["glutamato ampa nmda", "canal iônico", "rápido"] },
+                { type: 'open', q: "Propriedades eletroquímicas das células excitáveis.", keywords: ["k+ na+", "potencial repouso", "ação"] },
+                { type: 'open', q: "Explique a fisiologia muscular básica.", keywords: ["fibras contração", "actina miosina", "energia atp"] },
+                { type: 'open', q: "Descreva o sistema nervoso e suas divisões.", keywords: ["snc snp", "crânio coluna", "nervos periféricos"] },
+                { type: 'open', q: "Introdução aos sistemas sensoriais: transdução.", keywords: ["estímulo sinal elétrico", "neurônio aferente", "snc"] },
+                { type: 'open', q: "Para que serve o movimento? Funções e comportamentos.", keywords: ["respiração digestão", "luta-fuga exploração", "comunicação socialização"] }
+            ]
+        };
 
-    // Função para gerar perguntas aleatórias (suporte a MC e open)
-    function generateQuestions(sectionId, pool) {
-        const numToGenerate = sectionId === 'section6' ? pool.length : 5;
-        const shuffledQuestions = shuffle([...pool]).slice(0, numToGenerate);
-        const container = document.getElementById(`questions${sectionId.slice(-1)}`);
-        
-        const alphabet = ['A', 'B', 'C', 'D'];
+        // Função para gerar perguntas aleatórias (suporte a MC e open)
+        function generateQuestions(sectionId, pool) {
+            const numToGenerate = sectionId === 'section6' ? pool.length : 5;
+            const shuffledQuestions = shuffle([...pool]).slice(0, numToGenerate);
+            const container = document.getElementById(`questions${sectionId.slice(-1)}`);
+            
+            const alphabet = ['A', 'B', 'C', 'D'];
 
-        shuffledQuestions.forEach((item, index) => {
-            const qDiv = document.createElement('div');
-            qDiv.classList.add('question');
-            qDiv.dataset.type = item.type;
-            const p = document.createElement('p');
-            p.textContent = `${index + 1}. ${item.q}`;
-            qDiv.appendChild(p);
+            shuffledQuestions.forEach((item, index) => {
+                const qDiv = document.createElement('div');
+                qDiv.classList.add('question');
+                qDiv.dataset.type = item.type;
+                const p = document.createElement('p');
+                p.textContent = `${index + 1}. ${item.q}`;
+                qDiv.appendChild(p);
 
-            if (item.type === 'mc') {
-                // 1. Embaralha as opções
-                let optionsToShuffle = [...item.options];
-                shuffle(optionsToShuffle);
-                
-                // 2. Encontra a nova letra correta após o embaralhamento
-                let newCorrectLetter = '';
-                const optionsDiv = document.createElement('div');
-                optionsDiv.classList.add('options');
-
-                optionsToShuffle.forEach((opt, optIndex) => {
-                    const originalValue = opt.substring(0, opt.indexOf(':')); // A, B, C ou D original
-                    const newLetter = alphabet[optIndex]; // A, B, C ou D da nova posição
+                if (item.type === 'mc') {
+                    // 1. Embaralha as opções
+                    let optionsToShuffle = [...item.options];
+                    shuffle(optionsToShuffle);
                     
-                    // Verifica se esta opção é a correta usando o texto (correctText)
-                    const isCorrect = opt.includes(item.correctText);
+                    // 2. Encontra a nova letra correta após o embaralhamento e recria as opções
+                    let newCorrectLetter = '';
+                    const optionsDiv = document.createElement('div');
+                    optionsDiv.classList.add('options');
 
-                    if (isCorrect) {
-                        newCorrectLetter = newLetter;
+                    optionsToShuffle.forEach((opt, optIndex) => {
+                        const newLetter = alphabet[optIndex]; // A, B, C ou D da nova posição
+                        
+                        // Verifica se esta opção é a correta usando o texto (correctText)
+                        // É necessário usar uma verificação mais flexível, pois o texto da opção contém o prefixo (A: etc.)
+                        const correctContent = item.correctText;
+                        const optionContent = opt.substring(opt.indexOf(':') + 2).trim(); // Conteúdo após A:, B: etc.
+
+                        // Se o conteúdo da opção corresponde ao texto correto (ignorando a citação para segurança)
+                        const isCorrect = correctContent.includes(optionContent);
+
+                        if (isCorrect) {
+                            newCorrectLetter = newLetter;
+                        }
+                        
+                        // Formata a opção com a nova letra
+                        const newOptionText = `${newLetter}: ${optionContent}`;
+                        
+                        const btn = document.createElement('button');
+                        btn.classList.add('option');
+                        btn.dataset.value = newLetter; // Armazena a nova letra
+                        btn.textContent = newOptionText;
+                        optionsDiv.appendChild(btn);
+                    });
+                    
+                    // 3. Define a nova letra correta no dataset da questão
+                    qDiv.dataset.correct = newCorrectLetter; 
+                    qDiv.appendChild(optionsDiv);
+                } else { // open
+                    qDiv.dataset.keywords = item.keywords.join(',');
+                    const textarea = document.createElement('textarea');
+                    textarea.classList.add('open-answer');
+                    textarea.placeholder = 'Digite sua resposta detalhada aqui...';
+                    qDiv.appendChild(textarea);
+                }
+                container.appendChild(qDiv);
+            });
+        }
+
+        // Timer global (30 minutos = 1800 segundos)
+        let timeLeft = 3600;
+        const timerDisplay = document.getElementById('timer');
+        let timerInterval;
+
+        // Inicia o timer
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timerDisplay.textContent = `Tempo restante: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    timerDisplay.textContent = 'Tempo esgotado!';
+                    document.querySelectorAll('.submit-btn').forEach(btn => btn.disabled = true);
+                }
+            }, 1000);
+        }
+
+        // Gerar perguntas ao carregar
+        window.addEventListener('load', () => {
+            generateQuestions('section1', questionPools.section1);
+            generateQuestions('section2', questionPools.section2);
+            generateQuestions('section3', questionPools.section3);
+            generateQuestions('section4', questionPools.section4);
+            generateQuestions('section5', questionPools.section5);
+            generateQuestions('section6', questionPools.section6);
+            
+            // Iniciar o timer
+            startTimer();
+
+            // Adicionar event listeners para seleção (MC)
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('option')) {
+                    const options = e.target.parentElement.querySelectorAll('.option');
+                    options.forEach(opt => opt.classList.remove('selected'));
+                    e.target.classList.add('selected');
+                }
+            });
+        });
+
+        // Função para verificar respostas
+        function checkAnswers(sectionId) {
+            if (timeLeft <= 0) return; // Não permite verificar após tempo esgotado
+            const section = document.getElementById(sectionId);
+            const questions = section.querySelectorAll('.question');
+            let correctCount = 0;
+            let totalQuestions = 0;
+            let errors = [];
+
+            questions.forEach((q) => {
+                totalQuestions++;
+                if (q.dataset.type === 'mc') {
+                    const selected = q.querySelector('.option.selected');
+                    const correct = q.dataset.correct; // A nova letra correta (A, B, C ou D)
+                    
+                    if (selected && selected.dataset.value === correct) {
+                        correctCount++;
+                    } else {
+                        const questionText = q.querySelector('p').textContent;
+                        const selectedValue = selected ? selected.textContent : 'Nenhuma selecionada';
+                        // Encontra a opção correta pela nova letra correta
+                        const correctOptionElement = Array.from(q.querySelectorAll('.option')).find(opt => opt.dataset.value === correct);
+                        const correctText = correctOptionElement ? correctOptionElement.textContent : 'N/A';
+                        errors.push(`${questionText} - Sua resposta: ${selectedValue} (Errada). Correta: ${correctText}`);
                     }
-                    
-                    // Remove a letra original e a substitui pela nova letra
-                    const optionContent = opt.substring(opt.indexOf(':') + 2); // Conteúdo após A:, B: etc.
-                    const newOptionText = `${newLetter}: ${optionContent}`;
-                    
-                    const btn = document.createElement('button');
-                    btn.classList.add('option');
-                    btn.dataset.value = newLetter; // Armazena a nova letra
-                    btn.textContent = newOptionText;
-                    optionsDiv.appendChild(btn);
-                });
-                
-                // 3. Atualiza o dataset para a verificação
-                qDiv.dataset.correct = newCorrectLetter; 
-                qDiv.appendChild(optionsDiv);
-            } else { // open
-                qDiv.dataset.keywords = item.keywords.join(',');
-                const textarea = document.createElement('textarea');
-                textarea.classList.add('open-answer');
-                textarea.placeholder = 'Digite sua resposta detalhada aqui...';
-                qDiv.appendChild(textarea);
-            }
-            container.appendChild(qDiv);
-        });
-    }
-
-    // Timer global (30 minutos = 1800 segundos)
-    let timeLeft = 3600;
-    const timerDisplay = document.getElementById('timer');
-    const timerInterval = setInterval(() => {
-        timeLeft--;
-        const minutes = Math.floor(timeLeft / 60);
-        const seconds = timeLeft % 60;
-        timerDisplay.textContent = `Tempo restante: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-        if (timeLeft <= 0) {
-            clearInterval(timerInterval);
-            timerDisplay.textContent = 'Tempo esgotado!';
-            document.querySelectorAll('.submit-btn').forEach(btn => btn.disabled = true);
-        }
-    }, 1000);
-
-    // Gerar perguntas ao carregar
-    window.addEventListener('load', () => {
-        generateQuestions('section1', questionPools.section1);
-        generateQuestions('section2', questionPools.section2);
-        generateQuestions('section3', questionPools.section3);
-        generateQuestions('section4', questionPools.section4);
-        generateQuestions('section5', questionPools.section5);
-        generateQuestions('section6', questionPools.section6);
-        
-        // Adicionar event listeners para seleção (MC)
-        document.addEventListener('click', function(e) {
-            if (e.target.classList.contains('option')) {
-                const options = e.target.parentElement.querySelectorAll('.option');
-                options.forEach(opt => opt.classList.remove('selected'));
-                e.target.classList.add('selected');
-            }
-        });
-    });
-
-    // Função para verificar respostas
-    function checkAnswers(sectionId) {
-        if (timeLeft <= 0) return; // Não permite verificar após tempo esgotado
-        const section = document.getElementById(sectionId);
-        const questions = section.querySelectorAll('.question');
-        let correctCount = 0;
-        let totalQuestions = 0;
-        let errors = [];
-
-        questions.forEach((q, index) => {
-            totalQuestions++;
-            if (q.dataset.type === 'mc') {
-                const selected = q.querySelector('.option.selected');
-                const correct = q.dataset.correct; // A nova letra correta (A, B, C ou D)
-                
-                if (selected && selected.dataset.value === correct) {
-                    correctCount++;
-                } else {
-                    const questionText = q.querySelector('p').textContent;
-                    const selectedValue = selected ? selected.textContent : 'Nenhuma selecionada';
-                    // Encontra a opção correta pela nova letra correta
-                    const correctOptionElement = Array.from(q.querySelectorAll('.option')).find(opt => opt.dataset.value === correct);
-                    const correctText = correctOptionElement ? correctOptionElement.textContent : 'N/A';
-                    errors.push(`${questionText} - Sua resposta: ${selectedValue} (Errada). Correta: ${correctText}`);
+                } else { // open
+                    const answer = q.querySelector('.open-answer').value.toLowerCase().trim();
+                    const keywords = q.dataset.keywords.split(',').map(k => k.toLowerCase().trim());
+                    // Critério de correção parcial: pelo menos 2 keywords
+                    const matches = keywords.filter(kw => answer.includes(kw)).length;
+                    if (matches >= 2) {
+                        correctCount++;
+                    } else {
+                        const questionText = q.querySelector('p').textContent;
+                        errors.push(`${questionText} - Resposta parcial/errada. Sugestão: Inclua termos como ${keywords.slice(0,3).join(', ')}...`);
+                    }
                 }
-            } else { // open
-                const answer = q.querySelector('.open-answer').value.toLowerCase().trim();
-                const keywords = q.dataset.keywords.split(',').map(k => k.toLowerCase().trim());
-                // Critério de correção parcial: pelo menos 2 keywords
-                const matches = keywords.filter(kw => answer.includes(kw)).length;
-                if (matches >= 2) {
-                    correctCount++;
-                } else {
-                    const questionText = q.querySelector('p').textContent;
-                    errors.push(`${questionText} - Resposta parcial/errada. Sugestão: Inclua termos como ${keywords.slice(0,3).join(', ')}...`);
-                }
+            });
+
+            const feedback = document.getElementById(`feedback${sectionId.slice(-1)}`);
+            feedback.innerHTML = `<span class="${correctCount === totalQuestions ? 'correct' : 'incorrect'}">Você acertou ${correctCount} de ${totalQuestions} questões.</span>`;
+            const result = document.getElementById(`result${sectionId.slice(-1)}`);
+            result.style.display = 'block';
+
+            if (errors.length === 0) {
+                result.innerHTML = '<p class="correct">Todas corretas! Parabéns!</p>';
+            } else {
+                result.innerHTML = '<h3>Erros Detalhados:</h3><ul>' + errors.map(err => `<li>${err}</li>`).join('') + '</ul>';
             }
-        });
-
-        const feedback = document.getElementById(`feedback${sectionId.slice(-1)}`);
-        feedback.innerHTML = `<span class="${correctCount === totalQuestions ? 'correct' : 'incorrect'}">Você acertou ${correctCount} de ${totalQuestions} questões.</span>`;
-        const result = document.getElementById(`result${sectionId.slice(-1)}`);
-        result.style.display = 'block';
-
-        if (errors.length === 0) {
-            result.innerHTML = '<p class="correct">Todas corretas! Parabéns!</p>';
-        } else {
-            result.innerHTML = '<h3>Erros Detalhados:</h3><ul>' + errors.map(err => `<li>${err}</li>`).join('') + '</ul>';
         }
-    }
-</script>
+    </script>
+</body>
+</html>
