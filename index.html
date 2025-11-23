@@ -316,24 +316,34 @@
         }
 
         // Timer global (30 minutos = 1800 segundos)
-        let timeLeft = 3600;
-        const timerDisplay = document.getElementById('timer');
-        let timerInterval;
+        let timeLeft = 5400; // Tempo total em segundos
+    const timerDisplay = document.getElementById('timer');
+    let timerInterval;
 
-        // Inicia o timer
-        function startTimer() {
-            timerInterval = setInterval(() => {
-                timeLeft--;
-                const minutes = Math.floor(timeLeft / 60);
-                const seconds = timeLeft % 60;
-                timerDisplay.textContent = `Tempo restante: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-                if (timeLeft <= 0) {
-                    clearInterval(timerInterval);
-                    timerDisplay.textContent = 'Tempo esgotado!';
-                    document.querySelectorAll('.submit-btn').forEach(btn => btn.disabled = true);
-                }
-            }, 1000);
-        }
+    // Função que formata e atualiza o timer (agora com horas)
+    function startTimer() {
+        timerInterval = setInterval(() => {
+            timeLeft--;
+
+            const hours = Math.floor(timeLeft / 3600);
+            const minutes = Math.floor((timeLeft % 3600) / 60);
+            const seconds = timeLeft % 60;
+            
+            // Formatação: HH:MM:SS
+            const formattedTime = 
+                `${hours < 10 ? '0' : ''}${hours}:` + 
+                `${minutes < 10 ? '0' : ''}${minutes}:` + 
+                `${seconds < 10 ? '0' : ''}${seconds}`;
+
+            timerDisplay.textContent = `Tempo restante: ${formattedTime}`;
+            
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                timerDisplay.textContent = 'Tempo esgotado!';
+                document.querySelectorAll('.submit-btn').forEach(btn => btn.disabled = true);
+            }
+        }, 1000);
+    }
 
         // Gerar perguntas ao carregar
         window.addEventListener('load', () => {
@@ -410,3 +420,4 @@
     </script>
 </body>
 </html>
+
