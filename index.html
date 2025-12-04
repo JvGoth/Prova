@@ -3,424 +3,538 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz Interativo de Fisiologia</title>
+    <title>Simulado Estruturado de Neurofisiologia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
     <style>
+        /* Define a fonte Inter, se disponível, para um visual moderno */
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            color: #333;
-            margin: 0;
-            padding: 20px;
-            line-height: 1.6;
+            font-family: 'Inter', sans-serif;
         }
-        h1, h2 {
-            text-align: center;
-            color: #2c3e50;
+        /* Customiza o scrollbar para melhor estética */
+        ::-webkit-scrollbar {
+            width: 8px;
         }
-        #timer {
-            text-align: center;
-            font-size: 24px;
-            color: #e74c3c;
-            margin-bottom: 20px;
-        }
-        .section {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            margin: 20px auto;
-            padding: 20px;
-            max-width: 800px;
-        }
-        .question {
-            margin-bottom: 20px;
-        }
-        .question p {
-            font-weight: bold;
-        }
-        .options {
-            display: flex;
-            flex-direction: column;
-        }
-        .option {
-            background-color: #e7e7e7;
-            border: none;
+        ::-webkit-scrollbar-thumb {
+            background-color: #94a3b8;
             border-radius: 4px;
-            color: #333;
-            cursor: pointer;
-            margin: 5px 0;
-            padding: 10px;
-            text-align: left;
-            transition: background-color 0.3s;
         }
-        .option:hover {
-            background-color: #d0d0d0;
+        ::-webkit-scrollbar-track {
+            background: #e2e8f0;
         }
-        .option.selected {
-            background-color: #3498db;
-            color: #fff;
+        .time-up {
+            animation: blink 1s infinite;
         }
-        .open-answer {
-            width: 100%;
-            min-height: 80px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            margin: 5px 0;
-            font-family: Arial, sans-serif;
-        }
-        .submit-btn {
-            background-color: #27ae60;
-            border: none;
-            border-radius: 4px;
-            color: #fff;
-            cursor: pointer;
-            display: block;
-            font-size: 16px;
-            margin: 20px auto 0;
-            padding: 10px 20px;
-            transition: background-color 0.3s;
-        }
-        .submit-btn:hover {
-            background-color: #219653;
-        }
-        .submit-btn:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
-        }
-        .feedback {
-            margin-top: 20px;
-            text-align: center;
-        }
-        .correct {
-            color: #27ae60;
-        }
-        .incorrect {
-            color: #e74c3c;
-        }
-        .result {
-            background-color: #ecf0f1;
-            border-radius: 4px;
-            margin-top: 20px;
-            padding: 10px;
-        }
-        .result ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        .result li {
-            margin: 5px 0;
+        @keyframes blink {
+            0%, 100% { background-color: #ef4444; }
+            50% { background-color: #b91c1c; }
         }
     </style>
 </head>
-<body>
-    <h1>Quiz Interativo de Fisiologia</h1>
-    <p style="text-align: center;">Este site contém questões interativas sobre Fisiologia. Selecione respostas para cada seção e clique em "Verificar". A seção final contém 15 questões abertas.</p>
-    <div id="timer">Tempo restante: 01:30:00</div>
-    <div class="section" id="section1">
-        <h2>Introdução à Fisiologia e Homeostase</h2>
-        <div id="questions1"></div>
-        <button class="submit-btn" onclick="checkAnswers('section1')">Verificar Respostas</button>
-        <div class="feedback" id="feedback1"></div>
-        <div class="result" id="result1" style="display: none;"></div>
+<body class="bg-slate-100 min-h-screen font-sans">
+
+    <div id="root" class="max-w-6xl mx-auto p-4 sm:p-8">
+        <div id="header-container"></div>
+        <div id="results-summary"></div>
+        <section id="closed-questions-section" class="space-y-10 mb-10"></section>
+        <section id="open-questions-section" class="space-y-6"></section>
+        <div id="footer-container"></div>
     </div>
-    <div class="section" id="section2">
-        <h2>Membranas Biológicas</h2>
-        <div id="questions2"></div>
-        <button class="submit-btn" onclick="checkAnswers('section2')">Verificar Respostas</button>
-        <div class="feedback" id="feedback2"></div>
-        <div class="result" id="result2" style="display: none;"></div>
-    </div>
-    <div class="section" id="section3">
-        <h2>Comunicação Intercelular</h2>
-        <div id="questions3"></div>
-        <button class="submit-btn" onclick="checkAnswers('section3')">Verificar Respostas</button>
-        <div class="feedback" id="feedback3"></div>
-        <div class="result" id="result3" style="display: none;"></div>
-    </div>
-    <div class="section" id="section4">
-        <h2>Eletrofisiologia e Propriedades Eletroquímicas</h2>
-        <div id="questions4"></div>
-        <button class="submit-btn" onclick="checkAnswers('section4')">Verificar Respostas</button>
-        <div class="feedback" id="feedback4"></div>
-        <div class="result" id="result4" style="display: none;"></div>
-    </div>
-    <div class="section" id="section5">
-        <h2>Fisiologia Muscular e Sistemas Relacionados</h2>
-        <div id="questions5"></div>
-        <button class="submit-btn" onclick="checkAnswers('section5')">Verificar Respostas</button>
-        <div class="feedback" id="feedback5"></div>
-        <div class="result" id="result5" style="display: none;"></div>
-    </div>
-    <div class="section" id="section6">
-        <h2>Questões Abertas (Nível Avançado)</h2>
-        <p>Responda livremente nas caixas de texto. Verificação parcial baseada em palavras-chave.</p>
-        <div id="questions6"></div>
-        <button class="submit-btn" onclick="checkAnswers('section6')">Verificar Respostas</button>
-        <div class="feedback" id="feedback6"></div>
-        <div class="result" id="result6" style="display: none;"></div>
-    </div>
+
     <script>
-        // Função para embaralhar array (Fisher-Yates shuffle)
+        // --- DEFINIÇÃO DOS TEMAS E POOLS DE QUESTÕES BASEADAS NOS SLIDES DE NEUROFISIOLOGIA ---
+        const FULL_POOLS = {
+            'cat1': {
+                nome: 'Controle Motor: Reflexos, Núcleos da Base e Cerebelo',
+                cor: 'blue',
+                fechadas: [
+                    { id: 1, pergunta: 'Qual é a função principal do Fuso Muscular nos reflexos espinhais?', opcoes: ['Detectar tensão no tendão.', 'Detectar o comprimento e estiramento do músculo.', 'Inibir o neurônio motor alfa.', 'Detectar estímulos dolorosos na pele.'], correta: 1, tema: 'cat1' },
+                    { id: 2, pergunta: 'No reflexo miotático inverso, qual estrutura sensorial é ativada para proteger o músculo de cargas excessivas?', opcoes: ['Fuso muscular.', 'Corpúsculo de Pacini.', 'Órgão Tendinoso de Golgi (OTG).', 'Terminação nervosa livre.'], correta: 2, tema: 'cat1' },
+                    { id: 3, pergunta: 'Qual neurotransmissor é liberado pela substância negra na via nigroestriatal, cuja degeneração causa a Doença de Parkinson?', opcoes: ['Acetilcolina.', 'Glutamato.', 'GABA.', 'Dopamina.'], correta: 3, tema: 'cat1' },
+                    { id: 4, pergunta: 'Qual das seguintes é uma função atribuída aos Núcleos da Base?', opcoes: ['Execução direta da contração muscular.', 'Filtragem, início e término de movimentos voluntários.', 'Coordenação fina e correção de erros motores em tempo real.', 'Geração de reflexos medulares.'], correta: 1, tema: 'cat1' },
+                    { id: 5, pergunta: 'Uma lesão no Cerebelo resultaria tipicamente em qual dos seguintes sintomas?', opcoes: ['Paralisia flácida.', 'Tremor de repouso.', 'Ataxia e dismetria (erro de alvo).', 'Perda de sensibilidade tátil.'], correta: 2, tema: 'cat1' },
+                    { id: 6, pergunta: 'Na organização hierárquica motora, quem são os "neurônios motores inferiores"?', opcoes: ['Neurônios do córtex motor.', 'Neurônios do tronco encefálico.', 'Neurônios da medula espinhal que inervam diretamente o músculo.', 'Neurônios dos núcleos da base.'], correta: 2, tema: 'cat1' },
+                    { id: 7, pergunta: 'A via direta dos núcleos da base tem qual efeito final sobre o córtex motor?', opcoes: ['Facilitação (liberação) do movimento.', 'Inibição do movimento.', 'Nenhum efeito.', 'Ativação do reflexo de retirada.'], correta: 0, tema: 'cat1' },
+                    { id: 8, pergunta: 'O trato Corticoespinhal Lateral é responsável principalmente pelo controle de:', opcoes: ['Músculos axiais e postura.', 'Músculos distais (apendiculares) para movimentos voluntários finos.', 'Reflexos autonômicos.', 'Movimentos oculares.'], correta: 1, tema: 'cat1' },
+                    { id: 9, pergunta: 'Qual divisão funcional do cerebelo está mais associada ao equilíbrio e movimentos oculares?', opcoes: ['Espinocerebelo.', 'Cerebrocerebelo.', 'Vestibulocerebelo (Floculonodular).', 'Verme cerebelar.'], correta: 2, tema: 'cat1' },
+                    { id: 10, pergunta: 'A Doença de Huntington é caracterizada por hipercinesia (movimentos excessivos). Isso ocorre devido à perda de neurônios na via:', opcoes: ['Direta.', 'Indireta.', 'Nigroestriatal dopaminérgica.', 'Cerebelar.'], correta: 1, tema: 'cat1' },
+                ],
+                abertas: [
+                    { id: 1, pergunta: 'Diferencie o Reflexo Miotático (de estiramento) do Reflexo Miotático Inverso (tendinoso) em termos de estímulo e resposta muscular.', gabarito: '**Resposta:** O Reflexo Miotático é ativado pelo **estiramento** do fuso muscular e causa a **contração** do músculo agonista (ex: reflexo patelar). O Reflexo Miotático Inverso é ativado pela **tensão/força** excessiva no Órgão Tendinoso de Golgi e causa o **relaxamento** do músculo para proteção.', tema: 'cat1' },
+                    { id: 2, pergunta: 'Explique o papel do Cerebelo como um "comparador" no controle motor.', gabarito: '**Resposta:** O cerebelo recebe informações sobre a **intenção** do movimento (do córtex) e sobre a **execução** real (da periferia/medula). **Contexto:** Ele compara esses dois sinais e, se houver erro (discrepância), envia correções para o sistema motor para ajustar a trajetória e garantir a coordenação.', tema: 'cat1' },
+                    { id: 3, pergunta: 'Descreva a fisiopatologia básica da Doença de Parkinson relacionando-a com a via direta e indireta dos núcleos da base.', gabarito: '**Resposta:** Há degeneração dos neurônios dopaminérgicos da Substância Negra (Pars Compacta). **Contexto:** A falta de dopamina reduz a atividade da via **direta** (que facilita movimento) e aumenta a atividade da via **indireta** (que inibe movimento), resultando em hipocinesia (dificuldade de iniciar movimentos) e rigidez.', tema: 'cat1' },
+                    { id: 4, pergunta: 'O que é uma Unidade Motora e como ela se relaciona com a força de contração?', gabarito: '**Resposta:** Uma unidade motora é composta por um neurônio motor alfa e todas as fibras musculares que ele inerva. **Contexto:** Para aumentar a força (recrutamento), o sistema nervoso ativa mais unidades motoras ou aumenta a frequência de disparo dessas unidades.', tema: 'cat1' },
+                    { id: 5, pergunta: 'Compare a rigidez de descerebração com a rigidez de decorticação em termos de nível de lesão.', gabarito: '**Resposta:** A rigidez de **decorticação** (flexão dos membros superiores) ocorre em lesões acima do núcleo rubro (córtex/capsula interna). **Contexto:** A rigidez de **descerebração** (extensão dos quatro membros) ocorre em lesões abaixo do núcleo rubro (mesencéfalo/ponte), liberando os reflexos extensores vestibulares.', tema: 'cat1' },
+                ]
+            },
+            'cat2': {
+                nome: 'Funções Integrativas: Memória, Sono e Emoções',
+                cor: 'green',
+                fechadas: [
+                    { id: 11, pergunta: 'O famoso paciente H.M., que teve o hipocampo removido bilateralmente, apresentou qual tipo de déficit?', opcoes: ['Amnésia retrógrada completa.', 'Perda de memória de procedimento (implícita).', 'Amnésia anterógrada severa (incapacidade de formar novas memórias explícitas).', 'Perda da capacidade de sentir medo.'], correta: 2, tema: 'cat2' },
+                    { id: 12, pergunta: 'Qual frequência de onda no EEG é característica de um estado de vigília atenta e concentração?', opcoes: ['Delta (< 4 Hz).', 'Theta (4-7 Hz).', 'Alpha (8-13 Hz).', 'Beta (15-30 Hz).'], correta: 3, tema: 'cat2' },
+                    { id: 13, pergunta: 'O sono REM (Paradoxal) é caracterizado por:', opcoes: ['Ondas lentas e de alta amplitude no EEG.', 'Atonia muscular (paralisia), movimentos oculares rápidos e EEG dessincronizado (similar à vigília).', 'Ausência de sonhos.', 'Frequência cardíaca e respiratória muito estáveis.'], correta: 1, tema: 'cat2' },
+                    { id: 14, pergunta: 'Qual estrutura é considerada o "centro do medo" e é essencial para o condicionamento aversivo?', opcoes: ['Hipocampo.', 'Córtex Pré-frontal.', 'Amígdala.', 'Cerebelo.'], correta: 2, tema: 'cat2' },
+                    { id: 15, pergunta: 'O sistema de recompensa cerebral, fundamental na motivação e no vício, utiliza principalmente qual neurotransmissor?', opcoes: ['Serotonina.', 'Dopamina.', 'Acetilcolina.', 'GABA.'], correta: 1, tema: 'cat2' },
+                    { id: 16, pergunta: 'Qual estrutura atua como o "relógio biológico" mestre, regulando os ritmos circadianos?', opcoes: ['Núcleo Supraquiasmático (NSQ) do hipotálamo.', 'Glândula Pineal.', 'Formação Reticular.', 'Tálamo.'], correta: 0, tema: 'cat2' },
+                    { id: 17, pergunta: 'A memória de procedimentos (como andar de bicicleta ou tocar um instrumento) é um exemplo de:', opcoes: ['Memória Explícita (Declarativa).', 'Memória Episódica.', 'Memória Implícita (Não-declarativa).', 'Memória Semântica.'], correta: 2, tema: 'cat2' },
+                    { id: 18, pergunta: 'A Doença de Urbach-Wiethe, que causa calcificação bilateral da amígdala, resulta em:', opcoes: ['Incapacidade de reconhecer faces (prosopagnosia).', 'Perda severa de memória.', 'Incapacidade específica de reconhecer e sentir medo.', 'Hifagia (fome excessiva).'], correta: 2, tema: 'cat2' },
+                    { id: 19, pergunta: 'Qual o papel da melatonina no ciclo sono-vigília?', opcoes: ['Induzir o despertar.', 'Sinalizar a escuridão e preparar o corpo para o sono.', 'Inibir o sono REM.', 'Aumentar a temperatura corporal.'], correta: 1, tema: 'cat2' },
+                    { id: 20, pergunta: 'A via mesolímbica conecta a Área Tegmentar Ventral (VTA) a qual estrutura principal no sistema de recompensa?', opcoes: ['Hipocampo.', 'Córtex Visual.', 'Núcleo Accumbens.', 'Cerebelo.'], correta: 2, tema: 'cat2' },
+                ],
+                abertas: [
+                    { id: 6, pergunta: 'Diferencie Memória Explícita (Declarativa) de Memória Implícita (Não-declarativa) e cite as estruturas cerebrais principais de cada uma.', gabarito: '**Resposta:** Explícita: Fatos e eventos (episódica/semântica), acesso consciente. Depende do **lobo temporal medial/hipocampo**. **Contexto:** Implícita: Habilidades motoras, hábitos, condicionamento. Depende de **núcleos da base, cerebelo e amígdala**.', tema: 'cat2' },
+                    { id: 7, pergunta: 'Explique o conceito de "consolidação" da memória.', gabarito: '**Resposta:** É o processo pelo qual uma memória de curta duração (lábil) é estabilizada em uma memória de longa duração (estável/engrama). **Contexto:** Envolve alterações sinápticas (como LTP) e síntese proteica. O hipocampo é crucial para consolidar memórias declarativas no córtex.', tema: 'cat2' },
+                    { id: 8, pergunta: 'Descreva as principais características fisiológicas do Sono de Ondas Lentas (N3/Profundo) comparado ao Sono REM.', gabarito: '**Resposta:** N3 (Ondas Lentas): EEG sincronizado (ondas delta), tônus muscular reduzido (mas presente), metabolismo baixo, essencial para recuperação física. **Contexto:** REM: EEG dessincronizado (rápido), atonia muscular completa (exceto olhos/respiratórios), sonhos vívidos, essencial para memória e emocional.', tema: 'cat2' },
+                    { id: 9, pergunta: 'Qual a relação entre a amígdala e o hipocampo na formação de memórias emocionais?', gabarito: '**Resposta:** A amígdala avalia a valência emocional (ex: perigo) e modula a consolidação da memória. **Contexto:** O hipocampo registra o contexto (onde/quando). A ativação da amígdala fortalece a memória no hipocampo, tornando eventos emocionais mais inesquecíveis.', tema: 'cat2' },
+                    { id: 10, pergunta: 'Como drogas de abuso (ex: cocaína) atuam no sistema de recompensa?', gabarito: '**Resposta:** Elas aumentam artificialmente os níveis de **dopamina** no Núcleo Accumbens (na via mesolímbica). **Contexto:** A cocaína, por exemplo, bloqueia a recaptação de dopamina, prolongando seu efeito e reforçando o comportamento de uso (vício).', tema: 'cat2' },
+                ]
+            },
+            'cat3': {
+                nome: 'SNA e Córtices Associativos',
+                cor: 'red',
+                fechadas: [
+                    { id: 21, pergunta: 'Qual é o principal neurotransmissor liberado pelas fibras pós-ganglionares do Sistema Nervoso Simpático nos órgãos-alvo?', opcoes: ['Acetilcolina.', 'Noradrenalina.', 'Serotonina.', 'Glutamato.'], correta: 1, tema: 'cat3' },
+                    { id: 22, pergunta: 'Os receptores nos órgãos-alvo do Sistema Nervoso Parassimpático são do tipo:', opcoes: ['Nicotínicos.', 'Adrenérgicos Alfa.', 'Adrenérgicos Beta.', 'Muscarínicos.'], correta: 3, tema: 'cat3' },
+                    { id: 23, pergunta: 'O córtex de associação parietal é fundamental para:', opcoes: ['Planejamento motor.', 'Reconhecimento de objetos (O que é?).', 'Atenção e percepção espacial (Onde está?).', 'Controle emocional.'], correta: 2, tema: 'cat3' },
+                    { id: 24, pergunta: 'A Prosopagnosia (incapacidade de reconhecer faces) é causada por lesão em qual área?', opcoes: ['Córtex Pré-frontal.', 'Lobo Parietal Direito (Negligência).', 'Córtex Temporal Inferior (Área fusiforme da face).', 'Área de Broca.'], correta: 2, tema: 'cat3' },
+                    { id: 25, pergunta: 'O caso de Phineas Gage, que teve mudança drástica de personalidade e perda de inibição social, ilustra a função de qual área?', opcoes: ['Córtex Pré-frontal (Associação Frontal).', 'Córtex Occipital.', 'Hipocampo.', 'Cerebelo.'], correta: 0, tema: 'cat3' },
+                    { id: 26, pergunta: 'A Síndrome de Negligência Unilateral (ignorar metade do espaço/corpo) geralmente ocorre após lesão em qual lobo?', opcoes: ['Lobo Frontal Esquerdo.', 'Lobo Parietal Direito.', 'Lobo Temporal Bilateral.', 'Lobo Occipital.'], correta: 1, tema: 'cat3' },
+                    { id: 27, pergunta: 'Qual divisão do SNA é conhecida como sistema de "luta ou fuga" (catabólico)?', opcoes: ['Simpático.', 'Parassimpático.', 'Entérico.', 'Somático.'], correta: 0, tema: 'cat3' },
+                    { id: 28, pergunta: 'A medula da adrenal é considerada um gânglio modificado de qual sistema?', opcoes: ['Parassimpático.', 'Simpático.', 'Somático.', 'Límbico.'], correta: 1, tema: 'cat3' },
+                    { id: 29, pergunta: 'Onde se localizam os corpos celulares dos neurônios pré-ganglionares do sistema Parassimpático?', opcoes: ['Medula espinhal toracolombar (T1-L2).', 'Tronco encefálico e medula sacral (Craniossacral).', 'Gânglios paravertebrais.', 'Córtex motor.'], correta: 1, tema: 'cat3' },
+                    { id: 30, pergunta: 'A Área de Broca, relacionada à produção da fala, está localizada tipicamente no:', opcoes: ['Lobo Temporal Superior.', 'Lobo Frontal Inferior.', 'Lobo Parietal.', 'Lobo Occipital.'], correta: 1, tema: 'cat3' },
+                ],
+                abertas: [
+                    { id: 11, pergunta: 'Compare os efeitos do Sistema Simpático e Parassimpático no coração e na pupila.', gabarito: '**Resposta:** Coração: Simpático aumenta a frequência (taquicardia, receptor Beta-1); Parassimpático diminui (bradicardia, receptor Muscarínico). **Contexto:** Pupila: Simpático dilata (midríase, receptor Alfa); Parassimpático contrai (miose, receptor Muscarínico).', tema: 'cat3' },
+                    { id: 12, pergunta: 'Explique o mecanismo da febre em termos de termorregulação hipotalâmica.', gabarito: '**Resposta:** Pirogênios (ex: citocinas) alteram o "ponto de ajuste" (set point) do termostato no hipotálamo para uma temperatura mais alta. **Contexto:** O corpo então ativa mecanismos de conservação/produção de calor (tremores, vasoconstrição) até atingir essa nova temperatura elevada.', tema: 'cat3' },
+                    { id: 13, pergunta: 'Qual a função do Córtex Pré-Frontal no comportamento executivo e tomada de decisão?', gabarito: '**Resposta:** É responsável pelo planejamento, estratégia, inibição de comportamentos inadequados, memória de trabalho e julgamento moral. **Contexto:** Ele avalia as consequências futuras das ações, permitindo o controle sobre impulsos emocionais (top-down).', tema: 'cat3' },
+                    { id: 14, pergunta: 'O que é a Afasia de Wernicke e como ela difere da Afasia de Broca?', gabarito: '**Resposta:** Afasia de Wernicke (sensorial) afeta a **compreensão**; a fala é fluente mas sem sentido ("salada de palavras"). **Contexto:** Afasia de Broca (motora) afeta a **produção**; a compreensão é preservada, mas a fala é difícil, lenta e não fluente.', tema: 'cat3' },
+                    { id: 15, pergunta: 'Como ocorre a termorregulação em um ambiente quente (perda de calor)?', gabarito: '**Resposta:** O hipotálamo detecta o aumento de temperatura e ativa mecanismos de perda de calor. **Contexto:** Ocorre **vasodilatação cutânea** (para irradiar calor) e estimulação das **glândulas sudoríparas** (suor) para resfriamento por evaporação (via simpática colinérgica).', tema: 'cat3' },
+                ]
+            }
+        };
+
+        // --- Variáveis de Estado ---
+        let allClosedQuestions = []; 
+        let allOpenQuestions = []; 
+        let respostasFechadas = {};
+        let respostasAbertas = [];
+        let resultadosFechadas = null;
+        let verificadas = false;
+        let abertasVerificadas = false;
+        let tempoRestante = 5400; // 1 hora e 30 minutos
+        let timerId = null;
+        let timeIsUp = false;
+
+        // --- FUNÇÕES DE LÓGICA ---
+
         function shuffle(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex !== 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [
+                    array[randomIndex], array[currentIndex]];
             }
             return array;
         }
 
-        // Pools de Perguntas de Fisiologia (Agora a resposta correta é armazenada como o texto da opção: 'correctText')
-        const questionPools = {
-            section1: [
-                { type: 'mc', q: "Qual é a definição de Fisiologia segundo os slides?", options: ["A: Estudo da natureza do funcionamento de um organismo vivo e suas partes", "B: Apenas estudo de processos químicos", "C: Estudo de anatomia macroscópica", "D: Estudo de física aplicada"], correctText: "Estudo da natureza do funcionamento de um organismo vivo e suas partes" },
-                { type: 'mc', q: "Quem introduziu o conceito de regulação do meio interno?", options: ["A: Jean Fernel", "B: Claude Bernard", "C: Walter B. Cannon", "D: Roberto Lent"], correctText: "Claude Bernard" },
-                { type: 'mc', q: "O termo 'Homeostase' foi cunhado por:", options: ["A: Claude Bernard", "B: Walter B. Cannon", "C: Jean Fernel", "D: Guyton & Hall"], correctText: "Walter B. Cannon" },
-                { type: 'mc', q: "O meio interno do organismo é composto principalmente por:", options: ["A: Líquido intracelular (LIC)", "B: Líquido extracelular (LEC)", "C: Apenas plasma", "D: Oceano primitivo"], correctText: "Líquido extracelular (LEC)" },
-                { type: 'mc', q: "Qual é a porcentagem aproximada de LEC no plasma?", options: ["A: 75%", "B: 25%", "C: 67%", "D: 33%"], correctText: "25%" },
-                { type: 'mc', q: "As alças de retroalimentação negativa são usadas para:", options: ["A: Amplificar respostas", "B: Estabilizar o sistema", "C: Causar explosões", "D: Ignorar mudanças"], correctText: "Estabilizar o sistema" },
-                { type: 'mc', q: "Exemplo de feedback positivo nos slides:", options: ["A: Regulação de temperatura", "B: Coagulação sanguínea", "C: Pressão arterial", "D: Glicemia"], correctText: "Coagulação sanguínea" },
-                { type: 'mc', q: "Quais são os principais componentes do meio interno?", options: ["A: Plasma e interstício", "B: Apenas LIC", "C: Oceano primitivo", "D: Sistemas nervosos"], correctText: "Plasma e interstício" },
-                { type: 'mc', q: "A permeabilidade seletiva refere-se a:", options: ["A: Diferenças em íons entre LIC e LEC", "B: Igualdade total de composições", "C: Ausência de membranas", "D: Apenas água"], correctText: "Diferenças em íons entre LIC e LEC" },
-                { type: 'mc', q: "Quantos sistemas principais no corpo humano são listados?", options: ["A: 5", "B: 10", "C: 15", "D: 20"], correctText: "10" }
-            ],
-            section2: [
-                { type: 'mc', q: "As membranas biológicas são formadas principalmente por:", options: ["A: Proteínas apenas", "B: Fosfolipídios na bicamada lipídica", "C: Carboidratos", "D: Ácidos nucleicos"], correctText: "Fosfolipídios na bicamada lipídica" },
-                { type: 'mc', q: "Qual a função principal das membranas biológicas?", options: ["A: Barreira seletiva", "B: Armazenamento de energia", "C: Síntese de proteínas", "D: Reprodução celular"], correctText: "Barreira seletiva" },
-                { type: 'mc', q: "Os fosfolipídios formam a bicamada porque são:", options: ["A: Hidrofílicos totais", "B: Anfipáticos (hidrofílicos e hidrofóbicos)", "C: Hidrofóbicos totais", "D: Neutros"], correctText: "Anfipáticos (hidrofílicos e hidrofóbicos)" },
-                { type: 'mc', q: "Qual íon é mais concentrado no LIC do que no LEC?", options: ["A: Na+", "B: K+", "C: Cl-", "D: Ca2+"], correctText: "K+" },
-                { type: 'mc', q: "A composição eletrolítica dos líquidos corporais é mantida por:", options: ["A: Permeabilidade seletiva", "B: Difusão aleatória", "C: Ausência de bombas", "D: Apenas osmose"], correctText: "Permeabilidade seletiva" },
-                { type: 'mc', q: "Qual a função das proteínas de membrana?", options: ["A: Apenas estrutural", "B: Transporte, sinalização, adesão", "C: Armazenamento de íons", "D: Síntese de lipídios"], correctText: "Transporte, sinalização, adesão" },
-                { type: 'mc', q: "O modelo de mosaico fluido descreve as membranas como:", options: ["A: Rígidas e estáticas", "B: Fluidas com proteínas embutidas", "C: Apenas lipídicas", "D: Sem colesterol"], correctText: "Fluidas com proteínas embutidas" },
-                { type: 'mc', q: "O colesterol nas membranas ajuda a:", options: ["A: Aumentar fluidez excessiva", "B: Manter a fluidez adequada", "C: Bloquear todo transporte", "D: Dissolver a bicamada"], correctText: "Manter a fluidez adequada" },
-                { type: 'mc', q: "Diferenças na composição lipídica afetam:", options: ["A: Nada", "B: Fluidez e função da membrana", "C: Apenas cor", "D: Tamanho celular"], correctText: "Fluidez e função da membrana" },
-                { type: 'mc', q: "As glicoproteínas na membrana são importantes para:", options: ["A: Reconhecimento celular", "B: Apenas transporte de íons", "C: Armazenamento de energia", "D: Divisão celular"], correctText: "Reconhecimento celular" }
-            ],
-            section3: [
-                { type: 'mc', q: "Tipos de comunicação entre células incluem:", options: ["A: Apenas moléculas livres", "B: Moléculas livres e aderidas", "C: Apenas sinapses elétricas", "D: Nada"], correctText: "Moléculas livres e aderidas" },
-                { type: 'mc', q: "Moléculas de adesão ligam o extracelular ao:", options: ["A: Núcleo", "B: Citoesqueleto", "C: Mitocôndria", "D: Ribossomos"], correctText: "Citoesqueleto" },
-                { type: 'mc', q: "Junções GAP permitem comunicação em:", options: ["A: Sincício cardíaco", "B: Apenas nervos", "C: Apenas músculos lisos", "D: Ossos"], correctText: "Sincício cardíaco" },
-                { type: 'mc', q: "Moléculas de adesão são usadas no desenvolvimento para:", options: ["A: Migração e diferenciação celular", "B: Apenas digestão", "C: Respiração", "D: Circulação"], correctText: "Migração e diferenciação celular" },
-                { type: 'mc', q: "Sinalização parácrina é:", options: ["A: Local", "B: Distante via sangue", "C: Via nervos", "D: Neuroendócrina"], correctText: "Local" },
-                { type: 'mc', q: "Sinalização endócrina envolve:", options: ["A: Hormônios no sangue", "B: Moléculas locais", "C: Contato direto", "D: Junções GAP"], correctText: "Hormônios no sangue" },
-                { type: 'mc', q: "Receptores determinam a:", options: ["A: Resposta celular", "B: Produção de sinal", "C: Digestão", "D: Movimento"], correctText: "Resposta celular" },
-                { type: 'mc', q: "Exemplo de receptor ionotrópico:", options: ["A: Receptor de glutamato (AMPA e NMDA)", "B: Receptor olfatório", "C: Receptor de insulina", "D: Receptor de cortisol"], correctText: "Receptor de glutamato (AMPA e NMDA)" },
-                { type: 'mc', q: "Receptor conectado a proteína G exemplo:", options: ["A: Receptor olfatório", "B: AMPA", "C: Insulina", "D: Cortisol"], correctText: "Receptor olfatório" },
-                { type: 'mc', q: "Receptor intracelular exemplo:", options: ["A: Receptor de cortisol", "B: NMDA", "C: Olfatório", "D: Glutamato"], correctText: "Receptor de cortisol" }
-            ],
-            section4: [
-                { type: 'mc', q: "Propriedades eletroquímicas das células excitáveis envolvem íons como:", options: ["A: K+ e Na+", "B: Apenas Ca2+", "C: Apenas Cl-", "D: Nenhum íon"], correctText: "K+ e Na+" },
-                { type: 'mc', q: "O potencial de repouso é mantido por:", options: ["A: Bomba Na+/K+ ATPase", "B: Diferenças de concentração de íons", "C: Apenas difusão", "D: Nada"], correctText: "Diferenças de concentração de íons" },
-                { type: 'mc', q: "Potencial de ação envolve influxo de:", options: ["A: K+", "B: Na+", "C: Cl-", "D: H+"], correctText: "Na+" },
-                { type: 'mc', q: "Células excitáveis incluem:", options: ["A: Neurônios e músculos", "B: Apenas ossos", "C: Apenas pele", "D: Apenas fígado"], correctText: "Neurônios e músculos" },
-                { type: 'mc', q: "A despolarização ocorre quando:", options: ["A: Entra Na+", "B: Sai K+", "C: Entra Cl-", "D: Sai Ca2+"], correctText: "Entra Na+" },
-                { type: 'mc', q: "Hiperpolarização é causada por:", options: ["A: Saída de K+ ou entrada de Cl-", "B: Entrada de Na+", "C: Nada", "D: Apenas Ca2+"], correctText: "Saída de K+ ou entrada de Cl-" },
-                { type: 'mc', q: "O gradiente eletroquímico é:", options: ["A: Força que move íons", "B: Apenas elétrico", "C: Apenas químico", "D: Nenhum"], correctText: "Força que move íons" },
-                { type: 'mc', q: "Canais iônicos são seletivos para:", options: ["A: Tipos específicos de íons", "B: Todos íons", "C: Apenas proteínas", "D: Lipídios"], correctText: "Tipos específicos de íons" },
-                { type: 'mc', q: "A equação de Nernst calcula:", options: ["A: Potencial de equilíbrio para íons", "B: Fluxo de água", "C: Pressão", "D: Temperatura"], correctText: "Potencial de equilíbrio para íons" },
-                { type: 'mc', q: "Potencial de repouso típico de neurônio:", options: ["A: +70mV", "B: -70mV", "C: 0mV", "D: -30mV"], correctText: "-70mV" }
-            ],
-            section5: [
-                { type: 'mc', q: "Fibras musculares são especializadas em:", options: ["A: Contração", "B: Sensação", "C: Secreção", "D: Absorção"], correctText: "Contração" },
-                { type: 'mc', q: "Para que serve o movimento segundo os slides?", options: ["A: Respiração, digestão, circulação, etc", "B: Apenas luta-ou-fuga", "C: Apenas comunicação", "D: Nada"], correctText: "Respiração, digestão, circulação, etc" },
-                { type: 'mc', q: "Sistema nervoso é dividido em:", options: ["A: SNC e SNP", "B: Apenas SNC", "C: Apenas SNP", "D: SNC e endócrino"], correctText: "SNC e SNP" },
-                { type: 'mc', q: "Neurônios aferentes são:", options: ["A: Sensoriais", "B: Motores", "C: Interneurônios", "D: Glia"], correctText: "Sensoriais" },
-                { type: 'mc', q: "Transdução sensorial é:", options: ["A: Conversão de estímulo em sinal elétrico", "B: Apenas visão", "C: Apenas audição", "D: Nada"], correctText: "Conversão de estímulo em sinal elétrico" },
-                { type: 'mc', q: "Fibras musculares sob comando neural envolvem:", options: ["A: Motoneurônios", "B: Apenas hormônios", "C: Apenas autônomo", "D: Nenhum"], correctText: "Motoneurônios" },
-                { type: 'mc', q: "Comportamentos complexos incluem:", options: ["A: Comunicação, socialização", "B: Apenas respiração", "C: Apenas digestão", "D: Nada"], correctText: "Comunicação, socialização" },
-                { type: 'mc', q: "SNC inclui:", options: ["A: Crânio e coluna vertebral", "B: Apenas nervos periféricos", "C: Apenas baço", "D: Timo"], correctText: "Crânio e coluna vertebral" },
-                { type: 'mc', q: "Organismo interage com ambiente via:", options: ["A: Neurônios aferentes", "B: Apenas eferentes", "C: Nenhum", "D: Apenas glia"], correctText: "Neurônios aferentes" },
-                { type: 'mc', q: "Funções básicas do movimento:", options: ["A: Respiração, postura", "B: Apenas exploração", "C: Apenas expressão", "D: Nenhum"], correctText: "Respiração, postura" }
-            ],
-            section6: [ // 15 Questões Abertas
-                { type: 'open', q: "Defina Fisiologia com base nos slides.", keywords: ["natureza funcionamento", "organismo vivo", "processos físicos químicos"] },
-                { type: 'open', q: "Explique o conceito de homeostase e quem o cunhou.", keywords: ["walter cannon", "manutenção equilíbrio", "meio interno"] },
-                { type: 'open', q: "Descreva o meio interno do organismo e suas divisões.", keywords: ["líquido extracelular", "plasma interstício", "25% 75%"] },
-                { type: 'open', q: "Diferencie feedback negativo de positivo com exemplos.", keywords: ["negativo estabiliza", "positivo amplifica", "coagulação parto"] },
-                { type: 'open', q: "Cite os principais sistemas do corpo humano listados nos slides.", keywords: ["tegumentar circulatório", "músculo-esquelético respiratório", "digestório urinário reprodutor linfático endócrino nervoso"] },
-                { type: 'open', q: "Explique a estrutura das membranas biológicas.", keywords: ["bicamada lipídica", "fosfolipídios", "proteínas embutidas"] },
-                { type: 'open', q: "Descreva as diferenças na composição iônica entre LIC e LEC.", keywords: ["k+ alto lic", "na+ alto lec", "permeabilidade seletiva"] },
-                { type: 'open', q: "Tipos de comunicação intercelular e exemplos.", keywords: ["livre aderida", "parácrina endócrina", "neurócrina"] },
-                { type: 'open', q: "Explique junções GAP e seu exemplo.", keywords: ["comunicantes", "sincício cardíaco", "troca íons"] },
-                { type: 'open', q: "Descreva um receptor ionotrópico com exemplo.", keywords: ["glutamato ampa nmda", "canal iônico", "rápido"] },
-                { type: 'open', q: "Propriedades eletroquímicas das células excitáveis.", keywords: ["k+ na+", "potencial repouso", "ação"] },
-                { type: 'open', q: "Explique a fisiologia muscular básica.", keywords: ["fibras contração", "actina miosina", "energia atp"] },
-                { type: 'open', q: "Descreva o sistema nervoso e suas divisões.", keywords: ["snc snp", "crânio coluna", "nervos periféricos"] },
-                { type: 'open', q: "Introdução aos sistemas sensoriais: transdução.", keywords: ["estímulo sinal elétrico", "neurônio aferente", "snc"] },
-                { type: 'open', q: "Para que serve o movimento? Funções e comportamentos.", keywords: ["respiração digestão", "luta-fuga exploração", "comunicação socialização"] }
-            ]
-        };
-
-        // Função para gerar perguntas aleatórias (suporte a MC e open)
-        function generateQuestions(sectionId, pool) {
-            const numToGenerate = sectionId === 'section6' ? pool.length : 5;
-            const shuffledQuestions = shuffle([...pool]).slice(0, numToGenerate);
-            const container = document.getElementById(`questions${sectionId.slice(-1)}`);
-            
-            const alphabet = ['A', 'B', 'C', 'D'];
-
-            shuffledQuestions.forEach((item, index) => {
-                const qDiv = document.createElement('div');
-                qDiv.classList.add('question');
-                qDiv.dataset.type = item.type;
-                const p = document.createElement('p');
-                p.textContent = `${index + 1}. ${item.q}`;
-                qDiv.appendChild(p);
-
-                if (item.type === 'mc') {
-                    // 1. Embaralha as opções
-                    let optionsToShuffle = [...item.options];
-                    shuffle(optionsToShuffle);
-                    
-                    // 2. Encontra a nova letra correta após o embaralhamento e recria as opções
-                    let newCorrectLetter = '';
-                    const optionsDiv = document.createElement('div');
-                    optionsDiv.classList.add('options');
-
-                    optionsToShuffle.forEach((opt, optIndex) => {
-                        const newLetter = alphabet[optIndex]; // A, B, C ou D da nova posição
-                        
-                        // Verifica se esta opção é a correta usando o texto (correctText)
-                        // É necessário usar uma verificação mais flexível, pois o texto da opção contém o prefixo (A: etc.)
-                        const correctContent = item.correctText;
-                        const optionContent = opt.substring(opt.indexOf(':') + 2).trim(); // Conteúdo após A:, B: etc.
-
-                        // Se o conteúdo da opção corresponde ao texto correto (ignorando a citação para segurança)
-                        const isCorrect = correctContent.includes(optionContent);
-
-                        if (isCorrect) {
-                            newCorrectLetter = newLetter;
-                        }
-                        
-                        // Formata a opção com a nova letra
-                        const newOptionText = `${newLetter}: ${optionContent}`;
-                        
-                        const btn = document.createElement('button');
-                        btn.classList.add('option');
-                        btn.dataset.value = newLetter; // Armazena a nova letra
-                        btn.textContent = newOptionText;
-                        optionsDiv.appendChild(btn);
-                    });
-                    
-                    // 3. Define a nova letra correta no dataset da questão
-                    qDiv.dataset.correct = newCorrectLetter; 
-                    qDiv.appendChild(optionsDiv);
-                } else { // open
-                    qDiv.dataset.keywords = item.keywords.join(',');
-                    const textarea = document.createElement('textarea');
-                    textarea.classList.add('open-answer');
-                    textarea.placeholder = 'Digite sua resposta detalhada aqui...';
-                    qDiv.appendChild(textarea);
-                }
-                container.appendChild(qDiv);
-            });
+        function formatTime(totalSeconds) {
+            const hours = Math.floor(totalSeconds / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = totalSeconds % 60;
+            return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
         }
 
-        // Timer global (30 minutos = 1800 segundos)
-        let timeLeft = 5400; // Tempo total em segundos
-    const timerDisplay = document.getElementById('timer');
-    let timerInterval;
-
-    // Função que formata e atualiza o timer (agora com horas)
-    function startTimer() {
-        timerInterval = setInterval(() => {
-            timeLeft--;
-
-            const hours = Math.floor(timeLeft / 3600);
-            const minutes = Math.floor((timeLeft % 3600) / 60);
-            const seconds = timeLeft % 60;
-            
-            // Formatação: HH:MM:SS
-            const formattedTime = 
-                `${hours < 10 ? '0' : ''}${hours}:` + 
-                `${minutes < 10 ? '0' : ''}${minutes}:` + 
-                `${seconds < 10 ? '0' : ''}${seconds}`;
-
-            timerDisplay.textContent = `Tempo restante: ${formattedTime}`;
-            
-            if (timeLeft <= 0) {
-                clearInterval(timerInterval);
-                timerDisplay.textContent = 'Tempo esgotado!';
-                document.querySelectorAll('.submit-btn').forEach(btn => btn.disabled = true);
+        function getOptionClass(q, index) {
+            if (!verificadas) {
+                return respostasFechadas[q.id] === index ? 'bg-blue-200 border-blue-600' : 'hover:bg-gray-100 border-gray-300';
             }
-        }, 1000);
-    }
-
-        // Gerar perguntas ao carregar
-        window.addEventListener('load', () => {
-            generateQuestions('section1', questionPools.section1);
-            generateQuestions('section2', questionPools.section2);
-            generateQuestions('section3', questionPools.section3);
-            generateQuestions('section4', questionPools.section4);
-            generateQuestions('section5', questionPools.section5);
-            generateQuestions('section6', questionPools.section6);
-            
-            // Iniciar o timer
-            startTimer();
-
-            // Adicionar event listeners para seleção (MC)
-            document.addEventListener('click', function(e) {
-                if (e.target.classList.contains('option')) {
-                    const options = e.target.parentElement.querySelectorAll('.option');
-                    options.forEach(opt => opt.classList.remove('selected'));
-                    e.target.classList.add('selected');
-                }
-            });
-        });
-
-        // Função para verificar respostas
-        function checkAnswers(sectionId) {
-            if (timeLeft <= 0) return; // Não permite verificar após tempo esgotado
-            const section = document.getElementById(sectionId);
-            const questions = section.querySelectorAll('.question');
-            let correctCount = 0;
-            let totalQuestions = 0;
-            let errors = [];
-
-            questions.forEach((q) => {
-                totalQuestions++;
-                if (q.dataset.type === 'mc') {
-                    const selected = q.querySelector('.option.selected');
-                    const correct = q.dataset.correct; // A nova letra correta (A, B, C ou D)
-                    
-                    if (selected && selected.dataset.value === correct) {
-                        correctCount++;
-                    } else {
-                        const questionText = q.querySelector('p').textContent;
-                        const selectedValue = selected ? selected.textContent : 'Nenhuma selecionada';
-                        // Encontra a opção correta pela nova letra correta
-                        const correctOptionElement = Array.from(q.querySelectorAll('.option')).find(opt => opt.dataset.value === correct);
-                        const correctText = correctOptionElement ? correctOptionElement.textContent : 'N/A';
-                        errors.push(`${questionText} - Sua resposta: ${selectedValue} (Errada). Correta: ${correctText}`);
-                    }
-                } else { // open
-                    const answer = q.querySelector('.open-answer').value.toLowerCase().trim();
-                    const keywords = q.dataset.keywords.split(',').map(k => k.toLowerCase().trim());
-                    // Critério de correção parcial: pelo menos 2 keywords
-                    const matches = keywords.filter(kw => answer.includes(kw)).length;
-                    if (matches >= 2) {
-                        correctCount++;
-                    } else {
-                        const questionText = q.querySelector('p').textContent;
-                        errors.push(`${questionText} - Resposta parcial/errada. Sugestão: Inclua termos como ${keywords.slice(0,3).join(', ')}...`);
-                    }
-                }
-            });
-
-            const feedback = document.getElementById(`feedback${sectionId.slice(-1)}`);
-            feedback.innerHTML = `<span class="${correctCount === totalQuestions ? 'correct' : 'incorrect'}">Você acertou ${correctCount} de ${totalQuestions} questões.</span>`;
-            const result = document.getElementById(`result${sectionId.slice(-1)}`);
-            result.style.display = 'block';
-
-            if (errors.length === 0) {
-                result.innerHTML = '<p class="correct">Todas corretas! Parabéns!</p>';
+            if (index === q.correta) {
+                return 'bg-green-100 border-green-600 font-bold';
+            } else if (respostasFechadas[q.id] === index) {
+                return 'bg-red-100 border-red-600 line-through';
             } else {
-                result.innerHTML = '<h3>Erros Detalhados:</h3><ul>' + errors.map(err => `<li>${err}</li>`).join('') + '</ul>';
+                return 'bg-white border-gray-300';
             }
         }
+
+        function getResumoPorTema() {
+            if (!verificadas) return {};
+            const temas = {};
+            Object.keys(FULL_POOLS).forEach(key => {
+                temas[key] = { acertos: 0, total: 0, nome: FULL_POOLS[key].nome, cor: FULL_POOLS[key].cor };
+            });
+            allClosedQuestions.forEach(q => {
+                const temaKey = q.tema;
+                temas[temaKey].total++;
+                if (respostasFechadas[q.id] === q.correta) {
+                    temas[temaKey].acertos++;
+                }
+            });
+            return temas;
+        }
+
+        // --- FUNÇÕES DE RENDERIZAÇÃO ---
+
+        function renderHeader() {
+            const container = document.getElementById('header-container');
+            const timerClass = timeIsUp ? 'bg-red-600 text-white time-up' : 'bg-slate-700';
+
+            container.innerHTML = `
+                <header class="bg-slate-800 text-white p-6 rounded-xl shadow-2xl mb-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+                    <div class="flex items-center gap-4">
+                        <span class="w-8 h-8 text-blue-400 text-3xl">🧠</span>
+                        <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight">
+                            Simulado de Neurofisiologia e Funções Corticais
+                        </h1>
+                    </div>
+                    <div class="flex items-center gap-6">
+                        <div id="timer-display" class="flex items-center gap-2 p-2 rounded-lg ${timerClass}">
+                            <span class="w-5 h-5 text-yellow-400">⏳</span>
+                            <span class="font-mono text-lg">${formatTime(tempoRestante)}</span>
+                        </div>
+                        <div class="flex items-center gap-2 bg-slate-700 p-2 rounded-lg">
+                            <span class="w-5 h-5 text-red-400">📊</span>
+                            <span class="font-semibold text-lg">${allClosedQuestions.length + allOpenQuestions.length} Questões</span>
+                        </div>
+                    </div>
+                </header>
+            `;
+        }
+
+        function renderResultsSummary() {
+            const container = document.getElementById('results-summary');
+            if (!verificadas || !resultadosFechadas) {
+                container.innerHTML = '';
+                return;
+            }
+
+            const resumoPorTema = getResumoPorTema();
+            let temaHtml = '';
+            
+            Object.values(resumoPorTema).forEach(tema => {
+                const percentage = tema.total > 0 ? ((tema.acertos / tema.total) * 100).toFixed(0) : 0;
+                temaHtml += `
+                    <div class="flex justify-between items-center bg-slate-50 p-3 rounded-md">
+                        <div class="flex items-center gap-2">
+                            <span class="w-4 h-4 text-${tema.cor}-500">🏷️</span>
+                            <span class="text-sm font-medium text-slate-600">${tema.nome}</span>
+                        </div>
+                        <span class="font-bold text-md text-${tema.cor}-700">${tema.acertos} / ${tema.total} (${percentage}%)</span>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = `
+                <section class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-green-500 mb-8">
+                    <h2 class="text-2xl font-bold text-slate-800 mb-4 flex items-center gap-2">
+                        <span class="w-6 h-6 text-green-600">✅</span> Resumo de Desempenho (Múltipla Escolha)
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                        <div class="p-4 bg-green-50 rounded-lg border border-green-200">
+                            <p class="text-xl font-bold text-green-700">${resultadosFechadas.acertos}</p>
+                            <p class="text-sm text-green-600">Acertos</p>
+                        </div>
+                        <div class="p-4 bg-red-50 rounded-lg border border-red-200">
+                            <p class="text-xl font-bold text-red-700">${resultadosFechadas.incorretos}</p>
+                            <p class="text-sm text-red-600">Erros</p>
+                        </div>
+                        <div class="p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+                            <p class="text-xl font-bold text-yellow-700">${resultadosFechadas.naoRespondidas}</p>
+                            <p class="text-sm text-yellow-600">Não Respondidas</p>
+                        </div>
+                    </div>
+
+                    <h3 class="text-lg font-semibold text-slate-700 mb-3">Acertos por Categoria:</h3>
+                    <div class="space-y-2">
+                        ${temaHtml}
+                    </div>
+                </section>
+            `;
+        }
+
+        function renderClosedQuestions() {
+            const container = document.getElementById('closed-questions-section');
+            let closedHtml = `
+                <h2 class="text-3xl font-bold text-slate-700 border-b-2 border-slate-300 pb-2 mb-8 flex items-center gap-2">
+                    <span class="w-7 h-7 text-blue-600">☑️</span> Parte A: 15 Questões de Múltipla Escolha
+                </h2>
+            `;
+            let globalQuestionIndex = 0;
+
+            Object.keys(FULL_POOLS).forEach(tagKey => {
+                const temaData = FULL_POOLS[tagKey];
+                const questionsForTag = allClosedQuestions.filter(q => q.tema === tagKey);
+                
+                closedHtml += `
+                    <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-${temaData.cor}-500">
+                        <h3 class="text-2xl font-bold text-${temaData.cor}-700 mb-6 flex items-center gap-3">
+                            <span class="w-6 h-6 text-${temaData.cor}-600">🏷️</span> ${temaData.nome}
+                        </h3>
+                        <div class="space-y-6">
+                `;
+
+                questionsForTag.forEach((q) => {
+                    globalQuestionIndex++;
+                    let optionsHtml = '';
+                    q.opcoes.forEach((opcao, index) => {
+                        const isDisabled = verificadas ? 'disabled' : '';
+                        const optionClass = getOptionClass(q, index);
+                        const correctBadge = (verificadas && index === q.correta) ? '<span class="ml-3 text-green-700 font-bold flex-shrink-0"> (Correta)</span>' : '';
+                        const cursorClass = verificadas || timeIsUp ? 'cursor-not-allowed' : 'cursor-pointer';
+
+                        optionsHtml += `
+                            <button
+                                onclick="handleRespostaFechada(${q.id}, ${index})"
+                                ${isDisabled}
+                                class="w-full text-left p-3 rounded-lg border-2 transition-all duration-200 ${optionClass} ${cursorClass}"
+                            >
+                                <span class="font-mono font-bold mr-2 text-slate-600">${String.fromCharCode(65 + index)}.</span>
+                                <span class="text-slate-700">${opcao}</span>
+                                ${correctBadge}
+                            </button>
+                        `;
+                    });
+
+                    closedHtml += `
+                        <div id="q-closed-${q.id}" class="p-4 border-b border-slate-100 last:border-b-0">
+                            <p class="text-lg font-semibold text-slate-800 mb-3">
+                                <span class="text-${temaData.cor}-600 mr-2">${globalQuestionIndex}.</span> ${q.pergunta}
+                            </p>
+                            <div class="space-y-2">
+                                ${optionsHtml}
+                            </div>
+                        </div>
+                    `;
+                });
+
+                closedHtml += `
+                        </div>
+                    </div>
+                `;
+            });
+
+            const buttonHtml = !verificadas ? `
+                <button
+                    onclick="handleVerificar()"
+                    ${timeIsUp ? 'disabled' : ''}
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg flex items-center gap-2 transition-colors ${timeIsUp ? 'opacity-50 cursor-not-allowed' : ''}"
+                >
+                    <span class="w-5 h-5">⚡</span> Finalizar e Verificar Respostas
+                </button>
+            ` : `
+                <div class="px-6 py-3 bg-slate-400 text-white font-bold rounded-lg cursor-not-allowed">
+                    Verificado
+                </div>
+            `;
+
+            closedHtml += `
+                <div class="bg-slate-200 p-6 rounded-xl border border-slate-300 flex flex-col sm:flex-row justify-between items-center gap-4 mt-6">
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-lg">Fim da Parte A</h3>
+                        <p class="text-sm text-slate-600">Verifique suas respostas para a correção automática.</p>
+                    </div>
+                    ${buttonHtml}
+                </div>
+            `;
+            container.innerHTML = closedHtml;
+        }
+
+        function renderOpenQuestions() {
+            const container = document.getElementById('open-questions-section');
+            let openHtml = `
+                <h2 class="text-3xl font-bold text-slate-700 border-b-2 border-slate-300 pb-2 mb-8 flex items-center gap-2">
+                    <span class="w-7 h-7 text-orange-600">📝</span> Parte B: 15 Questões Discursivas
+                </h2>
+            `;
+            let globalQuestionIndex = allClosedQuestions.length;
+
+            allOpenQuestions.forEach((q) => {
+                globalQuestionIndex++;
+                const temaData = FULL_POOLS[q.tema];
+                const colorClass = `border-l-4 border-${temaData.cor}-500`;
+
+                const gabaritoHtml = abertasVerificadas ? `
+                    <div class="mt-4 p-4 bg-green-50 rounded-lg text-slate-800 text-sm border border-green-200">
+                        <strong class="text-green-700 block mb-1">Gabarito / Contexto Esperado:</strong>
+                        ${q.gabarito.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}
+                    </div>
+                ` : '';
+
+                openHtml += `
+                    <div class="bg-white p-6 rounded-xl shadow-md border ${colorClass}">
+                        <p class="text-xl font-semibold text-slate-800 mb-4">
+                            <span class="text-${temaData.cor}-600 mr-2">${globalQuestionIndex}.</span> ${q.pergunta}
+                        </p>
+                        <p class="text-xs font-medium text-slate-500 mb-2 flex items-center gap-1"><span class="w-4 h-4">🏷️</span> Tema: ${temaData.nome}</p>
+                        <textarea
+                            rows="5"
+                            oninput="handleRespostaAberta(${q.id}, this.value)"
+                            ${abertasVerificadas ? 'disabled' : ''}
+                            class="w-full p-3 border border-slate-300 rounded-lg focus:ring-orange-500 focus:border-orange-500 text-slate-700 resize-none ${abertasVerificadas ? 'bg-gray-100 disabled-textarea' : ''}"
+                            placeholder="Escreva sua resposta aqui..."
+                        >${q.resposta}</textarea>
+                        ${gabaritoHtml}
+                    </div>
+                `;
+            });
+
+            const buttonHtml = !abertasVerificadas ? `
+                <button
+                    onclick="handleLiberarGabaritosAbertas()"
+                    class="bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg flex items-center gap-2 transition-colors"
+                >
+                    <span class="w-5 h-5">👁️</span> Liberar Gabaritos das 15 Questões
+                </button>
+            ` : `
+                <div class="px-6 py-3 bg-slate-400 text-white font-bold rounded-lg cursor-not-allowed">
+                    Gabaritos Liberados
+                </div>
+            `;
+
+            openHtml += `
+                <div class="bg-slate-200 p-6 rounded-xl border border-slate-300 flex flex-col sm:flex-row justify-between items-center gap-4 mt-6">
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-lg">Fim da Parte B</h3>
+                        <p class="text-sm text-slate-600">Compare suas respostas com os gabaritos sugeridos.</p>
+                    </div>
+                    ${buttonHtml}
+                </div>
+            `;
+            container.innerHTML = openHtml;
+        }
+
+        function renderFooter() {
+            const container = document.getElementById('footer-container');
+            container.innerHTML = `
+                <footer class="mt-10 pt-6 border-t border-slate-300 text-center text-sm text-slate-500">
+                    <p>Simulado de Neurofisiologia - Aplicação em JavaScript Vanilla (Puro) e Tailwind CSS.</p>
+                </footer>
+            `;
+        }
+
+        function renderApp() {
+            renderHeader();
+            renderResultsSummary();
+            renderClosedQuestions();
+            renderOpenQuestions();
+            renderFooter();
+        }
+
+        // --- EVENTOS ---
+
+        function handleRespostaFechada(id, index) {
+            if (verificadas || timeIsUp) return;
+            respostasFechadas[id] = index;
+            renderClosedQuestions();
+        }
+        window.handleRespostaFechada = handleRespostaFechada;
+
+        function handleRespostaAberta(id, value) {
+            const q = allOpenQuestions.find(q => q.id === id);
+            if (q) {
+                q.resposta = value;
+            }
+        }
+        window.handleRespostaAberta = handleRespostaAberta;
+
+        function handleVerificar() {
+            if (verificadas) return;
+            clearInterval(timerId);
+            verificadas = true;
+
+            let acertos = 0;
+            let incorretos = 0;
+            const totalQuestoes = allClosedQuestions.length;
+
+            allClosedQuestions.forEach(q => {
+                const respostaUsuario = respostasFechadas[q.id];
+                if (respostaUsuario === q.correta) {
+                    acertos++;
+                } else if (respostaUsuario !== undefined) {
+                    incorretos++;
+                }
+            });
+
+            resultadosFechadas = { acertos, incorretos, naoRespondidas: totalQuestoes - acertos - incorretos };
+            renderApp();
+        }
+        window.handleVerificar = handleVerificar;
+
+        function handleLiberarGabaritosAbertas() {
+            if (abertasVerificadas) return;
+            abertasVerificadas = true;
+            renderOpenQuestions();
+        }
+        window.handleLiberarGabaritosAbertas = handleLiberarGabaritosAbertas;
+
+        // --- INICIALIZAÇÃO ---
+
+        function initializeQuestions() {
+            allClosedQuestions = [];
+            allOpenQuestions = [];
+
+            Object.keys(FULL_POOLS).forEach(key => {
+                const pool = FULL_POOLS[key];
+                
+                // Seleciona 5 fechadas aleatoriamente
+                const closedPool = shuffle([...pool.fechadas]);
+                const selectedClosed = closedPool.slice(0, 5);
+                allClosedQuestions.push(...selectedClosed);
+                
+                // Seleciona 5 abertas aleatoriamente
+                const openPool = shuffle([...pool.abertas]);
+                const selectedOpen = openPool.slice(0, 5);
+                allOpenQuestions.push(...selectedOpen.map(q => ({...q, resposta: ''}))); 
+            });
+            
+            // Embaralhar ordem final
+            allClosedQuestions = shuffle(allClosedQuestions);
+            allOpenQuestions = shuffle(allOpenQuestions);
+
+            respostasFechadas = {};
+        }
+
+        function startTimer() {
+            const timerDisplayContainer = document.getElementById('timer-display');
+            
+            function updateTimer() {
+                if (tempoRestante <= 0) {
+                    clearInterval(timerId);
+                    tempoRestante = 0;
+                    timeIsUp = true;
+                    if (!verificadas) {
+                       handleVerificar(); 
+                    } else {
+                       renderHeader();
+                       renderClosedQuestions();
+                    }
+                    return;
+                }
+                // Atualiza apenas o texto do timer se ele existir no DOM
+                const timerSpan = document.querySelector('#timer-display span:last-child');
+                 if (timerSpan) {
+                    timerSpan.textContent = formatTime(tempoRestante);
+                    if (tempoRestante <= 300 && !document.querySelector('.time-up')) {
+                        const timerDiv = document.getElementById('timer-display');
+                        timerDiv.classList.remove('bg-slate-700');
+                        timerDiv.classList.add('bg-red-600', 'time-up');
+                    }
+                }
+                tempoRestante--;
+            }
+
+            if (timerId) clearInterval(timerId);
+            timerId = setInterval(updateTimer, 1000);
+        }
+
+        window.onload = function() {
+            initializeQuestions();
+            renderApp();
+            startTimer();
+        };
     </script>
 </body>
 </html>
-
-
-
-
