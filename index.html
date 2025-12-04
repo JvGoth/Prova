@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulado Neurofisiologia (Slides 08-14)</title>
+    <title>Simulado Neurofisiologia (Slides 08-14) - Versão 3.0</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { font-family: 'Inter', system-ui, sans-serif; }
@@ -33,8 +33,9 @@
     </div>
 
     <script>
-        // --- BASE DE DADOS: POOL DE 10 QUESTÕES POR SLIDE ---
-        // O sistema selecionará aleatoriamente 5 destas para cada bloco.
+        // --- BASE DE DADOS: POOL DE QUESTÕES POR SLIDE ---
+        // Fechadas: 10 por slide (serão sorteadas 5)
+        // Abertas: 3 por slide (serão sorteadas 15 no total)
         
         const SLIDE_DATA = {
             'slide08': {
@@ -53,7 +54,9 @@
                     { id: 810, pergunta: 'Qual estrutura funciona como comparador de comprimento muscular?', opcoes: ['Fuso Muscular.', 'Corpúsculo de Meissner.', 'Discos de Merkel.', 'Órgão Tendinoso de Golgi.'], correta: 0 }
                 ],
                 abertas: [
-                    { id: 'aberta8', pergunta: 'Diferencie o reflexo miotático do reflexo miotático inverso em termos de estímulo e resposta.', gabarito: 'Miotático: Estímulo é o estiramento (comprimento); Resposta é a contração do agonista. Inverso: Estímulo é a tensão (força); Resposta é o relaxamento do agonista (proteção).' }
+                    { id: 'aberta8a', pergunta: 'Diferencie o reflexo miotático do reflexo miotático inverso em termos de estímulo e resposta.', gabarito: 'Miotático: Estímulo é o estiramento (comprimento); Resposta é a contração do agonista. Inverso: Estímulo é a tensão (força); Resposta é o relaxamento do agonista (proteção).' },
+                    { id: 'aberta8b', pergunta: 'Quais são as principais diferenças clínicas entre a Síndrome do Neurônio Motor Superior (NMS) e a do Neurônio Motor Inferior (NMI)?', gabarito: 'NMS (lesão central): causa espasticidade, hiper-reflexia e sinal de Babinski. NMI (lesão periférica): causa flacidez, atrofia muscular, fasciculações e arreflexia.' },
+                    { id: 'aberta8c', pergunta: 'Como a inervação recíproca e a inibição autogênica cooperam para um movimento coordenado e seguro?', gabarito: 'A inervação recíproca inibe o antagonista para permitir o movimento (flexão). A inibição autogênica (OTG) protege o músculo de tensão excessiva, causando relaxamento do agonista.' }
                 ]
             },
             'slide09': {
@@ -72,7 +75,9 @@
                     { id: 910, pergunta: 'A Coreia de Huntington afeta primariamente:', opcoes: ['A via indireta (causando excesso de movimento).', 'A via direta (causando falta de movimento).', 'O cerebelo.', 'O córtex visual.'], correta: 0 }
                 ],
                 abertas: [
-                    { id: 'aberta9', pergunta: 'Explique o papel do cerebelo como um "comparador" motor.', gabarito: 'O cerebelo recebe a cópia do comando motor (córtex) e a informação proprioceptiva da execução real (medula). Ele compara os dois e, se houver erro, envia correções para ajustar o movimento em tempo real.' }
+                    { id: 'aberta9a', pergunta: 'Explique o papel do cerebelo como um "comparador" motor.', gabarito: 'O cerebelo recebe a cópia do comando motor (córtex) e a informação proprioceptiva da execução real (medula). Ele compara os dois e, se houver erro, envia correções para ajustar o movimento em tempo real.' },
+                    { id: 'aberta9b', pergunta: 'Descreva como o desequilíbrio entre a via direta e a via indireta nos núcleos da base resulta nas características do Parkinson e do Huntington.', gabarito: 'Parkinson: Perda de dopamina inibe a via direta e facilita a indireta, resultando em freio excessivo (bradicinesia, rigidez). Huntington: Degeneração do estriado (GPE) diminui o freio da via indireta, resultando em excesso de movimento (coreia).' },
+                    { id: 'aberta9c', pergunta: 'Cite e defina duas manifestações clínicas comuns de lesões cerebelares.', gabarito: 'Dismetria: Erro na estimativa da distância ou amplitude de um movimento, resultando em overshoot ou undershoot do alvo. Ataxia: Falta de coordenação motora, levando a uma marcha instável, com passadas amplas e cambaleantes.' }
                 ]
             },
             'slide10': {
@@ -91,7 +96,9 @@
                     { id: 1010, pergunta: 'O córtex de associação temporal está ligado a:', opcoes: ['Reconhecimento de objetos e memória semântica.', 'Atenção espacial.', 'Planejamento motor.', 'Reflexos espinhais.'], correta: 0 }
                 ],
                 abertas: [
-                    { id: 'aberta10', pergunta: 'Diferencie funcionalmente as áreas de associação Parietal e Temporal.', gabarito: 'Parietal: Atenção espacial, percepção do corpo no espaço (Via "Onde"). Lesão causa Negligência. Temporal: Reconhecimento de objetos, faces e significado (Via "O que"). Lesão causa Agnosias.' }
+                    { id: 'aberta10a', pergunta: 'Diferencie funcionalmente as áreas de associação Parietal e Temporal.', gabarito: 'Parietal: Atenção espacial, percepção do corpo no espaço (Via "Onde"). Lesão causa Negligência. Temporal: Reconhecimento de objetos, faces e significado (Via "O que"). Lesão causa Agnosias.' },
+                    { id: 'aberta10b', pergunta: 'Descreva as diferenças entre a Afasia de Broca e a Afasia de Wernicke em relação à fluência e à compreensão da linguagem.', gabarito: 'Broca: Não fluente (fala lenta e esforçada) com compreensão preservada. Wernicke: Fluente (logorreia) com compreensão gravemente prejudicada (parafasias).' },
+                    { id: 'aberta10c', pergunta: 'Quais são as três principais funções executivas atribuídas ao Córtex Pré-Frontal?', gabarito: '1. Memória de Trabalho (manter e manipular informações). 2. Planejamento/Tomada de Decisão (formular estratégias). 3. Inibição de Resposta/Controle Comportamental (evitar ações inapropriadas).' }
                 ]
             },
             'slide11': {
@@ -110,7 +117,9 @@
                     { id: 1110, pergunta: 'O "Jet Lag" ocorre devido a:', opcoes: ['Falta de sono REM.', 'Dessincronização entre o relógio biológico interno e o ciclo claro/escuro externo.', 'Excesso de melatonina.', 'Falta de adenosina.'], correta: 1 }
                 ],
                 abertas: [
-                    { id: 'aberta11', pergunta: 'Explique a interação entre o Processo C e o Processo S na regulação do sono.', gabarito: 'Processo C (Circadiano): Variação cíclica do alerta promovida pelo NSQ (relógio biológico). Processo S (Homeostático): Acúmulo progressivo de "cansaço" (adenosina) quanto mais tempo ficamos acordados. O sono ocorre quando C está baixo e S está alto.' }
+                    { id: 'aberta11a', pergunta: 'Explique a interação entre o Processo C e o Processo S na regulação do sono.', gabarito: 'Processo C (Circadiano): Variação cíclica do alerta promovida pelo NSQ (relógio biológico). Processo S (Homeostático): Acúmulo progressivo de "cansaço" (adenosina) quanto mais tempo ficamos acordados. O sono ocorre quando C está baixo e S está alto.' },
+                    { id: 'aberta11b', pergunta: 'Quais são as principais características eletrofisiológicas (EEG) do sono de Ondas Lentas (N3) e do sono REM?', gabarito: 'Sono N3 (Ondas Lentas): Caracterizado por ondas Delta, lentas e de alta amplitude. Sono REM: Caracterizado por um EEG dessincronizado, rápido e de baixa voltagem, semelhante ao da vigília.' },
+                    { id: 'aberta11c', pergunta: 'Qual é o papel da Orexina (Hipocretina) na manutenção da vigília e qual distúrbio do sono está associado à sua deficiência?', gabarito: 'A Orexina é um peptídeo hipotalâmico que estabiliza e promove a vigília, mantendo o estado de alerta. A deficiência na sua produção está fortemente associada à Narcolepsia.' }
                 ]
             },
             'slide12': {
@@ -129,7 +138,9 @@
                     { id: 1210, pergunta: 'Onde, acredita-se, as memórias de longo prazo são armazenadas permanentemente?', opcoes: ['No Hipocampo.', 'Distribuídas pelo Neocórtex.', 'No Tálamo.', 'Na Medula.'], correta: 1 }
                 ],
                 abertas: [
-                    { id: 'aberta12', pergunta: 'Diferencie Memória Declarativa (Explícita) de Memória Não-Declarativa (Implícita).', gabarito: 'Declarativa: Consciente, fatos e eventos (Saber "o que"), depende do hipocampo. Não-declarativa: Inconsciente, habilidades, hábitos e condicionamento (Saber "como"), depende de núcleos da base/cerebelo/amígdala.' }
+                    { id: 'aberta12a', pergunta: 'Diferencie Memória Declarativa (Explícita) de Memória Não-Declarativa (Implícita).', gabarito: 'Declarativa: Consciente, fatos e eventos (Saber "o que"), depende do hipocampo. Não-declarativa: Inconsciente, habilidades, hábitos e condicionamento (Saber "como"), depende de núcleos da base/cerebelo/amígdala.' },
+                    { id: 'aberta12b', pergunta: 'Explique o papel do Hipocampo na memória explícita e qual o processo ele executa.', gabarito: 'O hipocampo é fundamental para a consolidação da memória explícita (episódica e semântica). Ele recebe informações corticais e as "junta" temporariamente, transferindo-as para armazenamento permanente no córtex (consolidação).' },
+                    { id: 'aberta12c', pergunta: 'O que é a Potenciação de Longa Duração (LTP) e como ela está relacionada ao aprendizado?', gabarito: 'LTP é um aumento duradouro na eficácia da transmissão sináptica após a estimulação da sinapse por um breve período de tempo. É o principal mecanismo celular proposto para o armazenamento de informações (engrama) e o aprendizado.' }
                 ]
             },
             'slide13': {
@@ -148,7 +159,9 @@
                     { id: 1310, pergunta: 'Qual é o papel do Córtex Pré-Frontal nas emoções?', opcoes: ['Gerar medo.', 'Regular e inibir impulsos emocionais (controle top-down).', 'Produzir adrenalina.', 'Nenhum papel.'], correta: 1 }
                 ],
                 abertas: [
-                    { id: 'aberta13', pergunta: 'Qual a relação entre o Córtex Pré-Frontal e a Amígdala na regulação emocional?', gabarito: 'A amígdala gera respostas emocionais rápidas (medo/alerta). O córtex pré-frontal avalia o contexto e exerce controle inibitório sobre a amígdala, permitindo adequar a resposta emocional à situação social.' }
+                    { id: 'aberta13a', pergunta: 'Qual a relação entre o Córtex Pré-Frontal e a Amígdala na regulação emocional?', gabarito: 'A amígdala gera respostas emocionais rápidas (medo/alerta). O córtex pré-frontal avalia o contexto e exerce controle inibitório sobre a amígdala, permitindo adequar a resposta emocional à situação social.' },
+                    { id: 'aberta13b', pergunta: 'Descreva a Via Mesolímbica do sistema de recompensa, citando as estruturas principais e o neurotransmissor chave.', gabarito: 'A via é composta pela Área Tegmentar Ventral (VTA) que projeta dopamina para o Núcleo Accumbens (NAc). É o circuito central que media o prazer, o reforço e o comportamento motivado, sendo o alvo de drogas de abuso.' },
+                    { id: 'aberta13c', pergunta: 'Explique o que são as emoções e como elas se diferenciam dos sentimentos, segundo a neurofisiologia.', gabarito: 'Emoções são respostas fisiológicas e comportamentais a um estímulo (ex: aumento da FC, expressão facial). Sentimentos são as percepções subjetivas e conscientes dessas emoções (a experiência subjetiva de "estar com medo").' }
                 ]
             },
             'slide14': {
@@ -167,15 +180,17 @@
                     { id: 1410, pergunta: 'O nervo Vago (X par) carrega a maior parte das fibras:', opcoes: ['Simpáticas.', 'Parassimpáticas.', 'Motoras somáticas.', 'Sensoriais de dor.'], correta: 1 }
                 ],
                 abertas: [
-                    { id: 'aberta14', pergunta: 'Explique o mecanismo da febre e como ela difere da hipertermia por exercício.', gabarito: 'Na febre, pirogênios (IL-1, PGE2) elevam o "ponto de ajuste" do hipotálamo; o corpo sente frio e produz calor para chegar nesse novo nível. Na hipertermia, o ponto de ajuste está normal, mas o corpo ganha mais calor do que consegue dissipar (falha na refrigeração).' }
+                    { id: 'aberta14a', pergunta: 'Explique o mecanismo da febre e como ela difere da hipertermia por exercício.', gabarito: 'Na febre, pirogênios (IL-1, PGE2) elevam o "ponto de ajuste" do hipotálamo; o corpo sente frio e produz calor para chegar nesse novo nível. Na hipertermia, o ponto de ajuste está normal, mas o corpo ganha mais calor do que consegue dissipar (falha na refrigeração).' },
+                    { id: 'aberta14b', pergunta: 'Descreva a diferença anatômica e neurotransmissora entre o sistema simpático e o parassimpático em relação aos gânglios.', gabarito: 'Simpático: Fibras pré-ganglionares curtas (Ach) e pós-ganglionares longas (Noradrenalina, exceto suor). Gânglios próximos à medula (cadeia paravertebral). Parassimpático: Fibras pré-ganglionares longas (Ach) e pós-ganglionares curtas (Ach). Gânglios próximos ou dentro do órgão efetor.' },
+                    { id: 'aberta14c', pergunta: 'O Hipotálamo é o centro de controle do SNA. Explique brevemente duas funções homeostáticas que ele regula via SNA.', gabarito: '1. Termorregulação: O hipotálamo anterior (dissipação de calor) e o posterior (conservação de calor) controlam a resposta vasomotora e a sudorese via SNA. 2. Controle da Pressão Arterial: Controla a atividade do tronco encefálico para modular a frequência cardíaca e a vasoconstrição/vasodilatação, mantendo a pressão estável.' }
                 ]
             }
         };
 
         // --- LÓGICA DO APP ---
 
-        let activeClosedQuestions = {}; // Guarda as 5 perguntas selecionadas por slide
-        let activeOpenQuestions = [];   // Guarda as questões abertas selecionadas
+        let activeClosedQuestions = {}; // Guarda as 5 perguntas selecionadas por slide (Total 35)
+        let activeOpenQuestions = [];   // Guarda as 15 perguntas abertas selecionadas
         let userResponsesClosed = {};
         let userResponsesOpen = {};
         let isVerified = false;
@@ -194,36 +209,40 @@
         function formatTime(seconds) {
             const m = Math.floor(seconds / 60).toString().padStart(2, '0');
             const s = (seconds % 60).toString().padStart(2, '0');
-            return `${Math.floor(m/60)}h ${m%60}m ${s}s`;
+            const h = Math.floor(m / 60);
+            const remainingM = m % 60;
+            return `${h.toString().padStart(2, '0')}h ${remainingM.toString().padStart(2, '0')}m ${s}s`;
         }
 
-        // Inicialização: Seleciona as perguntas
         function initQuiz() {
             activeClosedQuestions = {};
-            activeOpenQuestions = [];
-            
-            // Para cada slide, pega 5 fechadas aleatórias e 1 aberta
+            let openPool = [];
+
+            // 1. Configura as 5 questões fechadas por slide
             Object.keys(SLIDE_DATA).forEach(key => {
                 const pool = SLIDE_DATA[key];
                 
-                // 5 Fechadas
+                // 5 Fechadas aleatórias (de 10)
                 const shuffledClosed = shuffleArray([...pool.fechadas]);
                 activeClosedQuestions[key] = shuffledClosed.slice(0, 5);
                 
-                // 1 Aberta
-                if (pool.abertas.length > 0) {
-                    const randomOpen = pool.abertas[Math.floor(Math.random() * pool.abertas.length)];
-                    activeOpenQuestions.push({
-                        ...randomOpen,
-                        slideName: pool.nome,
-                        slideColor: pool.cor,
-                        slideKey: key
-                    });
-                }
+                // Adiciona TODAS as abertas ao pool total, adicionando info de slide
+                openPool.push(...pool.abertas.map(q => ({
+                    ...q,
+                    slideName: pool.nome,
+                    slideColor: pool.cor,
+                    slideKey: key
+                })));
             });
+
+            // 2. Embaralha e seleciona 15 questões abertas do pool total (o pool total tem 21)
+            const shuffledOpen = shuffleArray(openPool);
+            activeOpenQuestions = shuffledOpen.slice(0, 15); // Seleciona as 15 perguntas pedidas
             
-            // Embaralha a ordem das abertas para não ficar sempre na mesma sequencia de slides (opcional, aqui mantive ordem de inserção ou pode embaralhar)
-            // activeOpenQuestions = shuffleArray(activeOpenQuestions); 
+            // Popula as respostas abertas do usuário, se houver
+            activeOpenQuestions.forEach(q => {
+                userResponsesOpen[q.id] = userResponsesOpen[q.id] || '';
+            });
 
             renderHeader();
             renderClosedSection();
@@ -232,34 +251,95 @@
         }
 
         function startTimer() {
-            timerInterval = setInterval(() => {
-                timeRemaining--;
-                document.getElementById('timer-display').innerText = formatTime(timeRemaining);
-                if (timeRemaining <= 300) {
-                    document.getElementById('timer-box').classList.add('bg-red-600', 'time-up');
-                    document.getElementById('timer-box').classList.remove('bg-slate-700');
-                }
+            const timerBox = document.getElementById('timer-box');
+            if (!timerBox) return;
+
+            if (timerInterval) clearInterval(timerInterval);
+
+            const updateTimer = () => {
                 if (timeRemaining <= 0) {
                     clearInterval(timerInterval);
-                    verifyClosedAnswers();
+                    timeRemaining = 0;
+                    if (!isVerified) verifyClosedAnswers();
+                    timerBox.classList.add('bg-red-700', 'time-up');
+                    renderHeader(); 
+                    return;
                 }
-            }, 1000);
+                
+                document.getElementById('timer-display').innerText = formatTime(timeRemaining);
+
+                if (timeRemaining <= 300) { // Alerta visual nos últimos 5 minutos
+                    timerBox.classList.add('bg-red-600', 'time-up');
+                    timerBox.classList.remove('bg-slate-700');
+                }
+                timeRemaining--;
+            };
+
+            timerInterval = setInterval(updateTimer, 1000);
+            updateTimer(); // Chama imediatamente para evitar 1s de delay
         }
 
         // --- RENDERIZAÇÃO ---
 
         function renderHeader() {
-            const totalQ = Object.keys(activeClosedQuestions).length * 5 + activeOpenQuestions.length;
+            const totalFechadas = Object.keys(activeClosedQuestions).reduce((sum, key) => sum + activeClosedQuestions[key].length, 0);
+            const totalQ = totalFechadas + activeOpenQuestions.length;
+            const timerClass = timeRemaining <= 300 && timeRemaining > 0 ? 'bg-red-600 time-up' : (timeRemaining <= 0 ? 'bg-red-700' : 'bg-slate-700');
+            
             document.getElementById('header-container').innerHTML = `
                 <header class="bg-slate-800 text-white p-6 rounded-xl shadow-lg flex flex-col md:flex-row justify-between items-center gap-4">
                     <div>
                         <h1 class="text-2xl font-bold">Simulado Neurofisiologia</h1>
                         <p class="text-slate-400 text-sm">Slides 08 a 14 • ${totalQ} Questões</p>
                     </div>
-                    <div id="timer-box" class="bg-slate-700 px-4 py-2 rounded-lg font-mono text-xl font-bold transition-colors">
+                    <div id="timer-box" class="${timerClass} px-4 py-2 rounded-lg font-mono text-xl font-bold transition-colors">
                         <span id="timer-display">${formatTime(timeRemaining)}</span>
                     </div>
                 </header>
+            `;
+        }
+
+        function renderResultsSummary() {
+            const container = document.getElementById('results-summary');
+            if (!isVerified) { container.innerHTML = ''; return; }
+
+            const totalFechadas = Object.keys(activeClosedQuestions).reduce((sum, key) => sum + activeClosedQuestions[key].length, 0);
+            let correct = 0;
+            let summaryHTML = '<div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">';
+            
+            Object.keys(SLIDE_DATA).forEach(key => {
+                let slideCorrect = 0;
+                activeClosedQuestions[key].forEach(q => {
+                    if (userResponsesClosed[q.id] === q.correta) {
+                        correct++;
+                        slideCorrect++;
+                    }
+                });
+                const info = SLIDE_DATA[key];
+                summaryHTML += `
+                    <div class="bg-white p-3 rounded border-l-4 border-${info.cor}-500 shadow-sm text-center">
+                        <div class="text-xs text-slate-500 truncate">${info.nome}</div>
+                        <div class="font-bold text-xl text-slate-800">${slideCorrect}/5</div>
+                    </div>
+                `;
+            });
+            summaryHTML += '</div>';
+
+            const finalScore = Math.round((correct / totalFechadas) * 100);
+            const msgClass = finalScore >= 70 ? 'text-green-600' : (finalScore >= 50 ? 'text-yellow-600' : 'text-red-600');
+            const totalIncorrect = totalFechadas - correct;
+
+            container.innerHTML = `
+                <div class="bg-slate-50 p-6 rounded-xl border border-slate-300 mb-8 shadow-lg">
+                    <h2 class="text-2xl font-bold text-slate-800 mb-4 text-center">✅ Resultado da Parte A (Objetivas)</h2>
+                    <div class="grid grid-cols-3 gap-4 mb-6 text-center">
+                        <div class="p-3 bg-green-50 rounded border border-green-200"><p class="text-2xl font-bold text-green-700">${correct}</p><p class="text-xs text-green-600">Acertos</p></div>
+                        <div class="p-3 bg-red-50 rounded border border-red-200"><p class="text-2xl font-bold text-red-700">${totalIncorrect}</p><p class="text-xs text-red-600">Erros/Em branco</p></div>
+                        <div class="p-3 bg-blue-50 rounded border border-blue-200"><p class="text-2xl font-bold ${msgClass}">${finalScore}%</p><p class="text-xs text-blue-600">Aproveitamento</p></div>
+                    </div>
+                    <p class="font-bold text-slate-700 mb-3 border-b pb-2">Desempenho por Slide (5 Questões Cada):</p>
+                    ${summaryHTML}
+                </div>
             `;
         }
 
@@ -268,6 +348,7 @@
             let html = `<h2 class="text-2xl font-bold text-slate-700 border-b-2 border-slate-300 pb-2 flex items-center gap-2">
                             <span>📝</span> Parte A: Questões Objetivas (5 por Slide)
                         </h2>`;
+            let globalQNum = 0;
 
             Object.keys(SLIDE_DATA).forEach((slideKey) => {
                 const slideInfo = SLIDE_DATA[slideKey];
@@ -283,7 +364,8 @@
                         <div class="p-6 space-y-8">
                 `;
 
-                questions.forEach((q, idx) => {
+                questions.forEach((q) => {
+                    globalQNum++;
                     const userVal = userResponsesClosed[q.id];
                     
                     let optionsHtml = '';
@@ -307,7 +389,7 @@
                         }
 
                         optionsHtml += `
-                            <button onclick="handleClosedClick('${slideKey}', ${q.id}, ${optIdx})" 
+                            <button onclick="handleClosedClick(${q.id}, ${optIdx})" 
                                     ${isVerified ? 'disabled' : ''}
                                     class="${btnClass} mb-2 relative group">
                                 <span class="font-mono text-xs font-bold text-slate-500 mr-2">${String.fromCharCode(65+optIdx)})</span>
@@ -318,8 +400,8 @@
                     });
 
                     html += `
-                        <div class="question-block">
-                            <p class="font-medium text-slate-800 mb-3"><span class="text-slate-400 text-sm mr-1">#${idx+1}</span> ${q.pergunta}</p>
+                        <div class="question-block border-b border-slate-100 pb-6 last:border-b-0">
+                            <p class="font-medium text-slate-800 mb-3"><span class="text-slate-500 mr-1">Q${globalQNum}.</span> ${q.pergunta}</p>
                             <div>${optionsHtml}</div>
                         </div>
                     `;
@@ -332,12 +414,10 @@
                 html += `
                     <div class="flex justify-end pt-4">
                         <button onclick="verifyClosedAnswers()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transform transition hover:scale-105">
-                            Finalizar Parte A
+                            Finalizar Parte A (Objetivas)
                         </button>
                     </div>
                 `;
-            } else {
-                html += `<div class="text-center p-4 bg-blue-50 text-blue-800 font-bold rounded-lg border border-blue-200">Parte A Finalizada! Confira seu desempenho acima.</div>`;
             }
 
             container.innerHTML = html;
@@ -346,7 +426,7 @@
         function renderOpenSection() {
             const container = document.getElementById('open-questions-section');
             let html = `<h2 class="text-2xl font-bold text-slate-700 border-b-2 border-slate-300 pb-2 flex items-center gap-2 mt-12">
-                            <span>✍️</span> Parte B: Questões Discursivas (1 por Slide)
+                            <span>✍️</span> Parte B: Questões Discursivas (${activeOpenQuestions.length} Sorteadas)
                         </h2>`;
 
             activeOpenQuestions.forEach((q, idx) => {
@@ -389,10 +469,9 @@
 
         // --- HANDLERS ---
 
-        window.handleClosedClick = (slideKey, qId, optIdx) => {
+        window.handleClosedClick = (qId, optIdx) => {
             if (isVerified) return;
             userResponsesClosed[qId] = optIdx;
-            // Re-renderiza apenas para atualizar UI (idealmente seria reatividade fina, mas aqui rerenderizamos a seção)
             renderClosedSection();
         };
 
@@ -405,55 +484,27 @@
             clearInterval(timerInterval);
             isVerified = true;
             
-            // Calcula Pontuação
-            let correct = 0;
-            let total = 0;
-            let summaryHTML = '<div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">';
+            // Calcula Pontuação e renderiza sumário
+            renderResultsSummary();
             
-            Object.keys(SLIDE_DATA).forEach(key => {
-                let slideCorrect = 0;
-                activeClosedQuestions[key].forEach(q => {
-                    total++;
-                    if (userResponsesClosed[q.id] === q.correta) {
-                        correct++;
-                        slideCorrect++;
-                    }
-                });
-                const percent = (slideCorrect / 5) * 100;
-                const info = SLIDE_DATA[key];
-                summaryHTML += `
-                    <div class="bg-white p-3 rounded border-l-4 border-${info.cor}-500 shadow-sm">
-                        <div class="text-xs text-slate-500 truncate">${info.nome}</div>
-                        <div class="font-bold text-xl text-slate-800">${slideCorrect}/5</div>
-                    </div>
-                `;
-            });
-            summaryHTML += '</div>';
-
-            const finalScore = Math.round((correct / total) * 100);
-            const msgClass = finalScore >= 70 ? 'text-green-600' : (finalScore >= 50 ? 'text-yellow-600' : 'text-red-600');
-
-            document.getElementById('results-summary').innerHTML = `
-                <div class="bg-slate-200 p-6 rounded-xl border border-slate-300 mb-8 animate-fade-in-down">
-                    <h2 class="text-2xl font-bold text-slate-800 mb-4 text-center">Resultado Final: <span class="${msgClass}">${correct}/${total} (${finalScore}%)</span></h2>
-                    ${summaryHTML}
-                </div>
-            `;
-            
-            // Scroll para o topo
+            // Scroll para o resumo
             window.scrollTo({ top: 0, behavior: 'smooth' });
             renderClosedSection();
-            renderHeader(); // Para parar o timer visualmente se quiser
+            renderHeader(); 
         };
 
         window.verifyOpenAnswers = () => {
+            if (isOpenVerified) return;
             isOpenVerified = true;
             renderOpenSection();
+            // Scroll para o início da seção aberta
+            document.getElementById('open-questions-section').scrollIntoView({ behavior: 'smooth' });
         };
 
         // Iniciar
-        initQuiz();
-
+        window.onload = function() {
+            initQuiz();
+        };
     </script>
 </body>
 </html>
